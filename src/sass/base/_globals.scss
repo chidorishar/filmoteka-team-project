@@ -1,0 +1,10 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  &.js-modal-is-hidden,
+  &.location-open {
+    overflow: hidden;
+  }
+}

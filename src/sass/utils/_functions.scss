@@ -1,0 +1,30 @@
+@function createTransitionFor(
+  $types,
+  $duration: getTransitionData('time'),
+  $timeFunction: getTransitionData('timeFunction')
+) {
+  $compoundValue: '';
+
+  @each $type in $types {
+    $compoundValue: #{$compoundValue} #{$type} #{$duration} #{$timeFunction};
+    @if $type != nth($types, -1) {
+      $compoundValue: #{$compoundValue}',';
+    }
+  }
+
+  @return $compoundValue;
+}
+
+@function getBreakpointValue($bpName) {
+  @return map-get($breakpoints, $bpName);
+}
+
+@function getColorFromPalette($group, $type) {
+  $subMap: map-get($colorPalette, $group);
+
+  @return map-get($subMap, $type);
+}
+
+@function getTransitionData($dataName) {
+  @return map-get($transitionData, $dataName);
+}

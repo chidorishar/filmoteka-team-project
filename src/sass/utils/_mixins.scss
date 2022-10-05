@@ -1,0 +1,56 @@
+@mixin mediaUpTo($bp) {
+  @if map-has-key($breakpoints, $bp) {
+    @media screen and (max-width: (map-get($breakpoints, $bp) - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @media screen and (max-width: $bp) {
+      @content;
+    }
+  }
+}
+
+@mixin mediaOver($bp) {
+  @if map-has-key($breakpoints, $bp) {
+    @media screen and (min-width: map-get($breakpoints, $bp)) {
+      @content;
+    }
+  } @else {
+    @media screen and (min-width: $bp) {
+      @content;
+    }
+  }
+}
+
+@mixin mediaInBetween($bpFrom, $bpTo) {
+  @if map-has-key($breakpoints, $bpFrom) and map-has-key($breakpoints, $bpTo) {
+    @media screen and (min-width: map-get($breakpoints, $bpFrom)) and (max-width: (map-get($breakpoints, $bpTo) - 0.02px)) {
+      @content;
+    }
+  } @else {
+    @media screen and (min-width: ($bpFrom + 1)) and (max-width: ($bpTo - 1)) {
+      @content;
+    }
+  }
+}
+
+@mixin mediaScreenDensity2x {
+  @media screen and (min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi),
+    (min-resolution: 2dppx) {
+    @content;
+  }
+}
+
+@mixin cardSet($marginL, $marginT: 0) {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: $marginL * -1;
+  margin-top: $marginT * -1;
+}
+
+@mixin cardItem($cardNumber, $marginL, $marginT: 0) {
+    flex-basis: calc(100% / $cardNumber - $marginL);
+    margin-left: $marginL;
+    margin-top: $marginT;
+}
