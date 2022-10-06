@@ -4,35 +4,3 @@
 }
 
 
-.mask {
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  transition: 0.5s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loader {
-  width: 75px;
-  height: 75px;
-  border: 10px solid rgba(62, 190, 141, 0.6);
-  border-radius: 50%;
-  border-left-color: rgba(62, 190, 141);
-
-  animation: loader 1.3s linear infinite;
-}
-
-@keyframes loader {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.hide {
-  opacity: 0;
-}
