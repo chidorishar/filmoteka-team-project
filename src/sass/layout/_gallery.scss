@@ -33,6 +33,7 @@
 }
 
 .movie-card__img {
+    border-radius: 5px;
     @include mediaUpTo('desktop') {
         margin-bottom: 8px;
     }
@@ -40,4 +41,18 @@
     @include mediaOver('desktop') {
         margin-bottom: 12px;
     }
+}
+
+.movie-card__properties-list {
+    font-weight: $font-medium;
+    font-size: 20px;
+    line-height: 1.2;
+}
+
+.movie-card__movie-title {
+    color: getColorFromPalette('gallery', 'dark');
+}
+
+.movie-card__movie-category {
+    color: getColorFromPalette('gallery', 'ganres');
 }
