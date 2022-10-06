@@ -1,12 +1,34 @@
 .footer-section {
-  // background-color: getColorFromPalette('background', 'light');
+  background-color: getColorFromPalette('footer', 'background');
   font-style: normal;
+  padding-top: 29px;
+  padding-bottom: 29px;
 }
 
-.footer__box {
-  color: #545454;
+.footer-section__box {
+  font-family: $font-family-main;
+  color: getColorFromPalette('footer', 'text');
  font-size: 14px;
- font-weight: 400;
+ font-weight: $font-regular;
  text-align: center;
- /* display: flex; */
+ 
+
+ @include mediaInBetween('tablet', 'desktop') {
+  display: flex;
+  justify-content: center;
+ }
+ 
+ @include mediaOver('desktop') {
+   display: flex;
+   justify-content: center;
+ }
 }
+
+.footer-section__text {
+  margin-bottom: 10px;
+}
+
+.footer-section__acent {
+  text-decoration: underline;
+}
+

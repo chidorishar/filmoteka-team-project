@@ -3,12 +3,23 @@
 
 
 .film-card__box {
+    font-family: $font-family-main;
+    font-weight: $font-medium;
+    font-size: 20px;
     display: flex;
     margin: 0;
-    color: #FF6B08;
+    color: getColorFromPalette('secondary', 'orange');
 }
 
+
+.film-card__title {
+    font-family: $font-family-main;
+    color: getColorFromPalette('primary', 'dark');
+}
+
+
 .film-card__item {
+    font-family: $font-family-main;
     margin: 0;
 }
 
@@ -17,13 +28,21 @@
 }
 
 .film-card__title {
+    font-family: $font-family-main;
+    font-weight: $font-medium;
+    font-size: 20px;
     margin: 0;
 }
 
 .film-card__item--acсent {
+    font-family: $font-family-main;
     border-radius: 40px;
-    background-color:#FF6B08;
-    color: white;
+    background-color: getColorFromPalette('secondary', 'orange');
+    color: getColorFromPalette('secondary', 'white');
    padding-left: 10px;
     padding-right: 10px;
+}
+
+.is-hidden {
+    display: none;
 }
