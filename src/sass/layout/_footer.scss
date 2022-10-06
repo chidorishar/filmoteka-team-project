@@ -8,20 +8,19 @@
 .footer-section__box {
   font-family: $font-family-main;
   color: getColorFromPalette('footer', 'text');
- font-size: 14px;
- font-weight: $font-regular;
- text-align: center;
- 
+  font-size: 14px;
+  font-weight: $font-regular;
+  text-align: center;
 
- @include mediaInBetween('tablet', 'desktop') {
-  display: flex;
-  justify-content: center;
- }
- 
- @include mediaOver('desktop') {
-   display: flex;
-   justify-content: center;
- }
+  @include mediaInBetween('tablet', 'desktop') {
+    display: flex;
+    justify-content: center;
+  }
+
+  @include mediaOver('desktop') {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .footer-section__text {
@@ -32,3 +31,7 @@
   text-decoration: underline;
 }
 
+.footer-section__icon {
+  margin-left: 10px;
+  margin-right: 10px;
+}
