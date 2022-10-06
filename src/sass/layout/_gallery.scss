@@ -1,2 +1,43 @@
 .gallery {
+    margin: 60px auto;
+}
+
+
+.grid-card {
+    display: grid;
+    justify-content: center;
+
+    @include mediaUpTo('tablet') {
+        grid-template-columns: minmax(auto, 280px);
+        grid-template-rows: minmax(438px, auto);
+        row-gap: 20px;
+    }
+
+    @include mediaOver('tablet') {
+        grid-template-columns: repeat(2, minmax(auto, 336px));
+        grid-template-rows: minmax(495px, auto);
+        row-gap: 32px;
+        column-gap: 32px;
+    }
+
+    @include mediaOver('desktop') {
+        grid-template-columns: repeat(3, minmax(auto, 394px));
+        grid-template-rows: minmax(634px, auto);
+        grid-column-gap: 16px;
+        grid-row-gap: 32px;
+    }
+}
+
+.grid-card__item {
+    justify-self: center;
+}
+
+.movie-card__img {
+    @include mediaUpTo('desktop') {
+        margin-bottom: 8px;
+    }
+    
+    @include mediaOver('desktop') {
+        margin-bottom: 12px;
+    }
 }
