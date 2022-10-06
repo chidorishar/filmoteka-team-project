@@ -1,5 +1,4 @@
 .gallery {
-
     @include mediaUpTo('tablet') {
         margin: 20px auto 40pxgit  ;
     }
@@ -40,13 +39,25 @@
 }
 
 .movie-card__img {
+    object-fit: cover;
     border-radius: 5px;
+
+    @include mediaUpTo('tablet') {
+        width: 280px;
+        height: 402px;
+    }
+
     @include mediaUpTo('desktop') {
         margin-bottom: 8px;
+        width: 336px;
+        height: 454px;
     }
+    
     
     @include mediaOver('desktop') {
         margin-bottom: 12px;
+        width: 394px;
+        height: 574px;
     }
 }
 
