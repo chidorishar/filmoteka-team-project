@@ -1,5 +1,12 @@
 .gallery {
-    margin: 60px auto;
+
+    @include mediaUpTo('tablet') {
+        margin: 20px auto 40pxgit  ;
+    }
+        
+    @include mediaOver('tablet') {
+        margin: 60px auto;
+    }
 }
 
 
@@ -45,8 +52,16 @@
 
 .movie-card__properties-list {
     font-weight: $font-medium;
-    font-size: 20px;
-    line-height: 1.2;
+    
+    @include mediaUpTo('desktop') {
+        font-size: 12px;
+        line-height: 1.33;
+    }
+        
+    @include mediaOver('desktop') {
+        font-size: 20px;
+        line-height: 1.2;
+    }
 }
 
 .movie-card__movie-title {
