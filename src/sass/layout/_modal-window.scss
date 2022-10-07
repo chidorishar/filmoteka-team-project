@@ -4,13 +4,13 @@ img {
   width: 100%;
 
   object-fit: contain;
+  object-position: top;
 }
 
 .modal {
   flex-direction: column;
   background-color: white;
 }
-
 .modal-close {
   width: 30px;
   height: 30px;
@@ -21,6 +21,10 @@ img {
   right: 16px;
 
   cursor: pointer;
+}
+
+.modal-close__icon {
+  transition: createTransitionFor('fill');
 }
 
 .modal-close > .modal-close__icon:hover {
@@ -37,8 +41,7 @@ img {
 }
 
 .poster {
-  width: 240px;
-  height: 357px;
+  width: 100%;
   border-radius: 5px;
   margin-bottom: 20px;
 }
@@ -144,6 +147,7 @@ img {
   letter-spacing: 0em;
   text-align: center;
   cursor: pointer;
+  transition: createTransitionFor('background');
 
   border: 1px solid getColorFromPalette('modal', 'color-characteristics-text');
   border-radius: 5px;
@@ -200,9 +204,6 @@ img {
   .modal-info {
     display: flex;
     flex-direction: column;
-  }
-
-  .modal-info {
     max-width: 264px;
   }
 
@@ -212,7 +213,6 @@ img {
 
   .poster {
     width: 264px;
-    height: 374px;
     margin-bottom: 0;
   }
 
@@ -235,7 +235,6 @@ img {
 
   .poster {
     width: 375px;
-    height: 478px;
     margin-right: 16px;
     margin-bottom: 0;
   }
