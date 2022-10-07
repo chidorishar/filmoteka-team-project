@@ -9,17 +9,22 @@
   font-family: $font-family-main;
   color: getColorFromPalette('footer', 'text');
   font-size: 14px;
+  line-height: 1.17;
   font-weight: $font-regular;
   text-align: center;
 
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;
     justify-content: center;
+    font-size: 16px;
+    line-height: 1.17;
   }
 
   @include mediaOver('desktop') {
     display: flex;
     justify-content: center;
+    font-size: 16px;
+    line-height: 1.17;
   }
 }
 
@@ -27,7 +32,7 @@
   margin-bottom: 10px;
 }
 
-.footer-section__acent {
+.footer-section__acсent {
   text-decoration: underline;
 }
 
