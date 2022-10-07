@@ -53,12 +53,6 @@
   animation: pulse 2s linear infinite;
 }
 
-@keyframes pulse {
-  20% {
-    transform: scale(0.9);
-  }
-}
-
 span {
   display: block;
 }
