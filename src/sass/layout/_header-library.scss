@@ -1,12 +1,4 @@
-li {
-  list-style: none;
-}
-a {
-  text-decoration: none;
-}
-
 .header-library {
- 
 }
 
 .header-library__background {
@@ -41,14 +33,12 @@ a {
   justify-content: center;
   align-items: center;
 
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
   font-size: 30px;
-  line-height: 35px;
+  line-height: 1.16;
   gap: 10px;
 
   color: #ffffff;
+  @extend %clean-link;
 }
 
 .logo-img {
@@ -72,12 +62,12 @@ a {
 .nav-group-library__item {
   position: relative;
   margin-left: 40px;
+
+  @extend %unmarked-list;
 }
 
 .nav-group-library__link {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
+ 
   font-size: 12px;
   line-height: 1.17;
 
@@ -85,6 +75,8 @@ a {
   text-transform: uppercase;
 
   color: #ffffff;
+
+  @extend %clean-link;
 }
 
 .header__buttons {

@@ -4,15 +4,12 @@
   align-items: center;
   padding: 14px 36px 12px;
 
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 500;
   font-size: 12px;
   line-height: 1.33;
 
   text-transform: uppercase;
 
-  color: #ffffff;
+  // color: getColorFromPalette('menu', 'main');
 
   border: 1px solid #ffffff;
   background-color: transparent;
