@@ -1,3 +1,7 @@
+.film-card {
+  max-height: 495px;
+}
+
 .film-card__title {
   font-family: $font-family-main;
   color: getColorFromPalette('primary', 'dark');
