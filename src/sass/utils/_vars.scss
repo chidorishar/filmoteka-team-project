@@ -1,9 +1,4 @@
 $colorPalette: (
-  // 'primary': (
-  //   'additional': #907e82,
-  //   'dark': #000,
-  //   'light': #fff,
-  // ),
   // 'accent': (
   //   'additional': #ffa5ba,
   //   'dark': #d41443,
@@ -46,8 +41,7 @@ $breakpoints: (
   'desktop': 1280px,
 );
 
-//CHECK THIS VALUES ACCORDING TO THIS PROJECT DESIGN TEMPLATE
-$containerLRPaddings: 15px;
+$containerLRPaddings: 32px;
 $containerLRPaddingsMobile: 20px;
 
 $transitionData: (
