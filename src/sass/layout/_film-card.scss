@@ -9,6 +9,8 @@
   font-size: 12px;
   line-height: 1.33;
   margin: 0;
+  text-transform: uppercase;
+  font-style: italic;
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
@@ -28,6 +30,7 @@
   display: flex;
   margin: 0;
   color: getColorFromPalette('secondary', 'orange');
+  text-transform: capitalize;
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
