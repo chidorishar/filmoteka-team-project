@@ -21,7 +21,6 @@
 }
 
 .poster {
-  height: 357px;
   width: 240px;
   border-radius: 5px;
   margin-bottom: 20px;
@@ -70,6 +69,10 @@
   margin-bottom: 8px;
 }
 
+.modal__characteristic--title {
+  text-transform: uppercase;
+}
+
 .modal__characteristic--genre {
   margin-bottom: 0;
 }
@@ -87,7 +90,7 @@
   padding-right: 10px;
   width: 36px;
   height: 16px;
-  color: #ffffff;
+  color: getColorFromPalette('modal', 'text-in-accent');
 }
 
 .modal__about {
@@ -127,8 +130,26 @@
   border-radius: 5px;
 }
 
+.modal__add-to-watched:hover {
+  background-color: getColorFromPalette('modal-buttons', 'hover-watched-btn');
+}
+
+.modal__add-to-watched:focus {
+  background-color: getColorFromPalette('modal-buttons', 'focus-watched-btn');
+}
+
+.modal__add-to-queue:hover {
+  background-color: getColorFromPalette('modal-buttons', 'hover-queue-btn');
+}
+
+.modal__add-to-queue:focus {
+  background-color: getColorFromPalette('modal-buttons', 'focus-queue-btn');
+}
+
 .modal__add-to-queue {
   background-color: getColorFromPalette('modal', 'text-in-accent');
+  border: 1px solid getColorFromPalette('modal', 'color-characteristics-text');
+  border-radius: 5px;
 }
 
 .modal__add-to-watched {
@@ -140,6 +161,7 @@
 @include mediaUpTo('tablet') {
   .modal {
     min-width: 280px;
+    max-width: getBreakpointValue('mobile');
   }
 
   .modal-poster {
@@ -150,6 +172,11 @@
   .modal-data {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .modal__title {
+    font-size: 20px;
+    line-height: 23px;
   }
 }
 
@@ -176,8 +203,13 @@
   }
 
   .poster {
-    height: 374px;
     width: 264px;
+    margin-bottom: 0;
+  }
+
+  .modal__title {
+    font-size: 20px;
+    line-height: 23px;
   }
 
   .modal__about--text {
@@ -217,14 +249,15 @@
 
   .poster {
     width: 375px;
-    height: 478px;
     margin-right: 16px;
+    margin-bottom: 0;
   }
 
   .modal__title {
     font-weight: $font-medium;
     font-size: 30px;
     line-height: 35px;
+    text-transform: uppercase;
   }
 
   .modal__characteristic {
