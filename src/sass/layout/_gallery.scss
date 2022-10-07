@@ -8,6 +8,10 @@
     }
 }
 
+.gallery__section-title {
+    @extend %visually-hidden;
+}
+
 
 .grid-card {
     display: grid;
@@ -34,8 +38,13 @@
     }
 }
 
-.grid-card__item {
-    justify-self: center;
+.movie-card__list,
+.movie-card__properties-list {
+    @extend %unmarked-list;
+}
+
+.movie-card__link {
+    @extend %clean-link;
 }
 
 .movie-card__img {
