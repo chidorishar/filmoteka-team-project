@@ -41,7 +41,7 @@ $colorPalette: (
 //   'food-truck': #c2e297,
 //   'cafe': #f0d1a5,
 //   'button': #d41342,
-// ),,,,,,
+// ),,,,,,,
 );
 
 $breakpoints: (
@@ -50,8 +50,7 @@ $breakpoints: (
   'desktop': 1280px,
 );
 
-//CHECK THIS VALUES ACCORDING TO THIS PROJECT DESIGN TEMPLATE
-$containerLRPaddings: 15px;
+$containerLRPaddings: 32px;
 $containerLRPaddingsMobile: 20px;
 
 $transitionData: (
