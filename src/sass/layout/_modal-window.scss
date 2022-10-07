@@ -23,6 +23,14 @@ img {
   cursor: pointer;
 }
 
+.modal-close > .modal-close__icon:hover {
+  fill: getColorFromPalette('modal-buttons', 'hover-watched-btn');
+}
+
+.modal-close > .modal-close__icon:focus {
+  fill: getColorFromPalette('modal-buttons', 'focus-watched-btn');
+}
+
 .modal-close__icon {
   width: 30px;
   height: 30px;
@@ -56,6 +64,8 @@ img {
 .modal__title {
   font-weight: $font-medium;
   margin-bottom: 20px;
+  font-size: 20px;
+  line-height: 23px;
 }
 
 .modal-buttons {
@@ -111,7 +121,7 @@ img {
 .modal__about-text {
   font-family: $font-family-main;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: $font-medium;
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
@@ -135,7 +145,7 @@ img {
   text-align: center;
   cursor: pointer;
 
-  border: 1px solid var(--main-text-color);
+  border: 1px solid getColorFromPalette('modal', 'color-characteristics-text');
   border-radius: 5px;
 }
 
@@ -177,16 +187,6 @@ img {
     margin-left: auto;
     margin-right: auto;
   }
-
-  .modal-data {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .modal__title {
-    font-size: 20px;
-    line-height: 23px;
-  }
 }
 
 @include mediaInBetween('tablet', 'desktop') {
@@ -207,7 +207,6 @@ img {
   }
 
   .modal-poster {
-    display: flex;
     margin-right: 68px;
   }
 
@@ -217,36 +216,13 @@ img {
     margin-bottom: 0;
   }
 
-  .modal__title {
-    font-size: 20px;
-    line-height: 23px;
-  }
-
   .modal__about-text {
-    font-family: $font-family-main;
-    font-size: 12px;
-    font-weight: $font-medium;
-    line-height: 20px;
-    letter-spacing: 0em;
     max-height: 260px;
-  }
-
-  .modal-close-btn {
-    position: absolute;
-    right: 16px;
-    top: 16px;
   }
 
   .modal__add-to-watched,
   .modal__add-to-queue {
     width: 125;
-    height: 44;
-    font-family: $font-family-main;
-    font-size: 12px;
-    font-weight: $font-medium;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: center;
   }
 }
 
@@ -265,7 +241,6 @@ img {
   }
 
   .modal__title {
-    font-weight: $font-medium;
     font-size: 30px;
     line-height: 35px;
     text-transform: uppercase;
@@ -279,13 +254,10 @@ img {
 
   .modal__about {
     font-weight: $font-medium;
-    font-size: 12px;
     line-height: 16px;
   }
 
   .modal__about-text {
-    font-weight: $font-medium;
-    font-size: 12px;
     line-height: 20px;
 
     max-width: 391px;
@@ -294,13 +266,6 @@ img {
 
   .modal__add-to-watched,
   .modal__add-to-queue {
-    font-size: 12px;
-    font-weight: $font-medium;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: center;
-
     width: 136px;
-    height: 44px;
   }
 }
