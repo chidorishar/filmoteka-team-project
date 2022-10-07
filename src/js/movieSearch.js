@@ -1,22 +1,20 @@
-import { TMDBAPI } from './TMBD';
+import { TMDBAPI } from './theMovieAPI';
 ('./TMDB');
 
 //! change
 const searchInput = document.querySelector('.header_search');
 //! change
 const searchBtn = document.querySelector('.header_search-button');
-//! change
-const container = document.querySelector('.container');
+const movieList = document.querySelector('.movie-card__list');
+moviesAPI = new TMDBAPI();
 
-searchBtn.addEventListener('click', getMovies);
+searchBtn.addEventListener('click', onSearch);
 
-async function getMovies() {
-  moviesAPI = new TMDBAPI();
-
-  const arrOfFindedMovies = await moviesAPI.getMoviesByName(searchInput.value);
-  const finded = arrOfFindedMovies.results;
-
-  makeMoviesMarkup(finded);
+function onSearch() {
+  getMovies(moviesAPI.getMoviesByName(searchInput.value));
+}
+function getMovies(requestFn) {
+  return requestFn.then(res => makeMoviesMarkup(res.results));
 }
 
 /**
@@ -25,30 +23,42 @@ async function getMovies() {
  * @returns {string} - the markup of movies
  */
 function makeMoviesMarkup(movies) {
+  console.log(movies);
   const markupped = movies
-
     .map(el => {
       const movieOutputs = {
         image: el.poster_path,
         title: el.title,
-        //.slice(0, 4)
-        date: el.release_date,
-        //! genre doesn't work
+        date: el.release_date.slice(0, 4),
+        //! just id
         genre: el.genre_ids,
+        alt: el.overview,
       };
 
-      // console.log(movieOutputs.genre);
+      const { image, title, date, genre, alt } = movieOutputs;
+      //!выходит запросить изображение только с шириной 500px
+      const imageLink = `https://image.tmdb.org/t/p/w500${image}`;
 
-      const { image, title, date, genre } = movieOutputs;
+      console.log(imageLink);
 
-      console.log(genre);
-
-      // console.log(`https://image.tmdb.org/t/p/w500${image}`);
-      return `<img src="https://image.tmdb.org/t/p/w395{image}" alt="${title}"/><div><p>${title}</p><span>${date} | ${genre.join(
-        ', '
-      )}</span></div`;
+      return `<li class="movie-card__item grid-card__item">
+        <a class="movie-card__link" href="">
+        //! указаны размеры
+          <img width="395" height="594" class="movie-card__img" src="${imageLink}" loading="lazy" alt="${alt}">
+          <ul class="movie-card__properties-list">
+            <li class="movie-card__properties-item">
+              <h3 class="movie-card__movie-title">${title}</h3>
+            </li>
+            <li class="movie-card__properties-item">
+              <p class="movie-card__movie-category">${genre.join(
+                ', '
+              )} | ${date}</p>
+            </li>
+          </ul>
+        </a>
+      </li>`;
     })
-    .join(',');
+    .join('');
 
-  container.innerHTML = markupped;
+  return (movieList.innerHTML = markupped);
 }
