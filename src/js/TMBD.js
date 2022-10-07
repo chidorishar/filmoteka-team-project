@@ -16,7 +16,7 @@ export class TMDBAPI {
     URL: 'https://api.themoviedb.org/3/trending/all',
     timeWindow: 'week',
     page: 1,
-  };
+  }; 
 
   constructor() {}
 

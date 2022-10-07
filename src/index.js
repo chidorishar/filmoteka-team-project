@@ -1,3 +1,3 @@
 // import './js/***.js';
-import './js/TMDB';
+import './js/TMBD';
 import './js/movieSearch';
