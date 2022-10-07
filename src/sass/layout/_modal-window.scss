@@ -1,3 +1,11 @@
+img {
+  display: block;
+  height: 100%;
+  width: 100%;
+
+  object-fit: contain;
+}
+
 .modal {
   flex-direction: column;
   background-color: white;
@@ -22,6 +30,7 @@
 
 .poster {
   width: 240px;
+  height: 357px;
   border-radius: 5px;
   margin-bottom: 20px;
 }
@@ -31,7 +40,7 @@
   margin-right: 40px;
 }
 
-.modal__characteristic--data {
+.modal__characteristic-data {
   @extend %unmarked-list;
   display: flex;
   flex-direction: column;
@@ -60,30 +69,30 @@
   margin-bottom: 20px;
 }
 
-.modal__characteristic--rating,
-.modal__characteristic--popularity,
-.modal__characteristic--title,
-.modal__characteristic--genre {
+.modal__characteristic-rating,
+.modal__characteristic-popularity,
+.modal__characteristic-title,
+.modal__characteristic-genre {
   font-size: 12px;
   color: getColorFromPalette('modal', 'characteristic-text-color');
   margin-bottom: 8px;
 }
 
-.modal__characteristic--title {
+.modal__characteristic-title {
   text-transform: uppercase;
 }
 
-.modal__characteristic--genre {
+.modal__characteristic-genre {
   margin-bottom: 0;
 }
 
-.modal__characteristic--inform {
+.modal__characteristic-inform {
   font-size: 12px;
   line-height: 14px;
   color: getColorFromPalette('modal', 'color-characteristics-text');
 }
 
-.modal__characteristic--inform-accent {
+.modal__characteristic-inform-accent {
   background: getColorFromPalette('modal', 'accent-color');
   border-radius: 5px;
   padding-left: 10px;
@@ -99,7 +108,7 @@
   margin-bottom: 8px;
 }
 
-.modal__about--text {
+.modal__about-text {
   font-family: $font-family-main;
   font-size: 12px;
   font-weight: 500;
@@ -204,6 +213,7 @@
 
   .poster {
     width: 264px;
+    height: 374px;
     margin-bottom: 0;
   }
 
@@ -212,7 +222,7 @@
     line-height: 23px;
   }
 
-  .modal__about--text {
+  .modal__about-text {
     font-family: $font-family-main;
     font-size: 12px;
     font-weight: $font-medium;
@@ -249,6 +259,7 @@
 
   .poster {
     width: 375px;
+    height: 478px;
     margin-right: 16px;
     margin-bottom: 0;
   }
@@ -272,7 +283,7 @@
     line-height: 16px;
   }
 
-  .modal__about--text {
+  .modal__about-text {
     font-weight: $font-medium;
     font-size: 12px;
     line-height: 20px;
@@ -292,7 +303,4 @@
     width: 136px;
     height: 44px;
   }
-}
-
-body {
 }
