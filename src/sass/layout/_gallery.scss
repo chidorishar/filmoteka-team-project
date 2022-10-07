@@ -1,0 +1,11 @@
+.gallery {
+  padding: 20px 0 40px;
+
+  @include mediaOver('tablet') {
+    padding: $sectionTDPaddings 0;
+  }
+}
+
+.gallery__section-title {
+  @extend %visually-hidden;
+}
