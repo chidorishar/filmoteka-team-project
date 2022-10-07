@@ -1,4 +1,6 @@
-.film-card {
+.movie-card {
+  @extend %unmarked-list;
+
   margin-top: 0px;
   font-family: $font-family-main;
   width: 280px;
@@ -15,7 +17,11 @@
   }
 }
 
-.film-card__title {
+.movie-card__link {
+  @extend %clean-link;
+}
+
+.movie-card__title {
   font-family: $font-family-main;
   color: getColorFromPalette('primary', 'dark');
   font-weight: $font-medium;
@@ -39,7 +45,7 @@
   }
 }
 
-.film-card__box {
+.movie-card__box {
   font-family: $font-family-main;
   font-weight: $font-medium;
   font-size: 12px;
@@ -59,15 +65,17 @@
   }
 }
 
-.film-card__item {
+.movie-card__item {
   margin: 0;
 }
 
-.film-card__item:not(:last-child) {
+.movie-card__item:not(:last-child) {
   margin-right: 7px;
 }
 
-.film-card__item--acсent {
+.movie-card__item--acсent {
+  @extend %flex--vh-centred;
+
   font-family: $font-family-main;
   font-size: 12px;
   line-height: 1.17;
@@ -85,7 +93,7 @@
   }
 }
 
-.film-card__img {
+.movie-card__img {
   border-radius: 5px;
 
   width: 280px;
