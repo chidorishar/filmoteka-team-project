@@ -1,10 +1,5 @@
 :root {
-  --background-color-btn-watched: #ff6b01;
-  --accent-characteristic-element: #ff6b01;
-  --characteristic-text-color: #8c8c8c;
   --main-text-color: #000000;
-  --text-in-watched-btn: #ffffff;
-  --background-queue-btn: #ffffff;
 }
 
 .modal {
@@ -20,6 +15,8 @@
   position: absolute;
   top: 16px;
   right: 16px;
+
+  cursor: pointer;
 }
 
 .modal-close__icon {
@@ -73,7 +70,7 @@
 .modal__characteristic--title,
 .modal__characteristic--genre {
   font-size: 12px;
-  color: var(--characteristic-text-color);
+  color: getColorFromPalette('modal', 'characteristic-text-color');
   margin-bottom: 8px;
 }
 
@@ -84,11 +81,11 @@
 .modal__characteristic--inform {
   font-size: 12px;
   line-height: 14px;
-  color: var(--main-text-color);
+  color: getColorFromPalette('modal', 'color-characteristics-text');
 }
 
 .modal__characteristic--inform-accent {
-  background: var(--background-color-btn-watched);
+  background: getColorFromPalette('modal', 'accent-color');
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 10px;
@@ -99,6 +96,7 @@
 
 .modal__about {
   size: 12px;
+  margin-bottom: 8px;
 }
 
 .modal__about--text {
@@ -126,22 +124,23 @@
   line-height: 16px;
   letter-spacing: 0em;
   text-align: center;
+  cursor: pointer;
 
   border: 1px solid var(--main-text-color);
   border-radius: 5px;
 }
 
 .modal__add-to-queue {
-  background-color: var(--background-queue-btn);
+  background-color: getColorFromPalette('modal', 'text-in-accent');
 }
 
 .modal__add-to-watched {
-  background-color: var(--accent-characteristic-element);
-  color: var(--text-in-watched-btn);
+  background-color: getColorFromPalette('modal', 'accent-color');
+  color: getColorFromPalette('modal', 'text-in-accent');
   border: transparent;
 }
 
-@media screen and (min-width: 320px) and (max-width: 767px) {
+@include mediaUpTo('tablet') {
   .modal {
     min-width: 280px;
   }
@@ -157,7 +156,7 @@
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1023px) {
+@include mediaInBetween('tablet', 'desktop') {
   .modal {
     width: 704px;
     display: flex;
@@ -190,6 +189,7 @@
     font-weight: $font-medium;
     line-height: 20px;
     letter-spacing: 0em;
+    max-height: 260px;
   }
 
   .modal-close-btn {
@@ -211,7 +211,7 @@
   }
 }
 
-@media screen and (min-width: 1024px) {
+@include mediaOver('desktop') {
   .modal {
     width: 806px;
     display: flex;
@@ -248,6 +248,7 @@
     line-height: 20px;
 
     max-width: 391px;
+    max-height: 260px;
   }
 
   .modal__add-to-watched,
@@ -261,4 +262,7 @@
     width: 136px;
     height: 44px;
   }
+}
+
+body {
 }
