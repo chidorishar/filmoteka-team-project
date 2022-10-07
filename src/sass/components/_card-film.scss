@@ -81,7 +81,7 @@
 }
 
 .movie-card__box {
-  @extend %flex;
+  @extend %flex--v-centred;
 
   font-family: $font-family-main;
   font-weight: $font-medium;
@@ -102,11 +102,9 @@
 }
 
 .movie-card__item {
-  margin: 0;
-}
-
-.movie-card__item:not(:last-child) {
-  margin-right: 7px;
+  &:last-child {
+    margin-left: 6px;
+  }
 }
 
 .movie-card__item--accent {
