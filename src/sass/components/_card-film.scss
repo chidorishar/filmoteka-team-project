@@ -77,12 +77,18 @@
 
 .movie-card__title {
   font-family: $font-family-main;
-  color: getColorFromPalette('primary', 'dark');
   font-weight: $font-medium;
   font-size: 12px;
   line-height: 1.33;
-  margin: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: getColorFromPalette('primary', 'dark');
   text-transform: uppercase;
+
+  margin: 0;
   margin-top: 8px;
 
   @include mediaInBetween('tablet', 'desktop') {
