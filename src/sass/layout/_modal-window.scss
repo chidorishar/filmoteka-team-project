@@ -1,2 +1,264 @@
+:root {
+  --background-color-btn-watched: #ff6b01;
+  --accent-characteristic-element: #ff6b01;
+  --characteristic-text-color: #8c8c8c;
+  --main-text-color: #000000;
+  --text-in-watched-btn: #ffffff;
+  --background-queue-btn: #ffffff;
+}
+
 .modal {
+  flex-direction: column;
+  background-color: white;
+}
+
+.modal-close {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  background-color: transparent;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.modal-close__icon {
+  width: 30px;
+  height: 30px;
+}
+
+.poster {
+  height: 357px;
+  width: 240px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.modal__characteristic {
+  @extend %unmarked-list;
+  margin-right: 40px;
+}
+
+.modal__characteristic--data {
+  @extend %unmarked-list;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 48px;
+  padding-bottom: 40px;
+}
+
+.modal__title {
+  font-weight: $font-medium;
+  margin-bottom: 20px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.modal-data {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.modal__characteristic--rating,
+.modal__characteristic--popularity,
+.modal__characteristic--title,
+.modal__characteristic--genre {
+  font-size: 12px;
+  color: var(--characteristic-text-color);
+  margin-bottom: 8px;
+}
+
+.modal__characteristic--genre {
+  margin-bottom: 0;
+}
+
+.modal__characteristic--inform {
+  font-size: 12px;
+  line-height: 14px;
+  color: var(--main-text-color);
+}
+
+.modal__characteristic--inform-accent {
+  background: var(--background-color-btn-watched);
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 36px;
+  height: 16px;
+  color: #ffffff;
+}
+
+.modal__about {
+  size: 12px;
+}
+
+.modal__about--text {
+  font-family: $font-family-main;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+
+  margin-bottom: 20px;
+  max-height: 120px;
+  overflow: auto;
+}
+
+.modal__add-to-watched,
+.modal__add-to-queue {
+  height: 44px;
+  width: 110px;
+  size: 12px;
+  line-height: 16px;
+  font-family: $font-family-main;
+  font-size: 12px;
+  font-weight: $font-medium;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: center;
+
+  border: 1px solid var(--main-text-color);
+  border-radius: 5px;
+}
+
+.modal__add-to-queue {
+  background-color: var(--background-queue-btn);
+}
+
+.modal__add-to-watched {
+  background-color: var(--accent-characteristic-element);
+  color: var(--text-in-watched-btn);
+  border: transparent;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .modal {
+    min-width: 280px;
+  }
+
+  .modal-poster {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .modal-data {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .modal {
+    width: 704px;
+    display: flex;
+    flex-direction: row;
+    padding-top: 40px;
+  }
+
+  .modal-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-info {
+    max-width: 264px;
+  }
+
+  .modal-poster {
+    display: flex;
+    margin-right: 68px;
+  }
+
+  .poster {
+    height: 374px;
+    width: 264px;
+  }
+
+  .modal__about--text {
+    font-family: $font-family-main;
+    font-size: 12px;
+    font-weight: $font-medium;
+    line-height: 20px;
+    letter-spacing: 0em;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+
+  .modal__add-to-watched,
+  .modal__add-to-queue {
+    width: 125;
+    height: 44;
+    font-family: $font-family-main;
+    font-size: 12px;
+    font-weight: $font-medium;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: center;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .modal {
+    width: 806px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .poster {
+    width: 375px;
+    height: 478px;
+    margin-right: 16px;
+  }
+
+  .modal__title {
+    font-weight: $font-medium;
+    font-size: 30px;
+    line-height: 35px;
+  }
+
+  .modal__characteristic {
+    font-weight: $font-medium;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .modal__about {
+    font-weight: $font-medium;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .modal__about--text {
+    font-weight: $font-medium;
+    font-size: 12px;
+    line-height: 20px;
+
+    max-width: 391px;
+  }
+
+  .modal__add-to-watched,
+  .modal__add-to-queue {
+    font-size: 12px;
+    font-weight: $font-medium;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: center;
+
+    width: 136px;
+    height: 44px;
+  }
 }
