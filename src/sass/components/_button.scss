@@ -9,15 +9,15 @@
 
   text-transform: uppercase;
 
-  // color: getColorFromPalette('menu', 'main');
+  color: getColorFromPalette('primary', 'light');
 
-  border: 1px solid #ffffff;
+  border: 1px solid getColorFromPalette('primary', 'light');
   background-color: transparent;
   border-radius: 5px;
 }
 
 .btn-active {
-  background: #ff6b01;
-  box-shadow: 0px 8px 43px rgba(255, 107, 1, 0.6);
+  background: getColorFromPalette('secondary', 'orange');
+  box-shadow: 0px 8px 43px getColorFromPalette('secondary', 'orange-shadow');
   border: none;
 }

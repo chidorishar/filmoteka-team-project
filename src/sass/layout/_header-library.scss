@@ -31,7 +31,7 @@
   line-height: 1.16;
   gap: 10px;
 
-  color: #ffffff;
+  color: getColorFromPalette('primary', 'light');
   @extend %clean-link;
 }
 
@@ -68,7 +68,7 @@
   text-align: center;
   text-transform: uppercase;
 
-  color: #ffffff;
+  color: getColorFromPalette('primary', 'light');
 
   @extend %clean-link;
 }
@@ -93,7 +93,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  color: red;
-  background-color: red;
+  color: getColorFromPalette('secondary', 'red');
+  background-color: getColorFromPalette('secondary', 'red');
   height: 3px;
 }
