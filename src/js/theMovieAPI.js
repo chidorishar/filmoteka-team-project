@@ -28,6 +28,13 @@ export class TMDBAPI {
     return await this.#fetchByQuery(query);
   }
 
+  async getGenresData() {
+    // prettier-ignore
+    const query = `${this.#BASE_URL}/genre/movie/list?api_key=${this.#API_KEY}&language=en-US`;
+
+    return await this.#fetchByQuery(query);
+  }
+
   async getMoviesByName(searchName) {
     if (searchName) {
       this.#moviesByNameQueryOptions.name = searchName;
