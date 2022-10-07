@@ -39,4 +39,12 @@
 .footer-section__icon {
   margin-left: 10px;
   margin-right: 10px;
+  transform: rotate(0deg) scale(2);
+  animation: pulse 2s linear infinite;
+}
+
+@keyframes pulse {
+  20% {
+    transform: rotate(0deg) scale(0.9);
+  }
 }
