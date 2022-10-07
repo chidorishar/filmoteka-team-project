@@ -1,31 +1,48 @@
 .film-card {
+  margin-top: 0px;
   font-family: $font-family-main;
-  max-height: 495px;
+  width: 280px;
+  height: 438px;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    width: 336px;
+    height: 495px;
+  }
+
+  @include mediaOver('desktop') {
+    width: 395px;
+    height: 574px;
+  }
 }
 
 .film-card__title {
+  font-family: $font-family-main;
   color: getColorFromPalette('primary', 'dark');
   font-weight: $font-medium;
   font-size: 12px;
   line-height: 1.33;
   margin: 0;
   text-transform: uppercase;
-  font-style: italic;
+  margin-top: 8px;
+  // font-style: italic;
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
     line-height: 1.33;
+    margin-top: 8px;
   }
 
   @include mediaOver('desktop') {
     font-size: 20px;
     line-height: 1.2;
+    margin-top: 12px;
   }
 }
 
 .film-card__box {
+  font-family: $font-family-main;
   font-weight: $font-medium;
-  font-size: 20px;
+  font-size: 12px;
   display: flex;
   margin: 0;
   color: getColorFromPalette('secondary', 'orange');
@@ -51,13 +68,38 @@
 }
 
 .film-card__item--acсent {
+  font-family: $font-family-main;
   font-size: 12px;
   line-height: 1.17;
-  border-radius: 40px;
+  border-radius: 5px;
   background-color: getColorFromPalette('secondary', 'orange');
   color: getColorFromPalette('secondary', 'white');
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 1px 10px;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    padding: 1px 10px;
+  }
+
+  @include mediaOver('desktop') {
+    padding: 3px 12px;
+  }
+}
+
+.film-card__img {
+  border-radius: 5px;
+
+  width: 280px;
+  height: 398px;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    width: 336px;
+    height: 455px;
+  }
+
+  @include mediaOver('desktop') {
+    width: 395px;
+    height: 574px;
+  }
 }
 
 // .is-hidden {
