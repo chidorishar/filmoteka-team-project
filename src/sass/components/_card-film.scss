@@ -76,14 +76,12 @@
 }
 
 .movie-card__title {
+  @extend %text-with-wrapped-overflow;
+
   font-family: $font-family-main;
   font-weight: $font-medium;
   font-size: 12px;
   line-height: 1.33;
-
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 
   color: getColorFromPalette('primary', 'dark');
   text-transform: uppercase;
@@ -104,15 +102,18 @@
   }
 }
 
-.movie-card__box {
+.movie-card__movie-info-wrapper {
   @extend %flex--v-centred;
 
   font-family: $font-family-main;
   font-weight: $font-medium;
   font-size: 12px;
-  margin: 0;
-  color: getColorFromPalette('secondary', 'orange');
   text-transform: capitalize;
+
+  width: 100%;
+  margin: 0;
+
+  color: getColorFromPalette('secondary', 'orange');
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
@@ -126,9 +127,19 @@
 }
 
 .movie-card__item {
+  @extend %unmarked-list;
+
+  &--hidden-overflow {
+    overflow: hidden;
+  }
+
   &:last-child {
     margin-left: 6px;
   }
+}
+
+.movie-card__genres {
+  @extend %text-with-wrapped-overflow;
 }
 
 .movie-card__item--accent {
