@@ -1,2 +1,74 @@
-<!-- Header -->
-<header id="header" class="header"></header>
+<header id="header" class="header">
+    <div class="container">
+        <div class="header__background">
+            <picture>
+                <source
+                    media="(min-width:1280px)"
+                    srcset="
+                        ./images/decorative/images_header/desctop/header-desctop-1x.jpg 1x,
+                        ./images/decorative/images_header/desctop/header-desctop-2x.jpg 2x
+                        "
+                        type="image/jpg"
+                        />
+                <source
+                    media="(min-width:768px)"
+                    srcset="
+                        ./images/decorative/images_header/tablet/header-tablet-1x.jpg 1x,
+                        ./images/decorative/images_header/tablet/header-tablet-2x.jpg 2x
+                        "
+                        type="image/jpg"
+                        />
+                <source
+                    media="(max-width:767px)"
+                   srcset="
+                        ./images/decorative/images_header/mobile/header-mobile-1x.jpg 1x,
+                        ./images/decorative/images_header/mobile/header-mobile-2x.jpg 2x
+                        "
+                        type="image/jpg"
+                        />
+                <img
+                    class="header__background-img"
+                    alt="cinema"
+                    src="./images/decorative/images_header/mobile/header-mobile-1x.jpg" alt="cinema">                
+            </picture>
+        </div>
+
+
+        <div class="navigation-header">
+            
+            <a href="./index.html" class="logo-header">
+                <img src="./images/decorative/logo.png" alt="logo" class="logo-header__img">
+                <span>Filmoteka</span>
+            </a>
+
+            <nav class="navigation">
+                <ul class="nav-header">
+                    <li class="nav-header__item"><a href="./index.html" class="nav-header__link nav-header__link--current">Home</a></li>
+                    <li class="nav-header__item"><a href="#" class="nav-header__link">My Library</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="header-search">
+            <form class="search-form">
+              <input
+                class="search-input"
+                type="text"
+                name="query"
+                autocomplete="off"
+                placeholder="Movie search"
+              />
+              <button class="search-button"  type="submit">
+                <svg class="search-icon-svg" width="12" height="12">
+                    <use href="./images/decorative/sprite.svg#icon-search"></use>
+                </svg>
+              </button>
+              <div class="warning ">
+                Search result not successful. Enter the correct movie name
+              </div>
+            </form>
+          </div>
+
+    </div>
+</header>
+<!-- aria-label="search films" -->
