@@ -9,7 +9,7 @@ img {
 
 .modal {
   flex-direction: column;
-  background-color: white;
+  background-color: getColorFromPalette('modal', 'background-color');
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 48px;
@@ -44,7 +44,6 @@ img {
   right: 16px;
 
   cursor: pointer;
-  
 }
 
 .modal-close:focus {
