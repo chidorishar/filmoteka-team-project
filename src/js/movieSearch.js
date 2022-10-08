@@ -1,12 +1,11 @@
 import { TMDBAPI } from './theMovieAPI';
-('./TMDB');
 
 //! change
 const searchInput = document.querySelector('.header_search');
 //! change
 const searchBtn = document.querySelector('.header_search-button');
 const movieList = document.querySelector('.movie-card__list');
-moviesAPI = new TMDBAPI();
+const moviesAPI = new TMDBAPI();
 
 searchBtn.addEventListener('click', onSearch);
 
@@ -36,14 +35,14 @@ function makeMoviesMarkup(movies) {
       };
 
       const { image, title, date, genre, alt } = movieOutputs;
-      //!выходит запросить изображение только с шириной 500px
+      //! выходит запросить изображение только с шириной 500px
       const imageLink = `https://image.tmdb.org/t/p/w500${image}`;
 
-      console.log(imageLink);
+      console.log(moviesAPI.getGenreById(genre));
 
       return `<li class="movie-card__item grid-card__item">
         <a class="movie-card__link" href="">
-        //! указаны размеры
+        <!--//! указаны размеры-->
           <img width="395" height="594" class="movie-card__img" src="${imageLink}" loading="lazy" alt="${alt}">
           <ul class="movie-card__properties-list">
             <li class="movie-card__properties-item">
