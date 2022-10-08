@@ -16,28 +16,79 @@
 }
 
 .movie-card__img-thumb {
+  @extend %flex;
   flex-grow: 1;
 
+  border-radius: 5px;
   overflow: hidden;
+
+  &--no-poster {
+    $stripesWidth: 15px;
+    $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
+
+    background-image: repeating-linear-gradient(
+      to left bottom,
+      getColorFromPalette('primary', 'light'),
+      getColorFromPalette('primary', 'light') $stripesWidth,
+      $stripesMainColor $stripesWidth,
+      $stripesMainColor $stripesWidth * 2
+    );
+  }
 }
 
 .movie-card__img {
   width: 100%;
+  height: 100%;
 
-  border-radius: 5px;
-
+  object-fit: cover;
   object-position: 50% 50%;
 }
 
+.movie-card__poster-placeholder {
+  @extend %rounded;
+  @extend %flex--vh-centred;
+
+  flex-wrap: wrap;
+  align-content: center;
+
+  font-size: 32px;
+  text-align: center;
+  color: getColorFromPalette('secondary', 'white');
+
+  width: 240px;
+  height: 240px;
+  margin: auto;
+
+  background-color: rgba(getColorFromPalette('primary', 'dark'), 0.8);
+  box-shadow: 0px 0px 20px 0px #6d6d6d;
+
+  @include mediaOver('tablet') {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.movie-card__poster-placeholder--title {
+  width: 82%;
+  margin-bottom: 10px;
+
+  color: getColorFromPalette('secondary', 'orange');
+}
+
 .movie-card__title {
+  @extend %text-with-wrapped-overflow;
+
   font-family: $font-family-main;
-  color: getColorFromPalette('primary', 'dark');
   font-weight: $font-medium;
   font-size: 12px;
   line-height: 1.33;
-  margin: 0;
   text-transform: uppercase;
+
+  flex-shrink: 0;
+  margin: 0;
   margin-top: 8px;
+
+  color: getColorFromPalette('primary', 'dark');
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
@@ -52,15 +103,18 @@
   }
 }
 
-.movie-card__box {
-  @extend %flex;
+.movie-card__movie-info-wrapper {
+  @extend %flex--v-centred;
 
   font-family: $font-family-main;
   font-weight: $font-medium;
   font-size: 12px;
-  margin: 0;
-  color: getColorFromPalette('secondary', 'orange');
   text-transform: capitalize;
+
+  width: 100%;
+  margin: 0;
+
+  color: getColorFromPalette('secondary', 'orange');
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
@@ -74,19 +128,27 @@
 }
 
 .movie-card__item {
-  margin: 0;
+  @extend %unmarked-list;
+
+  &--hidden-overflow {
+    overflow: hidden;
+  }
+
+  &:last-child {
+    margin-left: 6px;
+  }
 }
 
-.movie-card__item:not(:last-child) {
-  margin-right: 7px;
+.movie-card__genres {
+  @extend %text-with-wrapped-overflow;
 }
 
-.movie-card__item--acсent {
+.movie-card__item--accent {
   @extend %flex--vh-centred;
 
   font-family: $font-family-main;
   font-size: 12px;
-  line-height: 1.17;
+  line-height: 1.2;
   border-radius: 5px;
   background-color: getColorFromPalette('secondary', 'orange');
   color: getColorFromPalette('secondary', 'white');

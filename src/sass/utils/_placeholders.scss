@@ -84,3 +84,9 @@
   align-items: center;
   justify-content: center;
 }
+
+%text-with-wrapped-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
