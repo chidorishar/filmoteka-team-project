@@ -1,21 +1,32 @@
 import { IDsParser } from './utils/idsToGenres';
 
 export class GalleryAPI {
-  #rootEl = null;
-  #pathToPoster = '';
   #idsParser = null;
+  #loadedImages = 0;
+  #totalImages = 0;
+  #pathToPoster = '';
+  #rootEl = null;
+  #onImagesLoadedCallback = null;
 
-  constructor(rootElementSelector, pathToPosterImg, genresAndIDs) {
+  constructor(
+    rootElementSelector,
+    pathToPosterImg,
+    genresAndIDs,
+    onAllImagesLoadedCallback = () => {}
+  ) {
     this.#rootEl = document.querySelector(rootElementSelector);
     this.#pathToPoster = pathToPosterImg;
+    this.#onImagesLoadedCallback = onAllImagesLoadedCallback;
     this.#idsParser = new IDsParser(genresAndIDs);
   }
 
   renderMoviesCards(moviesData) {
+    this.#totalImages = moviesData.length;
     this.#rootEl.innerHTML = moviesData.reduce(
       (acc, movieData) => (acc += this.#createMovieCardMarkup(movieData)),
       ''
     );
+    this.#trackImagesLoadingEnd();
   }
 
   #createMovieCardMarkup({
@@ -39,7 +50,6 @@ export class GalleryAPI {
         class="movie-card__img"
         src="${this.#pathToPoster}w500${poster_path}"
         alt=""
-        loading="lazy"
       />`
       : 
       `<span class="movie-card__poster-placeholder">
@@ -84,5 +94,24 @@ export class GalleryAPI {
     parsedGenres += isTooManyIDs ? ', Other' : '';
 
     return parsedGenres;
+  }
+
+  #onImageLoaded = e => {
+    this.#loadedImages++;
+    e.currentTarget.removeEventListener('load', this.#onImageLoaded);
+
+    if (this.#loadedImages === this.#totalImages) {
+      this.#onImagesLoadedCallback();
+    }
+  };
+
+  #trackImagesLoadingEnd() {
+    const allImagesEls = document.querySelectorAll('.movie-card__img');
+
+    this.#loadedImages = 0;
+    [...allImagesEls].forEach(el => {
+      el.addEventListener('load', this.#onImageLoaded);
+      el.addEventListener('error', this.#onImageLoaded);
+    });
   }
 }
