@@ -1,5 +1,5 @@
 .footer-section {
-  background-color: getColorFromPalette('background', 'light');
+  background-color: getColorFromPalette('footer', 'background');
   font-style: normal;
   padding-top: 29px;
   padding-bottom: 29px;
@@ -31,7 +31,9 @@
 }
 
 .footer-section__text {
-  margin-bottom: 10px;
+  @include mediaUpTo('tablet') {
+    margin-bottom: 10px;
+  }
 }
 
 .footer-section__acсent {
