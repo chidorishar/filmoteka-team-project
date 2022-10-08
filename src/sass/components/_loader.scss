@@ -15,13 +15,17 @@
   @extend %rounded;
   width: 75px;
   height: 75px;
-  border: 10px solid rgba(62, 190, 141, 0.6);
-  border-left-color: rgba(62, 190, 141);
+  border: 10px solid getColorFromPalette('loader', 'border');
+  border-left-color: getColorFromPalette('loader', 'border-left');
 
   animation: loader 1.3s linear infinite;
 }
 
-.hide {
-  opacity: 0;
-  pointer-events: none;
+// .hide {
+//   opacity: 0;
+//   pointer-events: none;
+// }
+
+.is-hidden {
+  display: none;
 }
