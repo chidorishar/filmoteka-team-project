@@ -29,10 +29,18 @@ export class TMDBAPI {
   }
 
   async getGenresData() {
+    let fetchedGenres = [];
     // prettier-ignore
-    const query = `${this.#BASE_URL}/genre/movie/list?api_key=${this.#API_KEY}&language=en-US`;
+    let query = `${this.#BASE_URL}/genre/movie/list?api_key=${this.#API_KEY}&language=en-US`;
 
-    return await this.#fetchByQuery(query);
+    fetchedGenres = (await this.#fetchByQuery(query)).genres;
+    // prettier-ignore
+    query = `${this.#BASE_URL}/genre/tv/list?api_key=${this.#API_KEY}&language=en-US`;
+    fetchedGenres = {
+      genres: [...fetchedGenres, ...(await this.#fetchByQuery(query)).genres],
+    };
+
+    return fetchedGenres;
   }
 
   async getMoviesByName(searchName) {
