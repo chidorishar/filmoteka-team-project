@@ -10,7 +10,8 @@ let tmdbAPI = null;
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
-    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images.base_url;
+    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
+      .secure_base_url;
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = (await tmdbAPI.getTopMovies()).results; //(await tmdbAPI.getMoviesByName('test')).results;
     //get array of IDs and genres
