@@ -10,8 +10,23 @@
 }
 
 .header-library__background-img {
-  width: 100%;
   height: 230px;
+  min-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  @include mediaOver('tablet') {
+    height: 219px;
+    max-width: 768px;
+  }
+  @include mediaOver('desktop') {
+    height: 216px;
+    max-width: 1280px;
+  }
 }
 
 .navigation-library {
@@ -61,7 +76,6 @@
 }
 
 .nav-group-library__link {
- 
   font-size: 12px;
   line-height: 1.17;
 
@@ -73,7 +87,7 @@
   @extend %clean-link;
 }
 
-.header__buttons {
+.header-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
