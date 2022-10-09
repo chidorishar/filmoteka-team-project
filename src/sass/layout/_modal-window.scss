@@ -1,10 +1,39 @@
-img {
-  display: block;
-  height: 100%;
-  width: 100%;
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: createTransitionFor('opacity'), createTransitionFor('visibility');
+}
 
-  object-fit: contain;
-  object-position: top;
+.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.modal {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: calc(100vw - 34px);
+  padding: 24px;
+
+  // background-color: getColorFromPalette('primary', 'light');
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+
+  transition: createTransitionFor('transform', '400ms');
+
+  .backdrop.is-hidden & {
+    transform: translate(-50%, -50%) scale(0.7);
+  }
 }
 
 .modal {
@@ -76,9 +105,15 @@ img {
 }
 
 .poster {
-  width: 100%;
-  border-radius: 5px;
+  display: block;
   margin-bottom: 20px;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 5px;
+
+  object-fit: contain;
+  object-position: top;
 
   @include mediaInBetween('tablet', 'desktop') {
     width: 264px;
