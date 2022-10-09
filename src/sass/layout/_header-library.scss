@@ -1,4 +1,4 @@
-.header-library {
+.header-library {position: relative;
   padding-top: 40px;
   padding-bottom: 62px;
   @include mediaOver('tablet') {
@@ -11,19 +11,24 @@
   top: 0;
   left: 0;
   width: 100%;
+  min-width: 320px;
+
   height: 230px;
   z-index: -1;
   overflow: hidden;
   color: rgba(0, 0, 0, 0.56);
   @include mediaOver('tablet') {
     height: 216px;
+    width: 768px;
+  }
+  @include mediaOver('desktop') {
+    height: 219px;
+    width: 1280px;
   }
 }
 
 .header-library__background-img {
   width: 100%;
-  min-width: 320px;
-
   z-index: -2;
 }
 
