@@ -12,8 +12,34 @@ searchBtn.addEventListener('click', onSearch);
 function onSearch() {
   getMovies(moviesAPI.getMoviesByName(searchInput.value));
 }
-function getMovies(requestFn) {
-  return requestFn.then(res => makeMoviesMarkup(res.results));
+
+async function getMovies(requestFn) {
+  const fetchedData = await requestFn;
+  return makeMoviesMarkup(fetchedData.results);
+}
+
+async function getGenres(id = [], finalId = []) {
+  const fetchedData = await moviesAPI.getGenresData();
+
+  id.forEach(idInstance => {
+    finalId.push(getGenreById(fetchedData.genres, idInstance));
+  });
+}
+
+function getGenreById(genres, id) {
+  const genresEqualisation = genres.filter(el => {
+    return el.id === id;
+  });
+
+  if (genresEqualisation) {
+    // фильтрация повторяющихся значений
+    //? это действие необходимо, тк в ответ на запрос массива жанров - приходит массив объекты которого дублирутся (только: id 16, 35, 80, 99, 18, 10751, 9648, 37)
+    const unique = [
+      ...new Map(genresEqualisation.map(el => [el[id], el])).values(),
+    ];
+    return unique[0].name;
+  }
+  return 0;
 }
 
 /**
@@ -21,6 +47,7 @@ function getMovies(requestFn) {
  * @param {Array} movies - array of getting movies
  * @returns {string} - the markup of movies
  */
+
 function makeMoviesMarkup(movies) {
   console.log(movies);
   const markupped = movies
@@ -30,15 +57,18 @@ function makeMoviesMarkup(movies) {
         title: el.title,
         date: el.release_date.slice(0, 4),
         //! just id
-        genre: el.genre_ids,
+        genreIds: el.genre_ids,
         alt: el.overview,
       };
 
-      const { image, title, date, genre, alt } = movieOutputs;
+      const { image, title, date, genreIds, alt } = movieOutputs;
+
+      const genres = [];
+      getGenres(genreIds, genres);
+      console.log(genres);
+
       //! выходит запросить изображение только с шириной 500px
       const imageLink = `https://image.tmdb.org/t/p/w500${image}`;
-
-      console.log(moviesAPI.getGenreById(genre));
 
       return `<li class="movie-card__item grid-card__item">
         <a class="movie-card__link" href="">
@@ -49,7 +79,7 @@ function makeMoviesMarkup(movies) {
               <h3 class="movie-card__movie-title">${title}</h3>
             </li>
             <li class="movie-card__properties-item">
-              <p class="movie-card__movie-category">${genre.join(
+              <p class="movie-card__movie-category">${genres.join(
                 ', '
               )} | ${date}</p>
             </li>
