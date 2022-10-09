@@ -161,7 +161,8 @@
   transition: all 0.3s linear 0s;
   }
   
-  .team:hover .team-photo::before {
+  .team:hover .team-photo::before,
+  .team:focus .team-photo::before {
     height: 100%;
   }
   
@@ -185,7 +186,8 @@
     transition: all 0.9 ease 0s;
   }
   
-  .team:hover .team-photo__img{
+  .team:hover .team-photo__img,
+  .team:focus .team-photo__img{
     box-shadow: 0 0 0 14px #f7f5ec;
     transform: scale(0.7);
   }
@@ -229,7 +231,8 @@
     transition: all 0.5s ease 0s;
   }
   
-  .team:hover .list-social {
+  .team:hover .list-social,
+  .team:focus .list-social {
     bottom: 0;
   }
   
@@ -246,7 +249,8 @@
     text-decoration: none;
   }
   
-  .team .link-social:hover {
+  .team .link-social:hover,
+  .team .link-social:focus {
     color: getColorFromPalette('secondary', 'orange');
     background-color: #f7f5ec;;
   }
