@@ -1,34 +1,18 @@
 <section class="pagination-section">
     <div class="container">
-        <ul class="pagination" id="pagination-list">
-            <!-- <li class="pagination__item pagination__item--margin-right">
-                <button type="button" class="pagination__btn pagination__btn-arrow pagination__btn--disabled" disabled id="pagination-previous-page">
-                    <svg class="pagination_svg" width="16" height="16">
-                        <use href="./images/decorative/sprite.svg#icon-arrow-left"></use>
-                    </svg>
-                </button>
-            </li> -->
-            <!-- <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn pagination__btn--active" id="pagination-page-number pagination-page-1">1</button></li>
-            <li class="pagination__item pagination__item--margin-right pagination__item--invisible">&#183;&#183;&#183;</li>
-            <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn" id="pagination-page-number pagination-page-2">2</button></li>
-            <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn" id="pagination-page-number pagination-page-3">3</button></li>
-            <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn" id="pagination-page-number pagination-page-4">4</button></li>
-            <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn" id="pagination-page-number pagination-page-5">5</button></li>
-            <li class="pagination__item pagination__item--margin-right pagination__item--invisible"><button type="button" class="pagination__btn"
-                    id="pagination-page-number pagination-page-6">6</button></li>
-            <li class="pagination__item pagination__item--margin-right pagination__item--invisible"><button type="button" class="pagination__btn"
-                    id="pagination-page-number pagination-page-7">7</button></li>
-            <li class="pagination__item pagination__item--margin-right pagination__item--invisible"><button type="button" class="pagination__btn"
-                    id="pagination-page-number pagination-page-8">8</button></li>
-            <li class="pagination__item pagination__item--margin-right">&#183;&#183;&#183;</li>
-            <li class="pagination__item pagination__item--margin-right"><button type="button" class="pagination__btn" id="pagination-page-number pagination-page-9">9</button></li> -->
-            <!-- <li class="pagination__item">
-                <button type="button" class="pagination__btn pagination__btn-arrow" id="pagination-next-page">
-                    <svg class="pagination_svg" width="16" height="16">
-                        <use href="./images/decorative/sprite.svg#icon-arrow-right"></use>
-                    </svg>
-                </button>
-            </li> -->
-        </ul>
+        <div class="pagination">
+            <button class="pagination__btn pagination__btn--hover pagination__btn--margin-right pagination__btn-arrow" id="pagination-button-previous">
+                <svg class="pagination_svg" width="16" height="16">
+                    <use href="./images/decorative/sprite.svg#icon-arrow-left"></use>
+                </svg>
+            </button>
+            <ul class="pagination__list" id="pagination-pages">
+            </ul>
+            <button class="pagination__btn pagination__btn--hover pagination__btn-arrow" id="pagination-button-next">
+                <svg class="pagination_svg" width="16" height="16">
+                    <use href="./images/decorative/sprite.svg#icon-arrow-right"></use>
+                </svg>
+            </button>
+        </div>
     </div>
 </section>

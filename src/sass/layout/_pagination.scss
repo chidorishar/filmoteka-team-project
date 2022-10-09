@@ -3,12 +3,22 @@
 }
 
 .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination__list {
     font-size: 12px;
     line-height: 1.33;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &--width-L {
+        min-width: 444px;
+    }
 
     @extend %unmarked-list;
 }
@@ -18,7 +28,7 @@
         margin-right: 16px;
     }
 
-    &--invisible {
+    &--hidden {
         @extend %visually-hidden;
     }
 }
@@ -37,6 +47,10 @@
     text-align: center;
 
     transition: background-color 250ms cubic-bezier(.57, .21, .69, 1.25);
+
+    &--margin-right {
+        margin-right: 16px;
+    }
     
     &--active {        
         background-color: getColorFromPalette('pagination', 'orange');
@@ -47,22 +61,29 @@
         background-color: getColorFromPalette('pagination', 'grey');
     }
 
-    &:hover {
-        cursor: pointer;
-        background-color: getColorFromPalette('pagination', 'orange');
-        color: getColorFromPalette('primary', 'light');
-        fill: getColorFromPalette('primary', 'light');
+    &--hidden {
+        @extend %visually-hidden;
     }
 
-    &:disabled {
-        background-color: darkgrey;
-
+    &--hover {
         &:hover {
-            cursor: default;
+            cursor: pointer;
+            background-color: getColorFromPalette('pagination', 'orange');
+            color: getColorFromPalette('primary', 'light');
+            fill: getColorFromPalette('primary', 'light');
+        }
+
+        &:disabled {
             background-color: darkgrey;
-            fill: getColorFromPalette('primary', 'dark');
+    
+            &:hover {
+                cursor: default;
+                background-color: darkgrey;
+                fill: getColorFromPalette('primary', 'dark');
+            }
         }
     }
+
 }
 
 .pagination_svg {
