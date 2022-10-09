@@ -1,0 +1,135 @@
+<header id="header" class="header">
+  <div class="header__background">
+    <picture>
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/decorative/header/desktop-img-1x/header-desktop-1x.jpg 1x,
+          ./images/decorative/header/desktop-img-2x/header-desktop-2x.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/decorative/header/desktop-img-1x/header-desktop-1x.webp 1x,
+          ./images/decorative/header/desktop-img-2x/header-desktop-2x.webp 2x
+        "
+        type="image/webp"
+      />
+      <source
+        media="(min-width:768px)"
+        srcset="
+          ./images/decorative/header/tablet-img-1x/header-tablet-1x.jpg 1x,
+          ./images/decorative/header/tablet-img-2x/header-tablet-2x.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(min-width:768px)"
+        srcset="
+          ./images/decorative/header/tablet-img-1x/header-tablet-1x.webp 1x,
+          ./images/decorative/header/tablet-img-2x/header-tablet-2x.webp 2x
+        "
+        type="image/webp"
+      />
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/decorative/header/mobile-img-1x/header-mobile-1x.jpg 1x,
+          ./images/decorative/header/mobile-img-2x/header-mobile-2x.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/decorative/header/mobile-img-1x/header-mobile-1x.webp 1x,
+          ./images/decorative/header/mobile-img-2x/header-mobile-2x.webp 2x
+        "
+        type="image/webp"
+      />
+      <img
+        class="header__background-img"
+        alt="cinema"
+        src="./images/decorative/header/mobile-img-1x/header-mobile-1x.jpg"
+        width="1280"
+        height="216"
+      />
+    </picture>
+  </div>
+
+  <div class="container">
+    <div class="navigation-header">
+      <a href="./index.html" class="logo-header">
+        <picture>
+          <source
+            media="(min-width:380px)"
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.png 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.png 2x
+            "
+          />
+          <source
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.webp 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <img
+            class="/"
+            alt="logo"
+            src="./images/decorative/header/logo-1x-2x/logo-1x.png"
+            width="24"
+            height="24"
+          />
+        </picture>
+        <span>Filmoteka</span>
+      </a>
+
+      <nav class="navigation">
+        <ul class="nav-header">
+          <li class="nav-header__item">
+            <a
+              href="./index.html"
+              class="nav-header__link nav-header__link--current"
+              >Home</a
+            >
+          </li>
+          <li class="nav-header__item">
+            <a href="#" class="nav-header__link">My Library</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="header-search">
+      <form class="search-form" id="movie-search-form">
+        <input
+          class="search-input"
+          type="text"
+          name="query"
+          autocomplete="off"
+          placeholder="Movie search"
+        />
+        <button
+          class="search-button"
+          type="submit"
+          aria-label="Start movie search by a name"
+        >
+          <svg class="search-icon-svg" width="12" height="12">
+            <use href="./images/decorative/sprite.svg#icon-search"></use>
+          </svg>
+        </button>
+        <span
+          style="display: none"
+          class="header-search__warning"
+          id="no-movies-found-message"
+        >
+          Search result not successful. Enter the correct movie name
+        </span>
+      </form>
+    </div>
+  </div>
+</header>
