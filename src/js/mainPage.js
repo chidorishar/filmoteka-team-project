@@ -6,18 +6,31 @@ const GENRES_DATA_LS_KEY = 'genres-data';
 let moviesData = null;
 let tmdbAPI = null;
 
+// for search
+//! change
+const searchInput = document.querySelector('.header_search');
+//! change
+const searchBtn = document.querySelector('.header_search-button');
+
+//* on submit by button with empty input we'll get also top movies
+searchBtn.addEventListener('click', loadMovies);
+
+//loading top movies on first login
+loadMovies();
+
 // MAIN
-(async () => {
+async function loadMovies() {
   try {
     tmdbAPI = new TMDBAPI();
-    // const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-    //   .secure_base_url;
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
 
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
 
-    moviesData = (await tmdbAPI.getTopMovies()).results; //(await tmdbAPI.getMoviesByName('test')).results;
+    // detection if the input is empty or page was loaded for the first time (one out of the other)
+    moviesData = !searchInput.value
+      ? (await tmdbAPI.getTopMovies()).results
+      : (await tmdbAPI.getMoviesByName(searchInput.value)).results;
 
     //get array of IDs and genres
     let genresAndIDs = null;
@@ -43,7 +56,7 @@ let tmdbAPI = null;
   } catch (error) {
     console.log(error.message);
   }
-})();
+}
 
 function readFromLocalStorage(key) {
   try {
