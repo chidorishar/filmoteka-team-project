@@ -1,4 +1,9 @@
 .header-library {
+  padding-top: 40px;
+  padding-bottom: 62px;
+  @include mediaOver('tablet') {
+    padding-bottom: 60px;
+  }
 }
 
 .header-library__background {
@@ -6,20 +11,30 @@
   top: 0;
   left: 0;
   width: 100%;
+  height: 230px;
   z-index: -1;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.56);
+  @include mediaOver('tablet') {
+    height: 216px;
+  }
 }
 
 .header-library__background-img {
   width: 100%;
-  height: 230px;
+  min-width: 320px;
+
+  z-index: -2;
 }
 
 .navigation-library {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
   margin-bottom: 60px;
+  @include mediaOver('tablet') {
+    margin-bottom: 40px;
+  }
 }
 
 .logo {
@@ -28,7 +43,7 @@
   align-items: center;
 
   font-size: 30px;
-  line-height: 1.16;
+  line-height: 35px;
   gap: 10px;
 
   color: getColorFromPalette('primary', 'light');
@@ -61,7 +76,6 @@
 }
 
 .nav-group-library__link {
- 
   font-size: 12px;
   line-height: 1.17;
 

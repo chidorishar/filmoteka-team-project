@@ -1,41 +1,41 @@
 <header id="header" class="header-library">
+  <div class="header-library__background">
+    <picture>
+      <!-- for desktop screens  -->
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/content/MyLibrary/1x-desktop-header.jpg 1x,
+          ./images/content/MyLibrary/2x-desktop-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <!-- for tablet screens  -->
+      <source
+        media="(min-width: 768px)"
+        srcset="
+          ./images/content/MyLibrary/1x-tablet-header.jpg 1x,
+          ./images/content/MyLibrary/2x-tablet-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <!-- for mobile screens  -->
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/content/MyLibrary/1x-mobile-header.jpg 1x,
+          ./images/content/MyLibrary/2x-mobile-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <img
+        class="header-library__background-img"
+        src="./images/content/MyLibrary/1x-mobile-header.jpg"
+        alt="cinema"
+      />
+    </picture>
+  </div>
   <div class="container">
-    <div class="header-library__background">
-      <picture>
-        <!-- for desktop screens  -->
-        <source
-          media="(min-width:1280px)"
-          srcset="
-            ./images/content/MyLibrary/1x-desktop-header.jpg 1x,
-            ./images/content/MyLibrary/2x-desktop-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <!-- for tablet screens  -->
-        <source
-          media="(min-width: 768px)"
-          srcset="
-            ./images/content/MyLibrary/1x-tablet-header.jpg 1x,
-            ./images/content/MyLibrary/2x-tablet-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <!-- for mobile screens  -->
-        <source
-          media="(max-width:767px)"
-          srcset="
-            ./images/content/MyLibrary/1x-mobile-header.jpg 1x,
-            ./images/content/MyLibrary/2x-mobile-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <img
-          class="header-library__background-img"
-          src="./images/content/MyLibrary/1x-mobile-header.jpg"
-          alt="cinema"
-        />
-      </picture>
-    </div>
     <div class="navigation-library">
       <a href="./index.html" class="logo">
         <img
