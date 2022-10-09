@@ -1,29 +1,74 @@
 $colorPalette: (
   'primary': (
-    'additional': #907e82,
+    'additional': #907E82,
     'dark': #000,
     'light': #fff,
-  
   ),
   'secondary': (
-    'orange': #ff6b08,
-    'orange-shadow': rgba(255, 107, 1, 0.6),
-    'white': #ffffff,
-      'red': #FF001B,
+    'orange': #FF6B08,
+    'white': #FFFFFF,
+  ),
+  'footer': (
+    'text': #545454,
+    'background': #F7F7F7,
+  ),
+  'accent': (
+    'additional': #FFA5BA,
+    'dark': #D41443,
+    'light': #FFB8CA,
+    'warning': #FF001B,
+  ),
+  'background': (
+    'additional': #C2E297,
+    'dark': #F0D1A5,
+    'light': #FFF5F6,
+  ),
+  'controls': (
+    'accent': #D31342,
+    'main': #D9D9D9,
+  ),
+  'icons': (
+    'main': #FEA5BB,
+  ),
+  'decoration': (
+    'additional': #FAFAFA,
+    'main': #E1E1E1,
+  ),
+  'hovered': (
+    'additional': #9A092C,
+    'main': #ECEBEB,
+  ),
+  'menu': (
+    'additional': #E18298,
+    'main': #E17992,
+  ),
+  'contacts': (
+    'food-truck': #C2E297,
+    'cafe': #F0D1A5,
+    'button': #D41342,
+  ),
+  'modal': (
+    'accent-color': #FF6B01,
+    'characteristic-text-color': #8C8C8C,
+    'text-in-accent': #FFFFFF,
+    'color-characteristics-text': #000000,
+    'background-color': #FFFFFF,
+  ),
+  'modal-buttons': (
+    'hover-watched-btn': #EA6500,
+    'focus-watched-btn': #CE5900,
+    'hover-queue-btn': #F3F3F3,
+    'focus-queue-btn': #E6E6E6,
   ),
 );
-
 $breakpoints: (
   'mobile': 480px,
   'tablet': 768px,
   'desktop': 1280px,
 );
-
 $containerLRPaddings: 32px;
 $containerLRPaddingsMobile: 20px;
-
 $sectionTDPaddings: 60px;
-
 $transitionData: (
   'time': 250ms,
   'timeFunction': cubic-bezier(0.4, 0, 0.2, 1),
