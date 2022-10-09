@@ -1,3 +1,9 @@
+import { pagination } from './utils/paginationInfo';
+import { TMDBAPI } from './theMovieAPI';
+import { GalleryAPI } from './galleryAPI';
+
+const GENRES_DATA_LS_KEY = 'genres-data';
+
 const paginationPagesList = document.getElementById('pagination-pages');
 const paginationNextBtn = document.getElementById('pagination-button-next');
 const paginationPreviousBtn = document.getElementById(
@@ -9,34 +15,9 @@ paginationNextBtn.addEventListener('click', onNextBtnClick);
 paginationPreviousBtn.addEventListener('click', onPreviousBtnClick);
 paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
-const pagination = {
-  currentPage: 1,
-  totalPages: 9,
-
-  currentPageIncreaseByOne() {
-    if (this.currentPage === this.totalPages) {
-      return;
-    }
-
-    this.currentPage += 1;
-  },
-
-  currentPageReduceByOne() {
-    if (this.currentPage === 1) {
-      return;
-    }
-
-    this.currentPage -= 1;
-  },
-
-  updateCurrentPage(newCurrentPage) {
-    this.currentPage = newCurrentPage;
-  },
-};
-
 renderPagination();
 
-// if we on our mobile phone change screen size, then we just rerender our pagination list.
+// if we change screen size on our mobile phone, then we just rerender our pagination list.
 function onWindowResize() {
   if (window.matchMedia('(max-width: 767px)').matches) {
     renderPagination();
@@ -69,8 +50,51 @@ function onPreviousBtnClick() {
 }
 
 function renderPagination() {
-  renderPaginationMarkup();
+  renderGallery();
+}
 
+async function renderGallery() {
+  const { currentPage } = pagination;
+  const tmdbAPI = new TMDBAPI();
+
+  const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
+
+  let pathToPosterImg = null;
+  let genresAndIDs = null;
+
+  try {
+    pathToPosterImg = (await tmdbAPI.getConfiguration()).images.secure_base_url;
+
+    if (!genresDataFromLS) {
+      const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
+
+      genresAndIDs = genresDataFromBackend;
+      localStorage.setItem(
+        GENRES_DATA_LS_KEY,
+        JSON.stringify(genresDataFromBackend)
+      );
+    } else {
+      genresAndIDs = genresDataFromLS;
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  const galleryAPI = new GalleryAPI(
+    '#movies-wrapper',
+    pathToPosterImg,
+    genresAndIDs
+  );
+
+  try {
+    const requestResult = await tmdbAPI.getTopMoviesFromPage(200);
+    pagination.totalPages = requestResult.total_pages;
+
+    galleryAPI.renderMoviesCards(requestResult.results);
+  } catch (error) {
+    console.log(error);
+  }
+  renderPaginationMarkup();
   correctPaginationMarkup();
 }
 
@@ -216,5 +240,15 @@ function correctPaginationMarkup() {
       const pagItem = document.getElementById(`pagination-number-${i}`);
       pagItem.classList.add('pagination__item--hidden');
     }
+  }
+}
+
+function readFromLocalStorage(key) {
+  try {
+    const item = localStorage.getItem(key);
+
+    return JSON.parse(item);
+  } catch (error) {
+    return null;
   }
 }
