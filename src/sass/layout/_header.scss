@@ -1,3 +1,11 @@
+.header {
+  padding: 40px 0 91px;
+
+  @include mediaOver('tablet') {
+    padding-bottom: 79px;
+  }
+}
+
 .header__background {
   position: absolute;
   top: 0;
@@ -15,14 +23,21 @@
   width: 100%;
   height: 230px;
   z-index: -2;
+
+  @include mediaOver('tablet') {
+    height: 216px;
+  }
 }
 
 .navigation-header {
   @extend %flex--v-centred;
 
   justify-content: space-between;
-  margin-top: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 54px;
+
+  @include mediaOver('tablet') {
+    margin-bottom: 41px;
+  }
 }
 
 .logo-header {
@@ -42,6 +57,7 @@
 
 .logo-header > span {
   display: none;
+
   @include mediaOver('tablet') {
     display: inline-block;
   }
@@ -85,9 +101,11 @@
   margin: 0 auto;
   width: 280px;
   position: relative;
+
   @include mediaInBetween('tablet', 'desktop') {
     width: 336px;
   }
+
   @include mediaOver('desktop') {
     width: 394px;
   }
@@ -147,6 +165,7 @@
 
   display: block;
   position: absolute;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 22px;
