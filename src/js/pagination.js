@@ -87,13 +87,14 @@ async function renderGallery() {
   );
 
   try {
-    const requestResult = await tmdbAPI.getTopMoviesFromPage(200);
+    const requestResult = await tmdbAPI.getTopMoviesFromPage(currentPage);
     pagination.totalPages = requestResult.total_pages;
 
     galleryAPI.renderMoviesCards(requestResult.results);
   } catch (error) {
     console.log(error);
   }
+
   renderPaginationMarkup();
   correctPaginationMarkup();
 }
