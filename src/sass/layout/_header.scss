@@ -11,22 +11,20 @@
   top: 0;
   left: 0;
   width: 100%;
-  z-index: -1;
-  color: rgba(0, 0, 0, 0.56);
-}
-
-.header-library--picture {
-  z-index: -2;
-}
-
-.header__background-img {
-  width: 100%;
   height: 230px;
-  z-index: -2;
+  z-index: -1;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.56);
 
   @include mediaOver('tablet') {
     height: 216px;
   }
+}
+
+.header__background-img {
+  width: 100%;
+  min-width: 320px;
+  z-index: -2;
 }
 
 .navigation-header {
