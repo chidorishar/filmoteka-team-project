@@ -24,6 +24,7 @@ export class TMDBAPI {
 
   async getConfiguration() {
     const query = `${this.#BASE_URL}/configuration?api_key=${this.#API_KEY}`;
+    console.log(query);
 
     return await this.#fetchByQuery(query);
   }

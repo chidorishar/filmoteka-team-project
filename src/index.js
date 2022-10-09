@@ -1,3 +1,3 @@
 // import './js/***.js';
 import './js/mainPage.js';
-import './js/movieSearch';
+import './js/movieSearch1';

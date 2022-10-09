@@ -3,23 +3,32 @@ import { TMDBAPI } from './theMovieAPI';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
+//! change
+const searchInput = document.querySelector('.header_search');
+//! change
+const searchBtn = document.querySelector('.header_search-button');
+
 let moviesData = null;
 let tmdbAPI = null;
 
 // MAIN
-(async () => {
+searchBtn.addEventListener('click', onSearch);
+
+async function onSearch() {
   try {
     tmdbAPI = new TMDBAPI();
-    // const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-    //   .secure_base_url;
+
+    // const pathToPosterImg = `https://image.tmdb.org/t/p/`;
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
 
+    //geting stored genres
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
 
-    moviesData = (await tmdbAPI.getTopMovies()).results; //(await tmdbAPI.getMoviesByName('test')).results;
+    //getting movies data from fetch
+    moviesData = (await tmdbAPI.getMoviesByName(searchInput.value)).results;
 
-    //get array of IDs and genres
+    //getting array of IDs and genres
     let genresAndIDs = null;
     if (!genresDataFromLS) {
       const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
@@ -32,18 +41,18 @@ let tmdbAPI = null;
     } else {
       genresAndIDs = genresDataFromLS;
     }
+
     const galleryAPI = new GalleryAPI(
       '#movies-wrapper',
       pathToPosterImg,
       genresAndIDs
     );
-
     //render images
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
     console.log(error.message);
   }
-})();
+}
 
 function readFromLocalStorage(key) {
   try {

@@ -18,11 +18,12 @@ async function getMovies(requestFn) {
   return makeMoviesMarkup(fetchedData.results);
 }
 
-async function getGenres(id = [], finalId = []) {
+async function getGenres(id = []) {
   const fetchedData = await moviesAPI.getGenresData();
 
+  res = [];
   id.forEach(idInstance => {
-    finalId.push(getGenreById(fetchedData.genres, idInstance));
+    res.push(getGenreById(fetchedData.genres, idInstance));
   });
 }
 
@@ -63,9 +64,6 @@ function makeMoviesMarkup(movies) {
 
       const { image, title, date, genreIds, alt } = movieOutputs;
 
-      const genres = [];
-      getGenres(genreIds, genres);
-      console.log(genres);
 
       //! выходит запросить изображение только с шириной 500px
       const imageLink = `https://image.tmdb.org/t/p/w500${image}`;
@@ -79,9 +77,7 @@ function makeMoviesMarkup(movies) {
               <h3 class="movie-card__movie-title">${title}</h3>
             </li>
             <li class="movie-card__properties-item">
-              <p class="movie-card__movie-category">${genres.join(
-                ', '
-              )} | ${date}</p>
+              <p class="movie-card__movie-category"> ... | ${date}</p>
             </li>
           </ul>
         </a>
