@@ -7,23 +7,19 @@ let moviesData = null;
 let tmdbAPI = null;
 let galleryAPI = null;
 
-const searchForm = document.querySelector('#movie-search-form');
-const unsuccessfulSearch = document.querySelector('.header-search__warning');
-
-searchForm.addEventListener('submit', onFormSubmit);
+let unsuccessfulSearchEl = null;
 
 async function onFormSubmit(ev) {
   ev.preventDefault();
 
   const searchingMovieName = ev.currentTarget.elements.query.value;
-
   const lastSearchedName = tmdbAPI.lastSearchedName;
 
   if (searchingMovieName === lastSearchedName) return;
 
   try {
-    if (!unsuccessfulSearch.hasAttribute('style')) {
-      unsuccessfulSearch.setAttribute('style', 'display: none');
+    if (!unsuccessfulSearchEl.hasAttribute('style')) {
+      unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
     if (searchingMovieName === '') {
@@ -36,7 +32,7 @@ async function onFormSubmit(ev) {
     moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
 
     if (moviesData.length === 0) {
-      unsuccessfulSearch.removeAttribute('style');
+      unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
 
@@ -53,6 +49,10 @@ async function onFormSubmit(ev) {
       .secure_base_url;
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = (await tmdbAPI.getTopMovies()).results;
+    //movie search form
+    unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
+    const searchFormEl = document.querySelector('#movie-search-form');
+    searchFormEl.addEventListener('submit', onFormSubmit);
     //get array of IDs and genres
     let genresAndIDs = null;
     if (!genresDataFromLS) {
