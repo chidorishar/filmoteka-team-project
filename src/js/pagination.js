@@ -36,6 +36,7 @@ const pagination = {
 
 renderPagination();
 
+// if we on our mobile phone change screen size, then we just rerender our pagination list.
 function onWindowResize() {
   if (window.matchMedia('(max-width: 767px)').matches) {
     renderPagination();
