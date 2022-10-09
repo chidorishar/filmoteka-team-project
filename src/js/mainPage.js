@@ -8,6 +8,7 @@ let tmdbAPI = null;
 let galleryAPI = null;
 
 const searchForm = document.querySelector('#movie-search-form');
+const unsuccessfulSearch = document.querySelector('.header-search__warning');
 
 searchForm.addEventListener('submit', onFormSubmit);
 
@@ -21,17 +22,23 @@ async function onFormSubmit(ev) {
   if (searchingMovieName === lastSearchedName) return;
 
   try {
+    if (!unsuccessfulSearch.hasAttribute('style')) {
+      unsuccessfulSearch.setAttribute('style', 'display: none');
+    }
+
     if (searchingMovieName === '') {
       moviesData = (await tmdbAPI.getTopMovies()).results;
 
       galleryAPI.renderMoviesCards(moviesData);
-
       return;
     }
 
     moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
 
-    if (moviesData.length === 0) return;
+    if (moviesData.length === 0) {
+      unsuccessfulSearch.removeAttribute('style');
+      return;
+    }
 
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
