@@ -14,10 +14,25 @@
   border: 1px solid getColorFromPalette('primary', 'light');
   background-color: transparent;
   border-radius: 5px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+  }
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.5;
+  }
 }
 
 .btn-active {
   background: getColorFromPalette('secondary', 'orange');
   box-shadow: 0px 8px 43px getColorFromPalette('secondary', 'orange-shadow');
   border: none;
+
+  &:hover {
+    background-color: rgba(255, 107, 1, 0.9);
+  }
+  &:focus {
+    background-color: rgba(255, 107, 1, 0.9);
+  }
 }

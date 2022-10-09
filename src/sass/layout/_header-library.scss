@@ -2,27 +2,11 @@
 }
 
 .header-library__background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: -1;
-}
-
-.header-library__background-img {
   height: 230px;
-  min-width: 480px;
+  min-width: 320px;
+  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.56),
-    rgba(0, 0, 0, 0.56)
-  );
 
   @include mediaOver('tablet') {
     height: 219px;
@@ -32,13 +16,104 @@
     height: 216px;
     max-width: 1280px;
   }
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.56),
+      rgba(0, 0, 0, 0.56)
+    ),
+    url(../images/content/MyLibrary/1x-mobile-header.jpg);
+
+  //Загрузка изображения в формате WebP 1x-mobile
+  //  background-image: -webkit-image-set(
+  //     url(../images/content/MyLibrary/webP-1x-mobile.webp) 1x
+  //   );
+
+  @media (min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi),
+    (min-resolution: 2dppx) {
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.56),
+        rgba(0, 0, 0, 0.56)
+      ),
+      url(../images/content/MyLibrary/2x-mobile-header.jpg);
+
+    // Загрузка изображения в формате WebP 2x-mobile
+    // background-image: -webkit-image-set(
+    //   url(../images/content/MyLibrary/webP-2x-mobile.webp) 2x
+    // );
+  }
+
+  @include mediaOver('tablet') {
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.56),
+        rgba(0, 0, 0, 0.56)
+      ),
+      url(../images/content/MyLibrary/1x-tablet-header.jpg);
+
+    //Загрузка изображения в формате WebP 1x-tablet
+    // background-image: -webkit-image-set(
+    //   url(../images/content/MyLibrary/webP-1x-tablet-.webp) 1x
+    // );
+
+    @media (min-device-pixel-ratio: 2),
+      (min-resolution: 192dpi),
+      (min-resolution: 2dppx) {
+      background-image: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(../images/content/MyLibrary/2x-tablet-header.jpg);
+
+      //Загрузка изображения в формате WebP 2x-tablet
+      // background-image: -webkit-image-set(
+      //   url(../images/content/MyLibrary/webP-2x-tablet-.webp) 2x
+      // );
+    }
+  }
+  @include mediaOver('desktop') {
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.56),
+        rgba(0, 0, 0, 0.56)
+      ),
+      url(../images/content/MyLibrary/1x-desktop-header.jpg);
+
+    //Загрузка изображения в формате WebP 1x-desktop
+    // background-image: -webkit-image-set(
+    //   url(../images/content/MyLibrary/webP-1x-desktop.webp) 1x
+    // );
+
+    @media (min-device-pixel-ratio: 2),
+      (min-resolution: 192dpi),
+      (min-resolution: 2dppx) {
+      background-image: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.56),
+          rgba(0, 0, 0, 0.56)
+        ),
+        url(../images/content/MyLibrary/2x-desktop-header.jpg);
+
+      //Загрузка изображения в формате WebP 2x-desktop
+      // background-image: -webkit-image-set(
+      //   url(../images/content/MyLibrary/webP-2x-desktop.webp) 2x
+      // );
+    }
+  }
 }
 
 .navigation-library {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
+  padding-top: 40px;
   margin-bottom: 60px;
 }
 
@@ -48,7 +123,7 @@
   align-items: center;
 
   font-size: 30px;
-  line-height: 1.16;
+  line-height: 35px;
   gap: 10px;
 
   color: getColorFromPalette('primary', 'light');

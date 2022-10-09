@@ -1,68 +1,34 @@
 <header id="header" class="header-library">
-  <div class="container">
-    <div class="header-library__background">
-      <picture>
-        <!-- for desktop screens  -->
-        <source
-          media="(min-width:1280px)"
-          srcset="
-            ./images/content/MyLibrary/1x-desktop-header.jpg 1x,
-            ./images/content/MyLibrary/2x-desktop-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <!-- for tablet screens  -->
-        <source
-          media="(min-width: 768px)"
-          srcset="
-            ./images/content/MyLibrary/1x-tablet-header.jpg 1x,
-            ./images/content/MyLibrary/2x-tablet-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <!-- for mobile screens  -->
-        <source
-          media="(max-width:767px)"
-          srcset="
-            ./images/content/MyLibrary/1x-mobile-header.jpg 1x,
-            ./images/content/MyLibrary/2x-mobile-header.jpg 2x
-          "
-          type="image/jpg"
-        />
-        <img
-          class="header-library__background-img"
-          src="./images/content/MyLibrary/1x-mobile-header.jpg"
-          alt="cinema"
-        />
-      </picture>
-    </div>
-    <div class="navigation-library">
-      <a href="./index.html" class="logo">
-        <img
-          class="logo-img"
-          src="./images/decorative/site-favicon.png"
-          alt="logo"
-        /><span>Filmoteka</span>
-      </a>
+  <div class="header-library__background">
+    <div class="container">
+      <div class="navigation-library">
+        <a href="./index.html" class="logo">
+          <img
+            class="logo-img"
+            src="./images/decorative/site-favicon.png"
+            alt="logo"
+          /><span>Filmoteka</span>
+        </a>
 
-      <nav>
-        <ul class="nav-group-library">
-          <li class="nav-group-library__item">
-            <a class="nav-group-library__link" href="./index.html">Home</a>
-          </li>
-          <li class="nav-group-library__item">
-            <a
-              class="nav-group-library__link nav-group-library__link--current"
-              href=""
-              >my library</a
-            >
-          </li>
-        </ul>
-      </nav>
-    </div>
-    <div class="header-buttons">
-      <button class="btn btn-active">Watched</button>
-      <button class="btn">queue</button>
+        <nav>
+          <ul class="nav-group-library">
+            <li class="nav-group-library__item">
+              <a class="nav-group-library__link" href="./index.html">Home</a>
+            </li>
+            <li class="nav-group-library__item">
+              <a
+                class="nav-group-library__link nav-group-library__link--current"
+                href=""
+                >my library</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+      <div class="header-buttons">
+        <button class="btn btn-active">Watched</button>
+        <button class="btn">queue</button>
+      </div>
     </div>
   </div>
 </header>
