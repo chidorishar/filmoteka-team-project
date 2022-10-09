@@ -10,8 +10,8 @@ paginationPreviousBtn.addEventListener('click', onPreviousBtnClick);
 paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
 const pagination = {
-  currentPage: 10,
-  totalPages: 20,
+  currentPage: 1,
+  totalPages: 9,
 
   currentPageIncreaseByOne() {
     if (this.currentPage === this.totalPages) {
@@ -135,6 +135,12 @@ function correctPaginationMarkup() {
     dotsLeft.classList.add('pagination__item--hidden');
     dotsRight.classList.add('pagination__item--hidden');
     return;
+  } else {
+    if (!window.matchMedia('(max-width: 767px)').matches) {
+      paginationPagesList.classList.add('pagination__list--width-L');
+    } else {
+      paginationPagesList.classList.remove('pagination__list--width-L');
+    }
   }
 
   if (pagination.currentPage <= 5) {
@@ -189,10 +195,6 @@ function correctPaginationMarkup() {
         const pagItem = document.getElementById(`pagination-number-${i}`);
         pagItem.classList.add('pagination__item--hidden');
       }
-
-      paginationPagesList.classList.remove('pagination__list--width-L');
-    } else {
-      paginationPagesList.classList.add('pagination__list--width-L');
     }
 
     for (let i = 2; i <= pagination.totalPages - 1; i++) {
