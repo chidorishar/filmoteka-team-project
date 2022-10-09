@@ -1,8 +1,11 @@
+import {moviesData} from "./mainPage.js";
+
 const list = document.querySelector("#movies-wrapper");
 // const closeModalButton = document.querySelector();
 const modal = document.querySelector(".modal");
 const backdrop = document.querySelector(".backdrop");
 const body = document.querySelector("body");
+const closeModalButton = document.querySelector(".modal-close");
 
 // console.log(backdrop);
 
@@ -11,11 +14,17 @@ backdrop.addEventListener("click", onBackdropClick);
 
 function onOpenModal(event) {
     event.preventDefault();
+   if (event.target.nodeName !== "A") {
+    return;
+  }
+    console.log(event.target.dataset.movieId
+    );
+    console.log(moviesData);
     console.log("qwe",event.target);
-    console.log(event.currentTurget);
-    console.log("hi");
+    console.log(event.currentTarget);
     window.addEventListener("keydown", onEscKeyPress);
     document.body.classList.add("show-modal");
+    closeModalButton.addEventListener("click", onCloseModal);
 }
 
 function onCloseModal() {
@@ -24,7 +33,7 @@ function onCloseModal() {
 }
 
 function onBackdropClick(event) {
-    if (event.target === event.currentTurget) {
+    if (event.target === backdrop) {
         console.log(event.target);
         console.log(event.currentTurget);
         onCloseModal();
