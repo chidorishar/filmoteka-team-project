@@ -14,6 +14,12 @@
   border: 1px solid getColorFromPalette('primary', 'light');
   background-color: transparent;
   border-radius: 5px;
+
+  &:hover,
+  &:focus{
+    transition: createTransitionFor('color');
+    
+  }
 }
 
 .btn-active {
