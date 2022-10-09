@@ -5,7 +5,46 @@ const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
 let tmdbAPI = null;
+let galleryAPI = null;
 
+const searchForm = document.querySelector('#movie-search-form');
+const unsuccessfulSearch = document.querySelector('.header-search__warning');
+
+searchForm.addEventListener('submit', onFormSubmit);
+
+async function onFormSubmit(ev) {
+  ev.preventDefault();
+
+  const searchingMovieName = ev.currentTarget.elements.query.value;
+
+  const lastSearchedName = tmdbAPI.lastSearchedName;
+
+  if (searchingMovieName === lastSearchedName) return;
+
+  try {
+    if (!unsuccessfulSearch.hasAttribute('style')) {
+      unsuccessfulSearch.setAttribute('style', 'display: none');
+    }
+
+    if (searchingMovieName === '') {
+      moviesData = (await tmdbAPI.getTopMovies()).results;
+
+      galleryAPI.renderMoviesCards(moviesData);
+      return;
+    }
+
+    moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
+
+    if (moviesData.length === 0) {
+      unsuccessfulSearch.removeAttribute('style');
+      return;
+    }
+
+    galleryAPI.renderMoviesCards(moviesData);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 // MAIN
 (async () => {
   try {
@@ -13,7 +52,7 @@ let tmdbAPI = null;
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-    moviesData = (await tmdbAPI.getTopMovies()).results; //(await tmdbAPI.getMoviesByName('test')).results;
+    moviesData = (await tmdbAPI.getTopMovies()).results;
     //get array of IDs and genres
     let genresAndIDs = null;
     if (!genresDataFromLS) {
@@ -27,13 +66,13 @@ let tmdbAPI = null;
     } else {
       genresAndIDs = genresDataFromLS;
     }
-    const galleryAPI = new GalleryAPI(
+    galleryAPI = new GalleryAPI(
       '#movies-wrapper',
       pathToPosterImg,
       genresAndIDs
     );
 
-    //render images
+    //render movies
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
     console.log(error.message);
