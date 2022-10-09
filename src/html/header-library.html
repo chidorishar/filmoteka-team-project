@@ -10,6 +10,14 @@
         "
         type="image/jpg"
       />
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-desktop.webp 1x,
+          ./images/content/MyLibrary/webP-2x-desktop.webp 2x
+        "
+        type="image/webp"
+      />
       <!-- for tablet screens  -->
       <source
         media="(min-width: 768px)"
@@ -19,6 +27,14 @@
         "
         type="image/jpg"
       />
+      <source
+        media="(min-width:768px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-tablet.webp 1x,
+          ./images/content/MyLibrary/webP-2x-tablet.webp 2x
+        "
+        type="image/webp"
+      />
       <!-- for mobile screens  -->
       <source
         media="(max-width:767px)"
@@ -27,6 +43,14 @@
           ./images/content/MyLibrary/2x-mobile-header.jpg 2x
         "
         type="image/jpg"
+      />
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-desktop.webp 1x,
+          ./images/content/MyLibrary/webP-2x-desktop.webp 2x
+        "
+        type="image/webp"
       />
       <img
         class="header-library__background-img"
@@ -39,14 +63,31 @@
   </div>
   <div class="container">
     <div class="navigation-library">
-      <a href="./index.html" class="logo">
-        <img
-          class="logo-img"
-          src="./images/decorative/site-favicon.png"
-          alt="logo"
-          width="24"
-          height="24"
-        /><span>Filmoteka</span>
+      <a href="./index.html" class="logo-header">
+        <picture>
+          <source
+            media="(min-width:380px)"
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.png 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.png 2x
+            "
+          />
+          <source
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.webp 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <img
+            class="/"
+            alt="logo"
+            src="./images/decorative/header/logo-1x-2x/logo-1x.png"
+            width="24"
+            height="24"
+          />
+        </picture>
+        <span>Filmoteka</span>
       </a>
 
       <nav>
