@@ -5,33 +5,47 @@ const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
 let tmdbAPI = null;
+let galleryAPI = null;
 
-// for search
-//! change
-const searchInput = document.querySelector('.header_search');
-//! change
-const searchBtn = document.querySelector('.header_search-button');
+const searchForm = document.querySelector('#movie-search-form');
 
-//* on submit by button with empty input we'll get also top movies
-searchBtn.addEventListener('click', loadMovies);
+searchForm.addEventListener('submit', onFormSubmit);
 
-//loading top movies on first login
-loadMovies();
+async function onFormSubmit(ev) {
+  ev.preventDefault();
 
+  const searchingMovieName = ev.currentTarget.elements.query.value;
+
+  const lastSearchedName = tmdbAPI.lastSearchedName;
+
+  if (searchingMovieName === lastSearchedName) return;
+
+  try {
+    if (searchingMovieName === '') {
+      moviesData = (await tmdbAPI.getTopMovies()).results;
+
+      galleryAPI.renderMoviesCards(moviesData);
+
+      return;
+    }
+
+    moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
+
+    if (moviesData.length === 0) return;
+
+    galleryAPI.renderMoviesCards(moviesData);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 // MAIN
-async function loadMovies() {
+(async () => {
   try {
     tmdbAPI = new TMDBAPI();
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
-
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-
-    // detection if the input is empty or page was loaded for the first time (one out of the other)
-    moviesData = !searchInput.value
-      ? (await tmdbAPI.getTopMovies()).results
-      : (await tmdbAPI.getMoviesByName(searchInput.value)).results;
-
+    moviesData = (await tmdbAPI.getTopMovies()).results;
     //get array of IDs and genres
     let genresAndIDs = null;
     if (!genresDataFromLS) {
@@ -45,18 +59,18 @@ async function loadMovies() {
     } else {
       genresAndIDs = genresDataFromLS;
     }
-    const galleryAPI = new GalleryAPI(
+    galleryAPI = new GalleryAPI(
       '#movies-wrapper',
       pathToPosterImg,
       genresAndIDs
     );
 
-    //render images
+    //render movies
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
     console.log(error.message);
   }
-}
+})();
 
 function readFromLocalStorage(key) {
   try {
