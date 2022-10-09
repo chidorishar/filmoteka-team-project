@@ -29,9 +29,10 @@
     url(../images/content/MyLibrary/1x-mobile-header.jpg);
 
   //Загрузка изображения в формате WebP 1x-mobile
-  //  background-image: -webkit-image-set(
-  //     url(../images/content/MyLibrary/webP-1x-mobile.webp) 1x
-  //   );
+  // background-image: -webkit-image-set(
+  //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
+  //   url(../images/content/MyLibrary/webP-1x-mobile.webp) 1x
+  // );
 
   @media (min-device-pixel-ratio: 2),
     (min-resolution: 192dpi),
@@ -45,6 +46,7 @@
 
     // Загрузка изображения в формате WebP 2x-mobile
     // background-image: -webkit-image-set(
+    //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
     //   url(../images/content/MyLibrary/webP-2x-mobile.webp) 2x
     // );
   }
@@ -59,6 +61,7 @@
 
     //Загрузка изображения в формате WebP 1x-tablet
     // background-image: -webkit-image-set(
+    //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
     //   url(../images/content/MyLibrary/webP-1x-tablet-.webp) 1x
     // );
 
@@ -74,6 +77,7 @@
 
       //Загрузка изображения в формате WebP 2x-tablet
       // background-image: -webkit-image-set(
+      //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
       //   url(../images/content/MyLibrary/webP-2x-tablet-.webp) 2x
       // );
     }
@@ -88,6 +92,7 @@
 
     //Загрузка изображения в формате WebP 1x-desktop
     // background-image: -webkit-image-set(
+    //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
     //   url(../images/content/MyLibrary/webP-1x-desktop.webp) 1x
     // );
 
@@ -103,6 +108,7 @@
 
       //Загрузка изображения в формате WebP 2x-desktop
       // background-image: -webkit-image-set(
+      //   linear-gradient(to right, rgba(0, 0, 0, 0.56), rgba(0, 0, 0, 0.56)),
       //   url(../images/content/MyLibrary/webP-2x-desktop.webp) 2x
       // );
     }
