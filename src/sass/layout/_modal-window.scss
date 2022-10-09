@@ -36,15 +36,6 @@
   }
 }
 
-img {
-  display: block;
-  height: 100%;
-  width: 100%;
-
-  object-fit: contain;
-  object-position: top;
-}
-
 .modal {
   flex-direction: column;
   background-color: getColorFromPalette('modal', 'background-color');
@@ -114,9 +105,15 @@ img {
 }
 
 .poster {
-  width: 100%;
-  border-radius: 5px;
+  display: block;
   margin-bottom: 20px;
+  height: 100%;
+  width: 100%;
+
+  border-radius: 5px;
+
+  object-fit: contain;
+  object-position: top;
 
   @include mediaInBetween('tablet', 'desktop') {
     width: 264px;
