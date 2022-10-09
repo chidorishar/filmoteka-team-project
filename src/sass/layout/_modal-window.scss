@@ -177,6 +177,10 @@ img {
   margin-bottom: 8px;
 }
 
+.modal__characteristic-rating {
+  @extend %flex--v-centred;
+}
+
 .modal__characteristic-title {
   text-transform: uppercase;
 }

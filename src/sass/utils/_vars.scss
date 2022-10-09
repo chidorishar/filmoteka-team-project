@@ -4,6 +4,14 @@ $colorPalette: (
     'dark': #000,
     'light': #fff,
   ),
+  'secondary': (
+    'orange': #ff6b08,
+    'white': #ffffff,
+  ),
+  'footer': (
+    'text': #545454,
+    'background': #f7f7f7,
+  ),
   'accent': (
     'additional': #ffa5ba,
     'dark': #d41443,
@@ -43,7 +51,7 @@ $colorPalette: (
     'characteristic-text-color': #8c8c8c,
     'text-in-accent': #ffffff,
     'color-characteristics-text': #000000,
-    'background-color': #FFFFFF
+    'background-color': #ffffff,
   ),
   'modal-buttons': (
     'hover-watched-btn': #ea6500,
@@ -59,9 +67,10 @@ $breakpoints: (
   'desktop': 1280px,
 );
 
-//CHECK THIS VALUES ACCORDING TO THIS PROJECT DESIGN TEMPLATE
-$containerLRPaddings: 15px;
+$containerLRPaddings: 32px;
 $containerLRPaddingsMobile: 20px;
+
+$sectionTDPaddings: 60px;
 
 $transitionData: (
   'time': 250ms,
