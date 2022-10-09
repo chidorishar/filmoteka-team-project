@@ -74,7 +74,6 @@ function renderPagination() {
 }
 
 function renderPaginationMarkup() {
-  //   console.log('Current page is —', pagination.currentPage);
   let totalMarkup = '';
 
   if (pagination.currentPage === pagination.totalPages) {
