@@ -1,13 +1,16 @@
-const paginationPages = document.getElementById('pagination-pages');
-const nextBtn = document.getElementById('pagination-button-next');
-const previousBtn = document.getElementById('pagination-button-previous');
+const paginationPagesList = document.getElementById('pagination-pages');
+const paginationNextBtn = document.getElementById('pagination-button-next');
+const paginationPreviousBtn = document.getElementById(
+  'pagination-button-previous'
+);
 
-nextBtn.addEventListener('click', onNextBtnClick);
-previousBtn.addEventListener('click', onPreviousBtnClick);
-paginationPages.addEventListener('click', onPaginationPagesClick);
+window.addEventListener('resize', onWindowResize);
+paginationNextBtn.addEventListener('click', onNextBtnClick);
+paginationPreviousBtn.addEventListener('click', onPreviousBtnClick);
+paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
 const pagination = {
-  currentPage: 16,
+  currentPage: 10,
   totalPages: 20,
 
   currentPageIncreaseByOne() {
@@ -33,7 +36,15 @@ const pagination = {
 
 renderPagination();
 
-function onPaginationPagesClick(e) {
+function onWindowResize() {
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    renderPagination();
+  } else {
+    renderPagination();
+  }
+}
+
+function onPaginationPagesListClick(e) {
   if (e.target.nodeName !== 'BUTTON') {
     return;
   }
@@ -63,21 +74,21 @@ function renderPagination() {
 }
 
 function renderPaginationMarkup() {
-  console.log('Current page is —', pagination.currentPage);
+  //   console.log('Current page is —', pagination.currentPage);
   let totalMarkup = '';
 
   if (pagination.currentPage === pagination.totalPages) {
-    nextBtn.disabled = true;
-    previousBtn.disabled = false;
+    paginationNextBtn.disabled = true;
+    paginationPreviousBtn.disabled = false;
   } else {
-    previousBtn.disabled = false;
+    paginationPreviousBtn.disabled = false;
   }
 
   if (pagination.currentPage === 1) {
-    previousBtn.disabled = true;
-    nextBtn.disabled = false;
+    paginationPreviousBtn.disabled = true;
+    paginationNextBtn.disabled = false;
   } else if (pagination.currentPage !== pagination.totalPages) {
-    nextBtn.disabled = false;
+    paginationNextBtn.disabled = false;
   }
 
   totalMarkup += `
@@ -100,11 +111,11 @@ function renderPaginationMarkup() {
     totalMarkup += `
         <li class="pagination__item pagination__item--margin-right" id="pagination-dots-right">&#183;&#183;&#183;</li>      
       `;
-    nextBtn.classList.add('pagination__btn--hidden');
-    previousBtn.classList.add('pagination__btn--hidden');
+    paginationNextBtn.classList.add('pagination__btn--hidden');
+    paginationPreviousBtn.classList.add('pagination__btn--hidden');
   }
 
-  paginationPages.innerHTML = totalMarkup;
+  paginationPagesList.innerHTML = totalMarkup;
 }
 
 function correctPaginationMarkup() {
@@ -127,6 +138,15 @@ function correctPaginationMarkup() {
   }
 
   if (pagination.currentPage <= 5) {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      dotsRight.classList.add('pagination__item--hidden');
+
+      const lastPageItem = document.getElementById(
+        `pagination-number-${pagination.totalPages}`
+      );
+
+      lastPageItem.classList.add('pagination__item--hidden');
+    }
     dotsLeft.classList.add('pagination__item--hidden');
     for (let i = 6; i <= pagination.totalPages - 1; i++) {
       const pagItem = document.getElementById(`pagination-number-${i}`);
@@ -137,6 +157,13 @@ function correctPaginationMarkup() {
   }
 
   if (pagination.totalPages - pagination.currentPage <= 4) {
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      dotsLeft.classList.add('pagination__item--hidden');
+
+      const firstPageItem = document.getElementById('pagination-number-1');
+      firstPageItem.classList.add('pagination__item--hidden');
+    }
+
     dotsRight.classList.add('pagination__item--hidden');
     for (let i = 2; i <= pagination.totalPages - 5; i++) {
       const pagItem = document.getElementById(`pagination-number-${i}`);
@@ -147,10 +174,26 @@ function correctPaginationMarkup() {
   }
 
   if (
-    pagination.currentPage >= 6 &&
+    pagination.currentPage >= 5 &&
     pagination.currentPage <= pagination.totalPages - 5
   ) {
-    paginationPages.classList.add('pagination__list--width-L');
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      dotsLeft.classList.add('pagination__item--hidden');
+      dotsRight.classList.add('pagination__item--hidden');
+
+      for (
+        let i = 1;
+        i <= pagination.totalPages;
+        i += pagination.totalPages - 1
+      ) {
+        const pagItem = document.getElementById(`pagination-number-${i}`);
+        pagItem.classList.add('pagination__item--hidden');
+      }
+
+      paginationPagesList.classList.remove('pagination__list--width-L');
+    } else {
+      paginationPagesList.classList.add('pagination__list--width-L');
+    }
 
     for (let i = 2; i <= pagination.totalPages - 1; i++) {
       if (i === pagination.currentPage - 2) {
