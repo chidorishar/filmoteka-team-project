@@ -61,6 +61,7 @@ export class TMDBAPI {
   }
 
   async getTopMovies() {
+    this.#moviesByNameQueryOptions.name = '';
     const response = await this.#fetchMovies(this.#FETCH_MODES.TOP);
 
     return response;
