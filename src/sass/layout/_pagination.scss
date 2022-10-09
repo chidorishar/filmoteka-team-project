@@ -65,22 +65,20 @@
         @extend %visually-hidden;
     }
 
-    &--hover {
-        &:hover {
-            cursor: pointer;
-            background-color: getColorFromPalette('pagination', 'orange');
-            color: getColorFromPalette('primary', 'light');
-            fill: getColorFromPalette('primary', 'light');
-        }
+    &:hover {
+        cursor: pointer;
+        background-color: getColorFromPalette('pagination', 'orange');
+        color: getColorFromPalette('primary', 'light');
+        fill: getColorFromPalette('primary', 'light');
+    }
 
-        &:disabled {
+    &:disabled {
+        background-color: darkgrey;
+
+        &:hover {
+            cursor: default;
             background-color: darkgrey;
-    
-            &:hover {
-                cursor: default;
-                background-color: darkgrey;
-                fill: getColorFromPalette('primary', 'dark');
-            }
+            fill: getColorFromPalette('primary', 'dark');
         }
     }
 

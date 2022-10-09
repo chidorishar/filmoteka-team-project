@@ -2,9 +2,13 @@ const paginationPages = document.getElementById('pagination-pages');
 const nextBtn = document.getElementById('pagination-button-next');
 const previousBtn = document.getElementById('pagination-button-previous');
 
+nextBtn.addEventListener('click', onNextBtnClick);
+previousBtn.addEventListener('click', onPreviousBtnClick);
+paginationPages.addEventListener('click', onPaginationPagesClick);
+
 const pagination = {
-  currentPage: 1,
-  totalPages: 7,
+  currentPage: 16,
+  totalPages: 20,
 
   currentPageIncreaseByOne() {
     if (this.currentPage === this.totalPages) {
@@ -21,9 +25,45 @@ const pagination = {
 
     this.currentPage -= 1;
   },
+
+  updateCurrentPage(newCurrentPage) {
+    this.currentPage = newCurrentPage;
+  },
 };
 
+renderPagination();
+
+function onPaginationPagesClick(e) {
+  if (e.target.nodeName !== 'BUTTON') {
+    return;
+  }
+
+  if (parseInt(e.target.textContent) === pagination.currentPage) {
+    return;
+  }
+  pagination.updateCurrentPage(parseInt(e.target.textContent));
+
+  renderPagination();
+}
+
+function onNextBtnClick() {
+  pagination.currentPageIncreaseByOne();
+  renderPagination();
+}
+
+function onPreviousBtnClick() {
+  pagination.currentPageReduceByOne();
+  renderPagination();
+}
+
+function renderPagination() {
+  renderPaginationMarkup();
+
+  correctPaginationMarkup();
+}
+
 function renderPaginationMarkup() {
+  console.log('Current page is —', pagination.currentPage);
   let totalMarkup = '';
 
   if (pagination.currentPage === pagination.totalPages) {
@@ -66,14 +106,6 @@ function renderPaginationMarkup() {
 
   paginationPages.innerHTML = totalMarkup;
 }
-
-function renderPagination() {
-  renderPaginationMarkup();
-
-  correctPaginationMarkup();
-}
-
-renderPagination();
 
 function correctPaginationMarkup() {
   const dotsLeft = document.getElementById('pagination-dots-left');
@@ -130,17 +162,4 @@ function correctPaginationMarkup() {
       pagItem.classList.add('pagination__item--hidden');
     }
   }
-}
-
-nextBtn.addEventListener('click', onNextBtnClick);
-previousBtn.addEventListener('click', onPreviousBtnClick);
-
-function onNextBtnClick() {
-  pagination.currentPageIncreaseByOne();
-  renderPagination();
-}
-
-function onPreviousBtnClick() {
-  pagination.currentPageReduceByOne();
-  renderPagination();
 }
