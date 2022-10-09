@@ -61,3 +61,32 @@
   fill: currentColor;
   transition: createTransitionFor(color);
 }
+
+%flex {
+  display: flex;
+}
+
+%flex--h-centred {
+  @extend %flex;
+
+  justify-content: center;
+}
+
+%flex--v-centred {
+  @extend %flex;
+
+  align-items: center;
+}
+
+%flex--vh-centred {
+  @extend %flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+%text-with-wrapped-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
