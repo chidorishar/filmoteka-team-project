@@ -130,9 +130,10 @@ function correctPaginationMarkup() {
   }
 
   // If we don't have many pages, hide all the dots (on the left and on the right)
-  if (pagination.totalPages <= 7) {
+  if (pagination.totalPages <= 8) {
     dotsLeft.classList.add('pagination__item--hidden');
     dotsRight.classList.add('pagination__item--hidden');
+    paginationPagesList.classList.remove('pagination__list--width-L');
     return;
   } else {
     // for mobiles we disable fixed width which was created to comfort nextPage clicking
