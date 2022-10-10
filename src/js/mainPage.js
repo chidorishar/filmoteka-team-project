@@ -1,5 +1,8 @@
-import { GalleryAPI } from './galleryAPI';
-import { TMDBAPI } from './theMovieAPI';
+import { GalleryAPI } from './components/GalleryAPI';
+import { TMDBAPI } from './libs/TMDBAPI';
+
+import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { readFromLocalStorage } from './utils/WebStorageMethods';
 import { renderPagination } from './pagination';
 import { pagination } from './utils/paginationInfo';
 
@@ -7,7 +10,7 @@ const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
 let tmdbAPI = null;
-let galleryAPI = null;
+export let galleryAPI = null;
 
 let unsuccessfulSearchEl = null;
 
@@ -48,13 +51,11 @@ async function onFormSubmit(ev) {
     console.log(error.message);
   }
 }
-
 // MAIN
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
-    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-      .secure_base_url;
+    await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = (await tmdbAPI.getTopMovies()).results;
     //movie search form
@@ -62,23 +63,7 @@ async function onFormSubmit(ev) {
     const searchFormEl = document.querySelector('#movie-search-form');
     searchFormEl.addEventListener('submit', onFormSubmit);
     //get array of IDs and genres
-    let genresAndIDs = null;
-    if (!genresDataFromLS) {
-      const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
-
-      genresAndIDs = genresDataFromBackend;
-      localStorage.setItem(
-        GENRES_DATA_LS_KEY,
-        JSON.stringify(genresDataFromBackend)
-      );
-    } else {
-      genresAndIDs = genresDataFromLS;
-    }
-    galleryAPI = new GalleryAPI(
-      '#movies-wrapper',
-      pathToPosterImg,
-      genresAndIDs
-    );
+    galleryAPI = new GalleryAPI('#movies-wrapper');
 
     //render movies
     galleryAPI.renderMoviesCards(moviesData);
@@ -86,13 +71,3 @@ async function onFormSubmit(ev) {
     console.log(error.message);
   }
 })();
-
-function readFromLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
-
-    return JSON.parse(item);
-  } catch (error) {
-    return null;
-  }
-}
