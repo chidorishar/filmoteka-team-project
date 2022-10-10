@@ -2,7 +2,7 @@ import { TMDBAPI } from './TMDBAPI.js';
 import { readFromLocalStorage } from '../utils/WebStorageMethods.js';
 
 export class BackendConfigStorage {
-  static tmdbAPI = new TMDBAPI();
+  static #tmdbAPI = new TMDBAPI();
 
   static #PATH_TO_POSTER_SS_KEY = 'PP-KEY';
   static #GENRES_DATA_LS_KEY = 'genres-data';
@@ -62,9 +62,11 @@ export class BackendConfigStorage {
 
     try {
       //get from backend
-      if (mode === BackendConfigStorage.#GET_MODE.PATH)
-        res = (await tmdbAPI.getConfiguration()).images.secure_base_url;
-      else res = (await tmdbAPI.getGenresData()).genres;
+      res =
+        mode === BackendConfigStorage.#GET_MODE.PATH
+          ? (await BackendConfigStorage.#tmdbAPI.getConfiguration()).images
+              .secure_base_url
+          : (await BackendConfigStorage.#tmdbAPI.getGenresData()).genres;
     } catch (error) {
       console.log(error.message);
     }
