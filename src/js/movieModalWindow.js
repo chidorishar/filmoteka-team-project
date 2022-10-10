@@ -19,10 +19,12 @@ function onGalleryClick(event) {
   }
 
   event.preventDefault();
-  console.log(movieCardLink.dataset.movieId);
-  console.log(moviesData);
-  console.log('qwe', event.target);
-  renderModal();
+
+  const movieId = movieCardLink.dataset.movieId;
+  const clickedMovieData = getMovieDataByID(movieId);
+
+  console.log(clickedMovieData);
+  renderModal(clickedMovieData);
 }
 
 function renderModal(movieData) {
@@ -50,9 +52,7 @@ function onEscKeyPress(event) {
 }
 
 function getMovieDataByID(ID) {
-  return moviesData.find(({ id }) => {
-    id === ID;
-  });
+  return moviesData.find(({ id }) => id === +ID);
 }
 
 // function on

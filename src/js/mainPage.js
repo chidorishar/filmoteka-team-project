@@ -3,7 +3,7 @@ import { TMDBAPI } from './theMovieAPI';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
-let moviesData = null;
+export let moviesData = null;
 let tmdbAPI = null;
 
 // MAIN
