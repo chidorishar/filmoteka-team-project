@@ -25,7 +25,9 @@ function onclickBtnWatched(e) {
       galleryAPI = new GalleryAPI('#movies-wrapper');
 
       let stringFromLocalStorage = localStorage.getItem('watched');
-      let filmsFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      if (stringFromLocalStorage !== null) {
+        let filmsFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      }
 
       galleryAPI.renderMoviesCards(filmsFromLocalStorage);
     } catch (error) {

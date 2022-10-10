@@ -3,13 +3,6 @@ class LocalStorageUtil {
     this.keyName = 'watched';
   }
 
-  getFilms() {
-    const watchedFilmsLocalStorage = localStorage.getItem(this.keyName);
-    if (watchedFilmsLocalStorage !== null) {
-      return JSON.parse(watchedFilmsLocalStorage);
-    }
-    return [];
-  }
 
   putFilms(film) {
     let watched = this.getFilms();
