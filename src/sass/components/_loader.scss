@@ -1,0 +1,31 @@
+.mask {
+  width: 100%;
+  height: 100%;
+  background: getColorFromPalette('primary', 'light');
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  transition: 0.5s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  @extend %rounded;
+  width: 75px;
+  height: 75px;
+  border: 10px solid getColorFromPalette('loader', 'border');
+  border-left-color: getColorFromPalette('loader', 'border-left');
+
+  animation: loader 1.3s linear infinite;
+}
+
+// .hide {
+//   opacity: 0;
+//   pointer-events: none;
+// }
+
+.is-loader-hidden {
+  display: none;
+}

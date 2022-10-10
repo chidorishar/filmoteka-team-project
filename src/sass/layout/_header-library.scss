@@ -1,0 +1,121 @@
+.header-library {
+  padding-top: 40px;
+  padding-bottom: 62px;
+  @include mediaOver('tablet') {
+    padding-bottom: 60px;
+  }
+}
+
+.header-library__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 230px;
+  z-index: -1;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.56);
+
+  @include mediaOver('tablet') {
+    height: 216px;
+  }
+
+  @include mediaOver('desktop') {
+    height: 219px;
+  }
+}
+
+.header-library__background-img {
+  width: 100%;
+  min-width: 320px;
+  z-index: -2;
+}
+
+.navigation-library {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+  @include mediaOver('tablet') {
+    margin-bottom: 40px;
+  }
+}
+
+.logo-header {
+  @extend %clean-link;
+  @extend %flex--vh-centred;
+
+  font-size: 30px;
+  line-height: 35px;
+  gap: 10px;
+  color: getColorFromPalette('primary', 'light');
+}
+
+.logo-header__img {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-header > span {
+  display: none;
+
+  @include mediaOver('tablet') {
+    display: inline-block;
+  }
+}
+
+.nav-group-library {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-group-library__item {
+  position: relative;
+  margin-left: 40px;
+
+  @extend %unmarked-list;
+}
+
+.nav-group-library__link {
+  font-size: 12px;
+  line-height: 1.17;
+
+  text-align: center;
+  text-transform: uppercase;
+
+  color: getColorFromPalette('primary', 'light');
+  transition: 250ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover,
+  &:focus {
+    color: getColorFromPalette('secondary', 'orange');
+  }
+
+  @extend %clean-link;
+}
+
+.header-library__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  @include mediaOver('tablet') {
+    gap: 32px;
+  }
+  @include mediaOver('desktop') {
+    gap: 16px;
+  }
+}
+
+.nav-group-library__link--current::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  color: getColorFromPalette('controls', 'accent');
+  background-color: getColorFromPalette('controls', 'accent');
+  height: 3px;
+}
