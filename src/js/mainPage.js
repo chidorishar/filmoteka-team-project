@@ -9,11 +9,13 @@ import {
   paginationPreviousBtn,
   paginationPagesList,
   pagination,
-} from './pagination';
+  onWindowResize,
+} from './components/pagination';
 
 paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
 paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
 paginationPagesList.addEventListener('click', onPaginationListBtnNumberClick);
+window.addEventListener('resize', onWindowResize);
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
@@ -72,6 +74,7 @@ async function onPaginationBtnChangeClick(e) {
   } else {
     pagination.currentPageReduceByOne();
   }
+
   await renderGalleryByPage();
 
   renderPagination();

@@ -37,18 +37,18 @@ export class GalleryAPI {
   }) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
     const rating = Number(vote_average).toFixed(1);
-    let genresStr = this.#parseIDsToGenresString(genre_ids);
+    let genresStr = this.#parseIDsToGenresString(
+      genre_ids === undefined ? [] : genre_ids
+    );
 
     // prettier-ignore
     const posterEl = poster_path
-      ? 
-      `<img
+      ? `<img
         class="movie-card__img"
         src="${this.#pathToPoster}w500${poster_path}"
         alt=""
       />`
-      : 
-      `<span class="movie-card__poster-placeholder">
+      : `<span class="movie-card__poster-placeholder">
         <span class="movie-card__poster-placeholder--title">
           ${title}
         </span>has no poster
