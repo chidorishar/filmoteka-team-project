@@ -1,15 +1,28 @@
-import { pagination } from './utils/paginationInfo';
+const pagination = {
+  currentPage: 1,
+  totalPages: null,
+  moviesName: null,
 
-export {
-  renderPagination,
-  paginationNextBtn,
-  paginationPreviousBtn,
-  paginationPagesList,
+  currentPageIncreaseByOne() {
+    if (this.currentPage === this.totalPages) {
+      return;
+    }
+
+    this.currentPage += 1;
+  },
+
+  currentPageReduceByOne() {
+    if (this.currentPage === 1) {
+      return;
+    }
+
+    this.currentPage -= 1;
+  },
+
+  updateCurrentPage(newCurrentPage) {
+    this.currentPage = newCurrentPage;
+  },
 };
-// import { TMDBAPI } from './theMovieAPI';
-// import { GalleryAPI } from './galleryAPI';
-
-// const GENRES_DATA_LS_KEY = 'genres-data';
 
 const paginationPagesList = document.getElementById('pagination-pages');
 const paginationNextBtn = document.getElementById('pagination-button-next');
@@ -18,11 +31,11 @@ const paginationPreviousBtn = document.getElementById(
 );
 
 window.addEventListener('resize', onWindowResize);
-// paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
-// paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
-// paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
-// renderPagination();
+function renderPagination() {
+  renderPaginationMarkup();
+  correctPaginationMarkup();
+}
 
 // if we change screen size on our mobile phone, then we just rerender our pagination list.
 function onWindowResize() {
@@ -32,75 +45,6 @@ function onWindowResize() {
     renderPagination();
   }
 }
-
-// function onPaginationPagesListClick(e) {
-//   if (e.target.nodeName !== 'BUTTON') return;
-
-//   if (parseInt(e.target.textContent) === pagination.currentPage) return;
-
-//   pagination.updateCurrentPage(parseInt(e.target.textContent));
-//   renderPagination();
-// }
-
-// function onPaginationBtnChangeClick(e) {
-//   if (e.currentTarget.id === 'pagination-button-next') {
-//     pagination.currentPageIncreaseByOne();
-//     renderPagination();
-
-//     return;
-//   }
-
-//   pagination.currentPageReduceByOne();
-//   renderPagination();
-// }
-
-function renderPagination() {
-  renderPaginationMarkup();
-  correctPaginationMarkup();
-}
-
-// async function renderGallery() {
-//   const { currentPage } = pagination;
-//   const tmdbAPI = new TMDBAPI();
-
-//   const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-
-//   let pathToPosterImg = null;
-//   let genresAndIDs = null;
-
-//   try {
-//     pathToPosterImg = (await tmdbAPI.getConfiguration()).images.secure_base_url;
-
-//     if (!genresDataFromLS) {
-//       const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
-
-//       genresAndIDs = genresDataFromBackend;
-//       localStorage.setItem(
-//         GENRES_DATA_LS_KEY,
-//         JSON.stringify(genresDataFromBackend)
-//       );
-//     } else {
-//       genresAndIDs = genresDataFromLS;
-//     }
-//   } catch (error) {
-//     console.log(error.message);
-// }
-
-//   const galleryAPI = new GalleryAPI(
-//     '#movies-wrapper',
-//     pathToPosterImg,
-//     genresAndIDs
-//   );
-
-//   try {
-//     const requestResult = await tmdbAPI.getTopMoviesFromPage(currentPage);
-//     pagination.totalPages = requestResult.total_pages;
-
-//     galleryAPI.renderMoviesCards(requestResult.results);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 function renderPaginationMarkup() {
   let totalMarkup = '';
@@ -269,12 +213,10 @@ function correctPaginationMarkup() {
   }
 }
 
-// function readFromLocalStorage(key) {
-//   try {
-//     const item = localStorage.getItem(key);
-
-//     return JSON.parse(item);
-//   } catch (error) {
-//     return null;
-//   }
-// }
+export {
+  renderPagination,
+  paginationNextBtn,
+  paginationPreviousBtn,
+  paginationPagesList,
+  pagination,
+};

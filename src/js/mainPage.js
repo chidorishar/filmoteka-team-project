@@ -8,12 +8,12 @@ import {
   paginationNextBtn,
   paginationPreviousBtn,
   paginationPagesList,
+  pagination,
 } from './pagination';
-import { pagination } from './utils/paginationInfo';
 
 paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
 paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
-paginationPagesList.addEventListener('click', onPaginationListBtnPageClick);
+paginationPagesList.addEventListener('click', onPaginationListBtnNumberClick);
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
@@ -38,8 +38,11 @@ async function onFormSubmit(ev) {
 
     if (searchingMovieName === '') {
       moviesData = await tmdbAPI.getTopMoviesFromPage(1);
+
       pagination.totalPages = moviesData.total_pages;
       pagination.currentPage = 1;
+      pagination.moviesName =
+        pagination.moviesName === null ? null : (pagination.moviesName = null);
 
       await galleryAPI.renderMoviesCards(moviesData.results);
       renderPagination();
@@ -54,6 +57,9 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
+
+    pagination.moviesName = searchingMovieName;
+
     await galleryAPI.renderMoviesCards(moviesData.results);
     renderPagination();
   } catch (error) {
@@ -61,23 +67,53 @@ async function onFormSubmit(ev) {
   }
 }
 
-function onPaginationBtnChangeClick(e) {
+async function onPaginationBtnChangeClick(e) {
   if (e.currentTarget.id === 'pagination-button-next') {
     pagination.currentPageIncreaseByOne();
-    renderPagination();
-    return;
+  } else {
+    pagination.currentPageReduceByOne();
   }
-  pagination.currentPageReduceByOne();
+  await renderGalleryByPage();
 
   renderPagination();
 }
 
-function onPaginationListBtnPageClick(e) {
+async function onPaginationListBtnNumberClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
   if (parseInt(e.target.textContent) === pagination.currentPage) return;
 
   pagination.updateCurrentPage(parseInt(e.target.textContent));
+
+  await renderGalleryByPage();
+
   renderPagination();
+}
+
+async function renderGalleryByPage() {
+  if (pagination.moviesName) {
+    try {
+      moviesData = await tmdbAPI.getMoviesByNameFromPage(
+        pagination.currentPage,
+        pagination.moviesName
+      );
+
+      console.log(galleryAPI.renderMoviesCards);
+      galleryAPI.renderMoviesCards(moviesData.results);
+    } catch (error) {
+      console.log(error.message);
+    }
+    return;
+  }
+  try {
+    tmdbAPI = new TMDBAPI();
+    moviesData = await tmdbAPI.getTopMoviesFromPage(pagination.currentPage);
+
+    galleryAPI = new GalleryAPI('#movies-wrapper');
+
+    galleryAPI.renderMoviesCards(moviesData.results);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 // MAIN
@@ -88,6 +124,7 @@ function onPaginationListBtnPageClick(e) {
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = await tmdbAPI.getTopMoviesFromPage(1);
     pagination.totalPages = moviesData.total_pages;
+
     //movie search form
     unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
     const searchFormEl = document.querySelector('#movie-search-form');
