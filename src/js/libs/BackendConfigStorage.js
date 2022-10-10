@@ -2,6 +2,8 @@ import { TMDBAPI } from './TMDBAPI.js';
 import { readFromLocalStorage } from '../utils/WebStorageMethods.js';
 
 export class BackendConfigStorage {
+  static tmdbAPI = new TMDBAPI();
+
   static #PATH_TO_POSTER_SS_KEY = 'PP-KEY';
   static #GENRES_DATA_LS_KEY = 'genres-data';
   static #GET_MODE = {
@@ -56,7 +58,6 @@ export class BackendConfigStorage {
   }
 
   static async #getDataFromBackend(mode) {
-    const tmdbAPI = new TMDBAPI();
     let res = null;
 
     try {
