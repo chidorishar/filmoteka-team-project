@@ -136,7 +136,7 @@
 
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;
-    width: calc(50% - 30px);
+    width: calc(33% - 30px);
   }
 
   @include mediaOver('desktop') {
