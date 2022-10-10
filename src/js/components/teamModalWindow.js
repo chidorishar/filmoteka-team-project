@@ -11,6 +11,7 @@ let isShow = false;
   refs.openModalLink.addEventListener('click', onOpenModalLinkClick);
   refs.closeModalBtn.addEventListener('click', toggleModal);
   refs.modal.addEventListener('click', onBackdropClick);
+  refs.modal.removeAttribute('style');
 })();
 
 function onOpenModalLinkClick(event) {

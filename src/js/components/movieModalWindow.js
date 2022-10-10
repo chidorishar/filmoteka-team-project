@@ -13,6 +13,7 @@ const modalButtonsWrapper = document.querySelector(
 (() => {
   galleryWrapper.addEventListener('click', onGalleryClick);
   modalButtonsWrapper.addEventListener('click', onGalleryClick);
+  modalBackdrop.removeAttribute('style');
 })();
 
 function onGalleryClick(event) {
