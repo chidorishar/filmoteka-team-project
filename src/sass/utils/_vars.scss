@@ -64,8 +64,11 @@ $colorPalette: (
     'hover-queue-btn': #f3f3f3,
     'focus-queue-btn': #e6e6e6,
   ),
+  'loader': (
+    'border': rgba(62, 190, 141, 0.6),
+    'border-left': rgba(62, 190, 141),
+  ),
 );
-
 $breakpoints: (
   'mobile': 480px,
   'tablet': 768px,
