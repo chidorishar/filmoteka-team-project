@@ -1,2 +1,2 @@
 import './js/mainPage.js';
-import './js/team-window.js';
+import './js/teamModalWindow.js';
