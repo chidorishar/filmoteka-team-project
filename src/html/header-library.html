@@ -1,0 +1,113 @@
+<header id="header" class="header-library">
+  <div class="header-library__background">
+    <picture>
+      <!-- for desktop screens  -->
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/content/MyLibrary/1x-desktop-header.jpg 1x,
+          ./images/content/MyLibrary/2x-desktop-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(min-width:1280px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-desktop.webp 1x,
+          ./images/content/MyLibrary/webP-2x-desktop.webp 2x
+        "
+        type="image/webp"
+      />
+      <!-- for tablet screens  -->
+      <source
+        media="(min-width: 768px)"
+        srcset="
+          ./images/content/MyLibrary/1x-tablet-header.jpg 1x,
+          ./images/content/MyLibrary/2x-tablet-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(min-width:768px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-tablet.webp 1x,
+          ./images/content/MyLibrary/webP-2x-tablet.webp 2x
+        "
+        type="image/webp"
+      />
+      <!-- for mobile screens  -->
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/content/MyLibrary/1x-mobile-header.jpg 1x,
+          ./images/content/MyLibrary/2x-mobile-header.jpg 2x
+        "
+        type="image/jpg"
+      />
+      <source
+        media="(max-width:767px)"
+        srcset="
+          ./images/content/MyLibrary/webP-1x-desktop.webp 1x,
+          ./images/content/MyLibrary/webP-2x-desktop.webp 2x
+        "
+        type="image/webp"
+      />
+      <img
+        class="header-library__background-img"
+        src="./images/content/MyLibrary/1x-mobile-header.jpg"
+        alt="cinema"
+        width="1280"
+        height="216"
+      />
+    </picture>
+  </div>
+  <div class="container">
+    <div class="navigation-library">
+      <a href="./index.html" class="logo-header">
+        <picture>
+          <source
+            media="(min-width:380px)"
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.png 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.png 2x
+            "
+          />
+          <source
+            srcset="
+              ./images/decorative/header/logo-1x-2x/logo-1x.webp 1x,
+              ./images/decorative/header/logo-1x-2x/logo-2x.webp 2x
+            "
+            type="image/webp"
+          />
+          <img
+            class="/"
+            alt="logo"
+            src="./images/decorative/header/logo-1x-2x/logo-1x.png"
+            width="24"
+            height="24"
+          />
+        </picture>
+        <span>Filmoteka</span>
+      </a>
+
+      <nav>
+        <ul class="nav-group-library">
+          <li class="nav-group-library__item">
+            <a class="nav-group-library__link" href="./index.html">Home</a>
+          </li>
+          <li class="nav-group-library__item">
+            <a
+              class="nav-group-library__link nav-group-library__link--current"
+              href=""
+              >my library</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-library__buttons">
+      <button class="btn btn-active">Watched</button>
+      <button class="btn">queue</button>
+    </div>
+  </div>
+</header>
