@@ -1,27 +1,23 @@
-import { IDsParser } from './utils/idsToGenres';
+import { IDsParser } from '../utils/IDsToGenresParser';
+import { BackendConfigStorage } from '../libs/BackendConfigStorage.js';
 
 export class GalleryAPI {
-  #idsParser = null;
   #loadedImages = 0;
   #totalImages = 0;
   #pathToPoster = '';
   #rootEl = null;
   #onImagesLoadedCallback = null;
+  #currentMoviesData = null;
 
-  constructor(
-    rootElementSelector,
-    pathToPosterImg,
-    genresAndIDs,
-    onAllImagesLoadedCallback = () => {}
-  ) {
+  constructor(rootElementSelector, onAllImagesLoadedCallback = () => {}) {
     this.#rootEl = document.querySelector(rootElementSelector);
-    this.#pathToPoster = pathToPosterImg;
     this.#onImagesLoadedCallback = onAllImagesLoadedCallback;
-    this.#idsParser = new IDsParser(genresAndIDs);
+    this.#pathToPoster = BackendConfigStorage.pathToPoster;
   }
 
   renderMoviesCards(moviesData) {
     this.#totalImages = moviesData.length;
+    this.#currentMoviesData = moviesData;
     this.#rootEl.innerHTML = moviesData.reduce(
       (acc, movieData) => (acc += this.#createMovieCardMarkup(movieData)),
       ''
@@ -86,11 +82,10 @@ export class GalleryAPI {
   #parseIDsToGenresString(IDs) {
     if (!IDs.length) return '';
 
-    const idsParser = this.#idsParser;
     const isTooManyIDs = IDs.length > 2;
     const ids = isTooManyIDs ? IDs.slice(0, 2) : IDs;
 
-    let parsedGenres = idsParser.idsToGenres(ids);
+    let parsedGenres = IDsParser.idsToGenres(ids);
     parsedGenres += isTooManyIDs ? ', Other' : '';
 
     return parsedGenres;
@@ -113,5 +108,9 @@ export class GalleryAPI {
       el.addEventListener('load', this.#onImageLoaded);
       el.addEventListener('error', this.#onImageLoaded);
     });
+  }
+
+  get currentRenderedMoviesData() {
+    return this.#currentMoviesData;
   }
 }
