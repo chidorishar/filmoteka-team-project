@@ -1,8 +1,10 @@
 import { pagination } from './utils/paginationInfo';
-import { TMDBAPI } from './theMovieAPI';
-import { GalleryAPI } from './galleryAPI';
 
-const GENRES_DATA_LS_KEY = 'genres-data';
+export { renderPagination };
+// import { TMDBAPI } from './theMovieAPI';
+// import { GalleryAPI } from './galleryAPI';
+
+// const GENRES_DATA_LS_KEY = 'genres-data';
 
 const paginationPagesList = document.getElementById('pagination-pages');
 const paginationNextBtn = document.getElementById('pagination-button-next');
@@ -15,7 +17,7 @@ paginationNextBtn.addEventListener('click', onNextBtnClick);
 paginationPreviousBtn.addEventListener('click', onPreviousBtnClick);
 paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
-renderPagination();
+// renderPagination();
 
 // if we change screen size on our mobile phone, then we just rerender our pagination list.
 function onWindowResize() {
@@ -49,55 +51,54 @@ function onPreviousBtnClick() {
   renderPagination();
 }
 
-function renderPagination() {
-  renderGallery();
-}
-
-async function renderGallery() {
-  const { currentPage } = pagination;
-  const tmdbAPI = new TMDBAPI();
-
-  const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-
-  let pathToPosterImg = null;
-  let genresAndIDs = null;
-
-  try {
-    pathToPosterImg = (await tmdbAPI.getConfiguration()).images.secure_base_url;
-
-    if (!genresDataFromLS) {
-      const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
-
-      genresAndIDs = genresDataFromBackend;
-      localStorage.setItem(
-        GENRES_DATA_LS_KEY,
-        JSON.stringify(genresDataFromBackend)
-      );
-    } else {
-      genresAndIDs = genresDataFromLS;
-    }
-  } catch (error) {
-    console.log(error.message);
-  }
-
-  const galleryAPI = new GalleryAPI(
-    '#movies-wrapper',
-    pathToPosterImg,
-    genresAndIDs
-  );
-
-  try {
-    const requestResult = await tmdbAPI.getTopMoviesFromPage(currentPage);
-    pagination.totalPages = requestResult.total_pages;
-
-    galleryAPI.renderMoviesCards(requestResult.results);
-  } catch (error) {
-    console.log(error);
-  }
-
+async function renderPagination() {
+  // await renderGallery();
   renderPaginationMarkup();
   correctPaginationMarkup();
 }
+
+// async function renderGallery() {
+//   const { currentPage } = pagination;
+//   const tmdbAPI = new TMDBAPI();
+
+//   const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
+
+//   let pathToPosterImg = null;
+//   let genresAndIDs = null;
+
+//   try {
+//     pathToPosterImg = (await tmdbAPI.getConfiguration()).images.secure_base_url;
+
+//     if (!genresDataFromLS) {
+//       const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
+
+//       genresAndIDs = genresDataFromBackend;
+//       localStorage.setItem(
+//         GENRES_DATA_LS_KEY,
+//         JSON.stringify(genresDataFromBackend)
+//       );
+//     } else {
+//       genresAndIDs = genresDataFromLS;
+//     }
+//   } catch (error) {
+//     console.log(error.message);
+// }
+
+//   const galleryAPI = new GalleryAPI(
+//     '#movies-wrapper',
+//     pathToPosterImg,
+//     genresAndIDs
+//   );
+
+//   try {
+//     const requestResult = await tmdbAPI.getTopMoviesFromPage(currentPage);
+//     pagination.totalPages = requestResult.total_pages;
+
+//     galleryAPI.renderMoviesCards(requestResult.results);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 function renderPaginationMarkup() {
   let totalMarkup = '';
@@ -117,6 +118,10 @@ function renderPaginationMarkup() {
     paginationNextBtn.disabled = false;
   }
 
+  if (pagination.totalPages === 0) {
+    return;
+  }
+
   totalMarkup += `
         <li class="pagination__item pagination__item--margin-right" id="pagination-number-1"><button class="pagination__btn">1</button></li>
         <li class="pagination__item pagination__item--margin-right" id="pagination-dots-left">&#183;&#183;&#183;</li>
@@ -134,6 +139,8 @@ function renderPaginationMarkup() {
       <li class="pagination__item pagination__item--margin-right" id="pagination-dots-right">&#183;&#183;&#183;</li>
       <li class="pagination__item pagination__item--margin-right" id="pagination-number-${pagination.totalPages}"><button class="pagination__btn">${pagination.totalPages}</button></li>
   `;
+    paginationNextBtn.classList.remove('pagination__btn--hidden');
+    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
   } else {
     totalMarkup += `
         <li class="pagination__item pagination__item--margin-right" id="pagination-dots-right">&#183;&#183;&#183;</li>      
@@ -147,6 +154,19 @@ function renderPaginationMarkup() {
 }
 
 function correctPaginationMarkup() {
+  if (pagination.totalPages === 0) {
+    paginationNextBtn.classList.add('pagination__btn--hidden');
+    paginationPreviousBtn.classList.add('pagination__btn--hidden');
+
+    paginationPagesList.setAttribute('style', 'display: none');
+    return;
+  } else {
+    paginationNextBtn.classList.remove('pagination__btn--hidden');
+    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
+
+    paginationPagesList.removeAttribute('style');
+  }
+
   const dotsLeft = document.getElementById('pagination-dots-left');
   const dotsRight = document.getElementById('pagination-dots-right');
 
@@ -244,12 +264,12 @@ function correctPaginationMarkup() {
   }
 }
 
-function readFromLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
+// function readFromLocalStorage(key) {
+//   try {
+//     const item = localStorage.getItem(key);
 
-    return JSON.parse(item);
-  } catch (error) {
-    return null;
-  }
-}
+//     return JSON.parse(item);
+//   } catch (error) {
+//     return null;
+//   }
+// }

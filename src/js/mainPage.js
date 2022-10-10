@@ -1,5 +1,7 @@
 import { GalleryAPI } from './galleryAPI';
 import { TMDBAPI } from './theMovieAPI';
+import { renderPagination } from './pagination';
+import { pagination } from './utils/paginationInfo';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
@@ -23,24 +25,30 @@ async function onFormSubmit(ev) {
     }
 
     if (searchingMovieName === '') {
-      moviesData = (await tmdbAPI.getTopMovies()).results;
+      moviesData = await tmdbAPI.getTopMoviesFromPage(1);
+      pagination.totalPages = moviesData.total_pages;
+      pagination.currentPage = 1;
 
-      galleryAPI.renderMoviesCards(moviesData);
+      await galleryAPI.renderMoviesCards(moviesData.results);
+      renderPagination();
       return;
     }
 
-    moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
+    moviesData = await tmdbAPI.getMoviesByNameFromPage(1, searchingMovieName);
+    pagination.totalPages = moviesData.total_pages;
+    pagination.currentPage = 1;
 
     if (moviesData.length === 0) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
-
-    galleryAPI.renderMoviesCards(moviesData);
+    await galleryAPI.renderMoviesCards(moviesData.results);
+    renderPagination();
   } catch (error) {
     console.log(error.message);
   }
 }
+
 // MAIN
 (async () => {
   try {
