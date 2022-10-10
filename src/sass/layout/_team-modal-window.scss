@@ -40,11 +40,10 @@
     min-width: 280px;
     max-width: 420px;
     max-height: 95vh;
-    width: 100%;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
-    max-width: 95vh;
+    width: 95vw;
     max-height: 82vh;
   }
 
