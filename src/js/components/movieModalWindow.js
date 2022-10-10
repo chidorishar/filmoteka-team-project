@@ -1,4 +1,5 @@
-import { moviesData } from './mainPage.js';
+import { galleryAPI } from '../mainPage.js';
+import { IDsParser } from '../utils/IDsToGenresParser.js';
 
 const galleryWrapper = document.querySelector('#movies-wrapper');
 const modal = document.querySelector('.modal');
@@ -28,16 +29,30 @@ function onGalleryClick(event) {
 }
 
 function renderModal(movieData) {
+  const {
+    genre_ids: genreIDs,
+    original_title: movieTitle,
+    poster_path: pathToPoster,
+    vote_average: vote,
+    vote_count: votes,
+    overview,
+  } = movieData;
+
   window.addEventListener('keydown', onEscKeyPress);
   backdrop.addEventListener('click', onBackdropClick);
-  document.body.classList.add('modal-is-');
+  document.body.classList.add('js-modal-is-hidden');
   closeModalButton.addEventListener('click', closeModal);
+
+  const movieGenresString = IDsParser.idsToGenres(genreIDs);
+  // const posterImgPath = ;
+
+  //здесь подменить данные в модалке
 }
 
 function closeModal() {
   window.removeEventListener('keydown', onEscKeyPress);
   backdrop.removeEventListener('click', onBackdropClick);
-  document.body.classList.remove('show-modal');
+  document.body.classList.remove('js-modal-is-hidden');
 }
 
 function onBackdropClick(event) {
@@ -52,6 +67,8 @@ function onEscKeyPress(event) {
 }
 
 function getMovieDataByID(ID) {
+  const moviesData = galleryAPI.currentRenderedMoviesData;
+
   return moviesData.find(({ id }) => id === +ID);
 }
 
