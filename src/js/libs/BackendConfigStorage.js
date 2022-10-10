@@ -13,11 +13,7 @@ export class BackendConfigStorage {
   static #genresAndIDs = null;
   static #pathToPoster = null;
 
-  constructor() {
-    BackendConfigStorage.#pathToPoster ??= readFromSessionStorage(
-      BackendConfigStorage.#PATH_TO_POSTER_SS_KEY
-    );
-  }
+  constructor() {}
 
   static async init() {
     const POSTER_SS_KEY = BackendConfigStorage.#PATH_TO_POSTER_SS_KEY;
