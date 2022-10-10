@@ -1,6 +1,7 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
@@ -60,6 +61,14 @@ async function onFormSubmit(ev) {
 
     //render movies
     galleryAPI.renderMoviesCards(moviesData);
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
   } catch (error) {
     console.log(error.message);
   }
