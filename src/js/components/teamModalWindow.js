@@ -28,6 +28,7 @@ function toggleModal() {
     : document.body.addEventListener('keydown', onKeyDown);
   isShow = !isShow;
 }
+
 function onBackdropClick(event) {
   if (event.target != event.currentTarget) {
     return;
