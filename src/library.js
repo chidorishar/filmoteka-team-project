@@ -1,10 +1,16 @@
 import './js/components/teamModalWindow.js';
 
-// import { GalleryAPI } from './galleryAPI';
-// import { TMDBAPI } from './theMovieAPI';
-// const GENRES_DATA_LS_KEY = 'genres-data';
+import { GalleryAPI } from './js/components/GalleryAPI';
+import { TMDBAPI } from './js/libs/TMDBAPI';
+const GENRES_DATA_LS_KEY = 'genres-data';
 
 let galleryAPI = null;
+
+
+// записаный обьект в локал сторедж
+
+localStorage.getItem('watched',JSON.stringify())
+
 
 // MAIN
 (async () => {

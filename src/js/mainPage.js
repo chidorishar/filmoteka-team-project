@@ -60,6 +60,7 @@ async function onFormSubmit(ev) {
 
     //render movies
     galleryAPI.renderMoviesCards(moviesData);
+    console.log(moviesData)
   } catch (error) {
     console.log(error.message);
   }
