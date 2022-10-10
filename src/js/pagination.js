@@ -1,6 +1,11 @@
 import { pagination } from './utils/paginationInfo';
 
-export { renderPagination };
+export {
+  renderPagination,
+  paginationNextBtn,
+  paginationPreviousBtn,
+  paginationPagesList,
+};
 // import { TMDBAPI } from './theMovieAPI';
 // import { GalleryAPI } from './galleryAPI';
 
@@ -13,9 +18,9 @@ const paginationPreviousBtn = document.getElementById(
 );
 
 window.addEventListener('resize', onWindowResize);
-paginationNextBtn.addEventListener('click', onNextBtnClick);
-paginationPreviousBtn.addEventListener('click', onPreviousBtnClick);
-paginationPagesList.addEventListener('click', onPaginationPagesListClick);
+// paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
+// paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
+// paginationPagesList.addEventListener('click', onPaginationPagesListClick);
 
 // renderPagination();
 
@@ -28,31 +33,28 @@ function onWindowResize() {
   }
 }
 
-function onPaginationPagesListClick(e) {
-  if (e.target.nodeName !== 'BUTTON') {
-    return;
-  }
+// function onPaginationPagesListClick(e) {
+//   if (e.target.nodeName !== 'BUTTON') return;
 
-  if (parseInt(e.target.textContent) === pagination.currentPage) {
-    return;
-  }
-  pagination.updateCurrentPage(parseInt(e.target.textContent));
+//   if (parseInt(e.target.textContent) === pagination.currentPage) return;
 
-  renderPagination();
-}
+//   pagination.updateCurrentPage(parseInt(e.target.textContent));
+//   renderPagination();
+// }
 
-function onNextBtnClick() {
-  pagination.currentPageIncreaseByOne();
-  renderPagination();
-}
+// function onPaginationBtnChangeClick(e) {
+//   if (e.currentTarget.id === 'pagination-button-next') {
+//     pagination.currentPageIncreaseByOne();
+//     renderPagination();
 
-function onPreviousBtnClick() {
-  pagination.currentPageReduceByOne();
-  renderPagination();
-}
+//     return;
+//   }
 
-async function renderPagination() {
-  // await renderGallery();
+//   pagination.currentPageReduceByOne();
+//   renderPagination();
+// }
+
+function renderPagination() {
   renderPaginationMarkup();
   correctPaginationMarkup();
 }
@@ -102,6 +104,15 @@ async function renderPagination() {
 
 function renderPaginationMarkup() {
   let totalMarkup = '';
+
+  if (pagination.totalPages === 0) {
+    paginationNextBtn.classList.add('pagination__btn--hidden');
+    paginationPreviousBtn.classList.add('pagination__btn--hidden');
+    return;
+  } else {
+    paginationNextBtn.classList.remove('pagination__btn--hidden');
+    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
+  }
 
   // Buttons disabling and enabling
   if (pagination.currentPage === pagination.totalPages) {
@@ -155,15 +166,9 @@ function renderPaginationMarkup() {
 
 function correctPaginationMarkup() {
   if (pagination.totalPages === 0) {
-    paginationNextBtn.classList.add('pagination__btn--hidden');
-    paginationPreviousBtn.classList.add('pagination__btn--hidden');
-
     paginationPagesList.setAttribute('style', 'display: none');
     return;
   } else {
-    paginationNextBtn.classList.remove('pagination__btn--hidden');
-    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
-
     paginationPagesList.removeAttribute('style');
   }
 

@@ -1,6 +1,6 @@
 const pagination = {
   currentPage: 1,
-  totalPages: 2,
+  totalPages: 1,
 
   currentPageIncreaseByOne() {
     if (this.currentPage === this.totalPages) {

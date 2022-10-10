@@ -3,8 +3,17 @@ import { TMDBAPI } from './libs/TMDBAPI';
 
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
-import { renderPagination } from './pagination';
+import {
+  renderPagination,
+  paginationNextBtn,
+  paginationPreviousBtn,
+  paginationPagesList,
+} from './pagination';
 import { pagination } from './utils/paginationInfo';
+
+paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
+paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
+paginationPagesList.addEventListener('click', onPaginationListBtnPageClick);
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
@@ -51,13 +60,34 @@ async function onFormSubmit(ev) {
     console.log(error.message);
   }
 }
+
+function onPaginationBtnChangeClick(e) {
+  if (e.currentTarget.id === 'pagination-button-next') {
+    pagination.currentPageIncreaseByOne();
+    renderPagination();
+    return;
+  }
+  pagination.currentPageReduceByOne();
+
+  renderPagination();
+}
+
+function onPaginationListBtnPageClick(e) {
+  if (e.target.nodeName !== 'BUTTON') return;
+  if (parseInt(e.target.textContent) === pagination.currentPage) return;
+
+  pagination.updateCurrentPage(parseInt(e.target.textContent));
+  renderPagination();
+}
+
 // MAIN
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-    moviesData = (await tmdbAPI.getTopMovies()).results;
+    moviesData = await tmdbAPI.getTopMoviesFromPage(1);
+    pagination.totalPages = moviesData.total_pages;
     //movie search form
     unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
     const searchFormEl = document.querySelector('#movie-search-form');
@@ -66,7 +96,8 @@ async function onFormSubmit(ev) {
     galleryAPI = new GalleryAPI('#movies-wrapper');
 
     //render movies
-    galleryAPI.renderMoviesCards(moviesData);
+    galleryAPI.renderMoviesCards(moviesData.results);
+    renderPagination();
   } catch (error) {
     console.log(error.message);
   }
