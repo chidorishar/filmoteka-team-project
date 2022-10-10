@@ -1,5 +1,5 @@
-import { TMDBAPI } from './TMDBAPI';
-import { readFromLocalStorage } from '../utils/WebStorageMethods';
+import { TMDBAPI } from './TMDBAPI.js';
+import { readFromLocalStorage } from '../utils/WebStorageMethods.js';
 
 export class BackendConfigStorage {
   static #PATH_TO_POSTER_SS_KEY = 'PP-KEY';
