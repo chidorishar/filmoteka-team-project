@@ -54,10 +54,10 @@ export class TMDBAPI {
     return response;
   }
 
-  async getMoviesByNameFromPage(pageNumber, searchName) {
+  async getMoviesByNameFromPage(pageNumber) {
     this.#moviesByNameQueryOptions.page = pageNumber;
 
-    return await this.getMoviesByName(searchName);
+    return await this.getMoviesByName('');
   }
 
   async getTopMovies() {

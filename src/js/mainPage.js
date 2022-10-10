@@ -37,8 +37,7 @@ async function onFormSubmit(ev) {
     }
 
     if (searchingMovieName === '') {
-      moviesData = await tmdbAPI.getTopMoviesFromPage(1);
-
+      moviesData = await tmdbAPI.getTopMovies();
       pagination.totalPages = moviesData.total_pages;
       pagination.currentPage = 1;
       pagination.moviesName =
@@ -49,7 +48,7 @@ async function onFormSubmit(ev) {
       return;
     }
 
-    moviesData = await tmdbAPI.getMoviesByNameFromPage(1, searchingMovieName);
+    moviesData = await tmdbAPI.getMoviesByName(searchingMovieName);
     pagination.totalPages = moviesData.total_pages;
     pagination.currentPage = 1;
 
@@ -97,7 +96,6 @@ async function renderGalleryByPage() {
         pagination.moviesName
       );
 
-      console.log(galleryAPI.renderMoviesCards);
       galleryAPI.renderMoviesCards(moviesData.results);
     } catch (error) {
       console.log(error.message);
@@ -105,7 +103,6 @@ async function renderGalleryByPage() {
     return;
   }
   try {
-    tmdbAPI = new TMDBAPI();
     moviesData = await tmdbAPI.getTopMoviesFromPage(pagination.currentPage);
 
     galleryAPI = new GalleryAPI('#movies-wrapper');
@@ -122,7 +119,7 @@ async function renderGalleryByPage() {
     tmdbAPI = new TMDBAPI();
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-    moviesData = await tmdbAPI.getTopMoviesFromPage(1);
+    moviesData = await tmdbAPI.getTopMovies();
     pagination.totalPages = moviesData.total_pages;
 
     //movie search form
