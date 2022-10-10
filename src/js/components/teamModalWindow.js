@@ -35,5 +35,5 @@ function onBackdropClick(event) {
 }
 
 function onKeyDown(event) {
-  event.code === 'Escape' ? toggleModal() : none;
+  event.code === 'Escape' ? toggleModal() : null;
 }
