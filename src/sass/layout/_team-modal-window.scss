@@ -1,153 +1,161 @@
 // --STYLES FOR MOBILE-WINDOW TEAM --
 .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.2);
-    opacity: 1;
-    transition: all 0.8s ease 0s;
-    // transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: scroll;
-    z-index: 100;
-  }
-  
-  .backdrop.is-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-  
-  .backdrop.is-hidden .modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  opacity: 1;
+  transition: all 0.8s ease 0s;
+  // transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.backdrop.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.backdrop.is-hidden .modal-wrapper {
   transform: translate(-50%, -50%) scale(0.9);
+}
+
+.modal-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: getColorFromPalette('primary', 'light');
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: all 0.8s ease 0s;
+  transform: translate(-50%, -50%) scale(1);
+  // transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+
+  @include mediaUpTo('tablet') {
+    min-width: 280px;
+    max-width: 420px;
+    max-height: 95vh;
+    width: 100%;
   }
-  
-  .modal-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background-color: getColorFromPalette('primary', 'light');
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-    transition: all 0.8s ease 0s;
-    transform: translate(-50%, -50%) scale(1);
-    // transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: scroll;
-  
-    @include mediaUpTo('tablet') {
-      max-width: 280px;
-      max-height: 600px;
-      width: 100%;
-      height: 100%;
-      }
-  
-    @include mediaInBetween('tablet', 'desktop') {
-      width: 704px;
-      height: 522px;
-      }
-  
-    @include mediaOver('desktop') {
-      width: 1200px;
-      height: 750px;
-        }
+
+  @include mediaInBetween('tablet', 'desktop') {
+    max-width: 95vh;
+    max-height: 82vh;
   }
-  
-  .modal-wrapper__button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+
+  @include mediaOver('desktop') {
+    width: 1200px;
+    max-height: 70vh;
+  }
+}
+
+.modal-wrapper__button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  color: black;
+  background-color: getColorFromPalette('primary', 'light');
+  border: 1px solid getColorFromPalette('primary', 'light');
+  // transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-title {
+  font-size: 22px;
+  line-height: 1.15;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.03em;
+  color: getColorFromPalette('primary', 'dark');
+
+  @include mediaInBetween('tablet', 'desktop') {
+    font-size: 24px;
+    line-height: 1.25;
+  }
+
+  @include mediaOver('desktop') {
+    font-size: 30px;
+    line-height: 1.5;
+  }
+}
+
+.team-list {
+  @include mediaInBetween('tablet', 'desktop') {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    color: black;
-    background-color: getColorFromPalette('primary', 'light');
-    border: 1px solid getColorFromPalette('primary', 'light');
-    // transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    flex-wrap: wrap;
+    padding: 0 30px;
+    margin: 0;
   }
-  
-  .modal-title {
+
+  @include mediaOver('desktop') {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 30px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 1.50;
-    text-align: center;
-    letter-spacing: 0.03em;
-    color: getColorFromPalette('primary', 'dark');
-  
-    @include mediaUpTo('tablet') {
-      margin-right: 40px;
-      margin-left: 40px;
-      }
+    flex-wrap: wrap;
+    padding: 0 30px;
+    margin: 0;
   }
-  
-  .team-list {
-    @include mediaInBetween('tablet', 'desktop') {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 0 30px;
-      margin: 0;
-      }
-  
-    @include mediaOver('desktop') {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 0 30px;
-      margin: 0;
-      }
-  }
-  
-  .team {
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  background-color: #f7f5ec;
+  width: 230px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 1px rgba(0, 0, 0, 0.2);
+  padding: 30px 0 40px;
+  background-color: #f7f5ec;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+
+  @include mediaInBetween('tablet', 'desktop') {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    margin-bottom: 30px;
-    background-color: #f7f5ec;
-    width: 230px;
-    border-radius: 5px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 2px 1px rgba(0, 0, 0, 0.2);
-    padding: 30px 0 40px;
-    background-color: #f7f5ec;
-    text-align: center;
-    overflow: hidden;
-    position: relative;
-  
-    @include mediaInBetween('tablet', 'desktop') {
-      display: flex;
-      width: calc(50% - 30px);
-      }
-  
-    @include mediaOver('desktop') {
-      display: flex;
-      padding: 10px 15px;
-      width: calc(20% - 30px);
-      height: 280px;
-      }
+    width: calc(50% - 30px);
   }
-  
-  .team-photo {
-    display: inline-block;
-    height: 120px;
-    width: 120px;
-    margin-bottom: 10px;
-    z-index: 1;
-    position: relative;
+
+  @include mediaOver('desktop') {
+    display: flex;
+    padding: 10px 15px;
+    width: calc(20% - 30px);
+    height: 280px;
   }
-  
-  .team-photo::before {
-  content: "";
+}
+
+.team-photo {
+  display: inline-block;
+  height: 120px;
+  width: 120px;
+  margin-bottom: 10px;
+  z-index: 1;
+  position: relative;
+}
+
+.team-photo::before {
+  content: '';
   width: 100%;
   height: 0;
   border-radius: 50%;
@@ -159,98 +167,97 @@
   opacity: 0.9;
   transform: scale(3);
   transition: all 0.3s linear 0s;
-  }
-  
-  .team:hover .team-photo::before,
-  .team:focus .team-photo::before {
-    height: 100%;
-  }
-  
-  .team-photo::after {
-    content: "";
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: getColorFromPalette('secondary', 'orange');
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-  
-  .team-photo__img {
-    border-radius: 50%;
-    width: 100%;
-    height: auto;
-    transform: scale(1);
-    transition: all 0.9 ease 0s;
-  }
-  
-  .team:hover .team-photo__img,
-  .team:focus .team-photo__img{
-    box-shadow: 0 0 0 14px #f7f5ec;
-    transform: scale(0.7);
-  }
-  
-  .team-info {
-    padding: 10px;
-  }
-  
-  
-  .team-info__name {
-    text-align: center;
-    margin-bottom: 10px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 1.15;
-    color: getColorFromPalette('primary', 'dark');
-  }
-  
-  .team-info__role {
-    text-align: center;
-    margin-bottom: 20px;
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.15;
-    color:  getColorFromPalette('primary', 'additional');
-  }
-  
-  .list-social {
-    padding: 0;
-    list-style: none;
-    width: 100%;
-    margin: 0;
-    background-color: getColorFromPalette('secondary', 'orange');
-    position: absolute;
-    bottom: -100px;
-    left: 0;
-    transition: all 0.5s ease 0s;
-  }
-  
-  .team:hover .list-social,
-  .team:focus .list-social {
-    bottom: 0;
-  }
-  
-  .item-social {
-    display: inline-block;
-  }
-    
-  .link-social {
-    display: block;
-    padding: 10px;
-    font-size: 17px;
-    color: getColorFromPalette('primary', 'light');
-    transition: all 0.3s ease 0s;
-    text-decoration: none;
-  }
-  
-  .team .link-social:hover,
-  .team .link-social:focus {
-    color: getColorFromPalette('secondary', 'orange');
-    background-color: #f7f5ec;;
-  }
+}
+
+.team:hover .team-photo::before,
+.team:focus .team-photo::before {
+  height: 100%;
+}
+
+.team-photo::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: getColorFromPalette('secondary', 'orange');
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.team-photo__img {
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  transform: scale(1);
+  transition: all 0.9 ease 0s;
+}
+
+.team:hover .team-photo__img,
+.team:focus .team-photo__img {
+  box-shadow: 0 0 0 14px #f7f5ec;
+  transform: scale(0.7);
+}
+
+.team-info {
+  padding: 10px;
+}
+
+.team-info__name {
+  text-align: center;
+  margin-bottom: 10px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.15;
+  color: getColorFromPalette('primary', 'dark');
+}
+
+.team-info__role {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.15;
+  color: getColorFromPalette('primary', 'additional');
+}
+
+.list-social {
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  background-color: getColorFromPalette('secondary', 'orange');
+  position: absolute;
+  bottom: -100px;
+  left: 0;
+  transition: all 0.5s ease 0s;
+}
+
+.team:hover .list-social,
+.team:focus .list-social {
+  bottom: 0;
+}
+
+.item-social {
+  display: inline-block;
+}
+
+.link-social {
+  display: block;
+  padding: 10px;
+  font-size: 17px;
+  color: getColorFromPalette('primary', 'light');
+  transition: all 0.3s ease 0s;
+  text-decoration: none;
+}
+
+.team .link-social:hover,
+.team .link-social:focus {
+  color: getColorFromPalette('secondary', 'orange');
+  background-color: #f7f5ec;
+}
