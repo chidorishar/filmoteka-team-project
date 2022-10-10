@@ -1,5 +1,5 @@
 const refs = {
-  modalMovie: document.getElementById('modal'),
+  modalMovie: document.getElementById('movieModal'),
   modalTeam: document.getElementById('backdrop'),
   linkModalTeam: document.getElementById('open-team-modal'),
 };
