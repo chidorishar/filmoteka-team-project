@@ -116,14 +116,11 @@ function correctPaginationMarkup() {
   const dotsRight = document.getElementById('pagination-dots-right');
 
   // Adding background for our currentPage
-  for (let i = 1; i <= pagination.totalPages; i++) {
-    if (i === pagination.currentPage) {
-      const activePageItem = document.getElementById(`pagination-number-${i}`);
-      const activePageBtn = activePageItem.firstElementChild;
-      activePageBtn.classList.add('pagination__btn--active');
-      break;
-    }
-  }
+  const activePageItem = document.getElementById(
+    `pagination-number-${pagination.currentPage}`
+  );
+  const activePageBtn = activePageItem.firstElementChild;
+  activePageBtn.classList.add('pagination__btn--active');
 
   // If we don't have many pages, hide all the dots (on the left and on the right)
   if (pagination.totalPages <= 8) {
@@ -152,6 +149,7 @@ function correctPaginationMarkup() {
       lastPageItem.classList.add('pagination__item--hidden');
     }
     dotsLeft.classList.add('pagination__item--hidden');
+
     for (let i = 6; i <= pagination.totalPages - 1; i++) {
       const pagItem = document.getElementById(`pagination-number-${i}`);
       pagItem.classList.add('pagination__item--hidden');

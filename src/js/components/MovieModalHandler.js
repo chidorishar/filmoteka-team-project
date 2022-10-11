@@ -1,12 +1,7 @@
 // import { galleryAPI } from '../mainPage.js';
 import { IDsParser } from '../utils/IDsToGenresParser.js';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage';
-import {
-  MOVIE_INFO,
-  getMovieLSInfo,
-  saveToLS,
-  removeFromLS,
-} from '../utils/testLSSaver.js';
+import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
 
 export class MovieModalHandler {
   #modalWindowEls = {
@@ -71,7 +66,7 @@ export class MovieModalHandler {
     document.body.classList.add('js-modal-is-hidden');
 
     this.#movieId = movieCardLink.dataset.movieId;
-    this.#movieLibData = getMovieLSInfo(this.#movieId);
+    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
     this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
 
     this.#renderModal(this.#clickedMovieData);
@@ -135,17 +130,33 @@ export class MovieModalHandler {
   };
 
   #updateLSData(btnID) {
-    const movieNewLibData = { ...getMovieLSInfo(this.#movieId) };
+    const movieNewLibData = {
+      ...LDStorageAPI.findInLocalStorage(this.#movieId),
+    };
 
     if (btnID === 'queue-btn') {
       movieNewLibData.queued
-        ? removeFromLS(this.#movieId, MOVIE_INFO.QUEUED)
-        : saveToLS(this.#movieId, this.#clickedMovieData, MOVIE_INFO.QUEUED);
+        ? LDStorageAPI.removeFromLocalStorage(
+            this.#movieId,
+            LDStorageAPI.MOVIE_INFO.QUEUED
+          )
+        : LDStorageAPI.addToLocalStorage({
+            id: this.#movieId,
+            movieData: this.#clickedMovieData,
+            storageKey: LDStorageAPI.MOVIE_INFO.QUEUED,
+          });
       movieNewLibData.queued = !movieNewLibData.queued;
     } else {
       movieNewLibData.watched
-        ? removeFromLS(this.#movieId, MOVIE_INFO.WATCHED)
-        : saveToLS(this.#movieId, this.#clickedMovieData, MOVIE_INFO.WATCHED);
+        ? LDStorageAPI.removeFromLocalStorage(
+            this.#movieId,
+            LDStorageAPI.MOVIE_INFO.WATCHED
+          )
+        : LDStorageAPI.addToLocalStorage({
+            id: this.#movieId,
+            movieData: this.#clickedMovieData,
+            storageKey: LDStorageAPI.MOVIE_INFO.WATCHED,
+          });
       movieNewLibData.watched = !movieNewLibData.watched;
     }
 

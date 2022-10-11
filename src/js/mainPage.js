@@ -2,6 +2,7 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
@@ -125,6 +126,7 @@ async function onPaginationListBtnNumberClick(e) {
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
+    LDStorageAPI.init();
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     const { results: moviesData, total_pages: totalPages } =
