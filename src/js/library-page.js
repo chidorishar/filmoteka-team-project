@@ -79,7 +79,7 @@ function onclickBtnQueue(e) {
 
       galleryAPI = new GalleryAPI('#movies-wrapper');
 
-      let stringFromLocalStorage = localStorage.getItem('queue');
+      let stringFromLocalStorage = localStorage.getItem('queued');
       let objFromLocalStorage = JSON.parse(stringFromLocalStorage);
       let filmsFromLocalStorage = Object.values(objFromLocalStorage);
 
