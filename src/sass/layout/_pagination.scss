@@ -3,10 +3,22 @@
 
     &--sticky {
         position: sticky;
-        bottom: 0;
+        bottom: 10;
+        display: flex;
+        margin: 0 auto;
 
-        width: 100%;
-        background-color: getColorFromPalette('pagination', 'grey');
+        
+        border-radius: 10px;
+        
+        background-color: rgba(getColorFromPalette('primary', 'dark'), 0.65);
+        
+        @include mediaUpTo('tablet') {
+            width: 420px;
+        }
+
+        @include mediaOver('tablet') {
+            width: 600px
+        }
     }
 }
 
@@ -39,14 +51,17 @@
     &--hidden {
         @extend %visually-hidden;
     }
+    
+    &-dots {
+        color: white;
+    }
 }
 
 .pagination__btn {
-    background: none;
     border: none;
     padding: 8px;
-    border-radius: 5px;
     min-width: 40px;
+    border-radius: 5px;
     min-height: 40px;
     
     display: flex;
@@ -54,6 +69,8 @@
     align-items: center;
     text-align: center;
 
+    background-color: getColorFromPalette('primary', 'light');
+    
     transition: background-color 250ms cubic-bezier(.57, .21, .69, 1.25);
 
     &--margin-right {
@@ -89,5 +106,5 @@
             fill: getColorFromPalette('primary', 'dark');
         }
     }
-
 }
+

@@ -79,7 +79,7 @@ function renderPaginationMarkup() {
 
   totalMarkup += `
         <li class="pagination__item pagination__item--margin-right" id="pagination-number-1"><button class="pagination__btn">1</button></li>
-        <li class="pagination__item pagination__item--margin-right" id="pagination-dots-left">&#183;&#183;&#183;</li>
+        <li class="pagination__item pagination__item--margin-right pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>
     `;
 
   for (let i = 2; i <= pagination.totalPages - 1; i++) {
@@ -91,14 +91,14 @@ function renderPaginationMarkup() {
   // For single-paged markup and for more than one paged
   if (pagination.totalPages !== 1) {
     totalMarkup += `
-      <li class="pagination__item pagination__item--margin-right" id="pagination-dots-right">&#183;&#183;&#183;</li>
+      <li class="pagination__item pagination__item--margin-right pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>
       <li class="pagination__item pagination__item--margin-right" id="pagination-number-${pagination.totalPages}"><button class="pagination__btn">${pagination.totalPages}</button></li>
   `;
     paginationNextBtn.classList.remove('pagination__btn--hidden');
     paginationPreviousBtn.classList.remove('pagination__btn--hidden');
   } else {
     totalMarkup += `
-        <li class="pagination__item pagination__item--margin-right" id="pagination-dots-right">&#183;&#183;&#183;</li>      
+        <li class="pagination__item pagination__item--margin-right pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>      
       `;
     paginationNextBtn.classList.add('pagination__btn--hidden');
     paginationPreviousBtn.classList.add('pagination__btn--hidden');
