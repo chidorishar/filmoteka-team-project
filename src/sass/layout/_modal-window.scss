@@ -219,8 +219,6 @@
 }
 
 .modal-data {
-  display: flex;
-  align-items: flex-end;
   margin-bottom: 20px;
 }
 
@@ -242,10 +240,7 @@
   font-size: 12px;
   color: getColorFromPalette('modal', 'characteristic-text-color');
   margin-bottom: 8px;
-}
-
-.modal__characteristic-rating {
-  @extend %flex--v-centred;
+  
 }
 
 .modal__characteristic-genre {
@@ -260,8 +255,6 @@
 
 .modal__characteristic-inform-accent {
   background: getColorFromPalette('modal', 'accent-color');
-  display: flex;
-  align-items: flex-end;
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 10px;
