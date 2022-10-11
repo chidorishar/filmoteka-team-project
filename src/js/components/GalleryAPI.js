@@ -6,12 +6,13 @@ export class GalleryAPI {
   #totalImages = 0;
   #pathToPoster = '';
   #rootEl = null;
-  #onImagesLoadedCallback = null;
+  #onCriticalImagesLoadedCallbacks = [];
   #currentMoviesData = null;
 
-  constructor(rootElementSelector, onAllImagesLoadedCallback = () => {}) {
+  #numberOfCriticalImages = 3;
+
+  constructor(rootElementSelector) {
     this.#rootEl = document.querySelector(rootElementSelector);
-    this.#onImagesLoadedCallback = onAllImagesLoadedCallback;
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
   }
 
@@ -23,16 +24,43 @@ export class GalleryAPI {
     this.#rootEl.removeEventListener('click', cb);
   }
 
+  addOnCriticalImagesLoadedCallback(cb) {
+    this.#onCriticalImagesLoadedCallbacks.push(cb);
+  }
+
+  removeOnCriticalImagesLoadedCallback(cb) {
+    this.#onCriticalImagesLoadedCallbacks =
+      this.#onCriticalImagesLoadedCallbacks.filter(
+        existCallback => existCallback !== cb
+      );
+  }
+
   renderMoviesCards(moviesData) {
-    this.#totalImages = moviesData.length;
     this.#currentMoviesData = moviesData;
-    this.#rootEl.innerHTML = moviesData.reduce(
-      (acc, movieData) => (acc += this.#createMovieCardMarkup(movieData)),
-      ''
-    );
+    this.#rootEl.innerHTML = '';
+
+    let createdImgsNumber = 0;
+    const cardsMarkup = moviesData.reduce((acc, movieData) => {
+      const { markup, hasPoster } = this.#createMovieCardMarkup(movieData);
+      if (hasPoster) createdImgsNumber++;
+      //render bunch of critical images to gallery
+      if (createdImgsNumber === this.#numberOfCriticalImages + 1) {
+        this.#rootEl.innerHTML = acc;
+        acc = '';
+      }
+      return (acc += markup);
+    }, '');
+    //actual created images number is lesser than wanted tracked one, so must set it to real one
+    if (createdImgsNumber < this.#numberOfCriticalImages)
+      this.#numberOfCriticalImages = createdImgsNumber;
+    this.#totalImages = createdImgsNumber;
+
+    //render other (not critical) images to gallery
+    this.#rootEl.insertAdjacentHTML('beforeend', cardsMarkup);
     this.#trackImagesLoadingEnd();
   }
 
+  //cardNumber starts from 0
   #createMovieCardMarkup({
     poster_path,
     title,
@@ -46,22 +74,25 @@ export class GalleryAPI {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
     const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
+    const hasPoster = poster_path;
 
     // prettier-ignore
     const posterEl = poster_path
-      ? `<img
+      ? 
+      `<img
         class="movie-card__img"
         src="${this.#pathToPoster}w500${poster_path}"
         alt=""
       />`
-      : `<span class="movie-card__poster-placeholder">
+      : 
+      `<span class="movie-card__poster-placeholder">
         <span class="movie-card__poster-placeholder--title">
           ${title ?? name}
         </span>has no poster
       </span>`;
 
     // prettier-ignore
-    const resMarkup =
+    const markup =
       `<li class="movie-card">
         <a class="movie-card__link" href="/" data-movie-id="${id}">
           <div class="movie-card__img-thumb ${poster_path ? '' : "movie-card__img-thumb--no-poster"}">
@@ -82,7 +113,7 @@ export class GalleryAPI {
         </a>
       </li>`;
 
-    return resMarkup;
+    return { markup, hasPoster };
   }
 
   #parseIDsToGenresString(IDs) {
@@ -99,11 +130,16 @@ export class GalleryAPI {
 
   #onImageLoaded = e => {
     this.#loadedImages++;
+    console.log(this.#loadedImages);
     e.currentTarget.removeEventListener('load', this.#onImageLoaded);
 
-    if (this.#loadedImages === this.#totalImages) {
-      this.#onImagesLoadedCallback();
+    if (this.#loadedImages === this.#numberOfCriticalImages) {
+      this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
+
+    // if (this.#loadedImages === this.#totalImages) {
+    //   this.#onImagesLoadedCallback();
+    // }
   };
 
   #trackImagesLoadingEnd() {

@@ -49,6 +49,8 @@ let unsuccessfulSearchEl = null;
     );
     window.addEventListener('resize', onWindowResize);
 
+    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
+
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
     renderPagination();
@@ -64,6 +66,11 @@ let unsuccessfulSearchEl = null;
     console.log(error.message);
   }
 })();
+
+function onGalleryLoadedCriticalImages() {
+  console.log('loaded');
+}
+
 async function onFormSubmit(ev) {
   ev.preventDefault();
 
