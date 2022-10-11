@@ -1,8 +1,8 @@
 import './components/teamModalWindow.js';
 import { GalleryAPI } from './components/GalleryAPI';
-import { TMDBAPI } from './libs/TMDBAPI';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
-import { readFromLocalStorage } from './utils/WebStorageMethods';
+import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
 import {
   renderPagination,
   paginationNextBtn,
@@ -11,38 +11,30 @@ import {
   pagination,
   onWindowResize,
 } from './components/pagination';
-
-const GENRES_DATA_LS_KEY = 'genres-data';
-const MOVIE_INFO = {
-  WATCHED: 'watched',
-  QUEUED: 'queued',
-};
-
 let galleryAPI = null;
 
 // MAIN
 (async () => {
   try {
-    // All Storage API methods
+    //init
     LDStorageAPI.init();
-    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
-    LDStorageAPI.getTotalPages();
-    LDStorageAPI.getMoviesByPage(1);
-    console.log(1);
-
-    const tmdbAPI = new TMDBAPI();
-    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-      .secure_base_url;
-    const genresAndIDs = readFromLocalStorage(GENRES_DATA_LS_KEY);
-
-    galleryAPI = new GalleryAPI(
-      '#movies-wrapper',
-      pathToPosterImg,
-      genresAndIDs
+    await BackendConfigStorage.init();
+    galleryAPI = new GalleryAPI('#movies-wrapper');
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
     );
 
+    LDStorageAPI.setActiveStorage(LDStorageAPI.MOVIE_INFO.WATCHED);
+    // LDStorageAPI.getTotalPages();
+    LDStorageAPI.getMoviesByPage(1);
+
     //render movies
-    // galleryAPI.renderMoviesCards(moviesData);
+    galleryAPI.renderMoviesCards(LDStorageAPI.getMoviesByPage(1));
   } catch (error) {
     console.log(error);
   }
