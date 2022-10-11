@@ -2,6 +2,7 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
   renderPagination,
@@ -38,8 +39,9 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
-    if (searchingMovieName === '') {
+    if (!searchingMovieName) {
       moviesData = await tmdbAPI.getTopMovies();
+
       pagination.totalPages = moviesData.total_pages;
       pagination.currentPage = 1;
       pagination.moviesName =
@@ -54,7 +56,7 @@ async function onFormSubmit(ev) {
     pagination.totalPages = moviesData.total_pages;
     pagination.currentPage = 1;
 
-    if (moviesData.length === 0) {
+    if (!moviesData.results.length) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
@@ -63,6 +65,31 @@ async function onFormSubmit(ev) {
 
     await galleryAPI.renderMoviesCards(moviesData.results);
     renderPagination();
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+async function renderGalleryByPage() {
+  if (pagination.moviesName) {
+    try {
+      moviesData = await tmdbAPI.getMoviesByNameFromPage(
+        pagination.currentPage,
+        pagination.moviesName
+      );
+
+      galleryAPI.renderMoviesCards(moviesData.results);
+    } catch (error) {
+      console.log(error.message);
+    }
+    return;
+  }
+  try {
+    moviesData = await tmdbAPI.getTopMoviesFromPage(pagination.currentPage);
+
+    galleryAPI = new GalleryAPI('#movies-wrapper');
+
+    galleryAPI.renderMoviesCards(moviesData.results);
   } catch (error) {
     console.log(error.message);
   }
@@ -91,31 +118,6 @@ async function onPaginationListBtnNumberClick(e) {
   renderPagination();
 }
 
-async function renderGalleryByPage() {
-  if (pagination.moviesName) {
-    try {
-      moviesData = await tmdbAPI.getMoviesByNameFromPage(
-        pagination.currentPage,
-        pagination.moviesName
-      );
-
-      galleryAPI.renderMoviesCards(moviesData.results);
-    } catch (error) {
-      console.log(error.message);
-    }
-    return;
-  }
-  try {
-    moviesData = await tmdbAPI.getTopMoviesFromPage(pagination.currentPage);
-
-    galleryAPI = new GalleryAPI('#movies-wrapper');
-
-    galleryAPI.renderMoviesCards(moviesData.results);
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-
 // MAIN
 (async () => {
   try {
@@ -132,9 +134,17 @@ async function renderGalleryByPage() {
     //get array of IDs and genres
     galleryAPI = new GalleryAPI('#movies-wrapper');
 
-    //render movies
+    //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData.results);
     renderPagination();
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
   } catch (error) {
     console.log(error.message);
   }
