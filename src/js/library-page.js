@@ -17,7 +17,7 @@ const defaultRenderLibraryPage = onclickBtnWatched();
 refs.btnWatched.addEventListener('click', onclickBtnWatched);
 refs.btnQueue.addEventListener('click', onclickBtnQueue);
 
-//Дефолтный текст в контейнере галереи если нет в локал сторедже Watched
+//Дефолтный текст в контейнере галереи если нет в локал сторедже ключа Watched
 const contentEmptyLocalStorageWatched = document.createElement('p');
 contentEmptyLocalStorageWatched.style.fontSize = '24px';
 contentEmptyLocalStorageWatched.style.textAlign = 'center';
@@ -37,7 +37,8 @@ function onclickBtnWatched(e) {
 
       let stringFromLocalStorage = localStorage.getItem('watched');
 
-      let filmsFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      let objFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      let filmsFromLocalStorage = Object.values(objFromLocalStorage);
 
       refs.btnQueue.removeAttribute('disabled');
       refs.btnWatched.setAttribute('disabled', true);
@@ -60,7 +61,7 @@ function onclickBtnWatched(e) {
   })();
 }
 
-//Дефолтное значение в галереи если нет значения в локал сторедже ключа Queue
+//Дефолтный текст в контейнере галереи если нет в локал сторедже ключа Queue
 const contentEmptyLocalStorageQueue = document.createElement('p');
 contentEmptyLocalStorageQueue.style.fontSize = '24px';
 contentEmptyLocalStorageQueue.style.textAlign = 'center';
@@ -68,7 +69,7 @@ contentEmptyLocalStorageQueue.innerHTML =
   '"Вы еще не добавили ни одного фильма к просмотру"';
 refs.galleryContainer.prepend(contentEmptyLocalStorageQueue);
 
-//Функция на клик по кнопке Watched
+//Функция на клик по кнопке Queue
 function onclickBtnQueue(e) {
   // MAIN
   (async () => {
@@ -79,7 +80,8 @@ function onclickBtnQueue(e) {
       galleryAPI = new GalleryAPI('#movies-wrapper');
 
       let stringFromLocalStorage = localStorage.getItem('queue');
-      let filmsFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      let objFromLocalStorage = JSON.parse(stringFromLocalStorage);
+      let filmsFromLocalStorage = Object.values(objFromLocalStorage);
 
       refs.btnWatched.removeAttribute('disabled');
       refs.btnQueue.setAttribute('disabled', true);

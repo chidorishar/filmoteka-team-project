@@ -140,6 +140,7 @@ async function onPaginationListBtnNumberClick(e) {
 
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
+    console.log(moviesData);
     renderPagination();
     const mmh = new MovieModalHandler(
       '#watched-btn',
