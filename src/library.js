@@ -1,9 +1,13 @@
 import './js/components/teamModalWindow.js';
-
 import { GalleryAPI } from './js/components/GalleryAPI';
 import { TMDBAPI } from './js/libs/TMDBAPI';
 import { LDStorageAPI } from './js/utils/LibraryDataStorageAPI';
+import { readFromLocalStorage } from './js/utils/WebStorageMethods';
 const GENRES_DATA_LS_KEY = 'genres-data';
+const MOVIE_INFO = {
+  WATCHED: 'watched',
+  QUEUED: 'queued',
+};
 import {
   renderPagination,
   paginationNextBtn,
@@ -18,10 +22,12 @@ let galleryAPI = null;
 // MAIN
 (async () => {
   try {
+    // All Storage API methods
     LDStorageAPI.init();
-    moviesData = LDStorageAPI.getMovies();
-
-    pagination.totalPages = LDStorageAPI.getTotalPages();
+    LDStorageAPI.setActiveStorage('watched');
+    LDStorageAPI.getTotalPages();
+    LDStorageAPI.getMovies();
+    LDStorageAPI.getMoviesByPage(2);
 
     const tmdbAPI = new TMDBAPI();
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
@@ -40,13 +46,3 @@ let galleryAPI = null;
     console.log(error);
   }
 })();
-
-function readFromLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
-
-    return JSON.parse(item);
-  } catch (error) {
-    return null;
-  }
-}

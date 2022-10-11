@@ -9,6 +9,7 @@ export class LDStorageAPI {
   static paginationInfo = {
     page: 1,
     totalPages: null,
+    MOVIES_PER_PAGE: 18,
   };
 
   static #activeStorage = null;
@@ -78,7 +79,14 @@ export class LDStorageAPI {
     let moviesData = this.#sliceMoviesArrayByPage(moviesPropertiesArray);
 
     return moviesData;
-    // cutting sausage into slices
+  }
+
+  static setActiveStorage(storageType) {
+    if (this.MOVIE_INFO.WATCHED === storageType) {
+      this.#activeStorage = this.#watched;
+    } else if (this.MOVIE_INFO.QUEUED === storageType) {
+      this.#activeStorage = this.#queued;
+    }
   }
 
   static getMoviesByPage(pageNumber) {
@@ -88,8 +96,11 @@ export class LDStorageAPI {
   }
 
   static #sliceMoviesArrayByPage(moviesArray) {
-    let fromMovie = (this.paginationInfo.page - 1) * 18;
-    let toMovie = this.paginationInfo.page * 18;
+    // cutting sausage into slices
+    let fromMovie =
+      (this.paginationInfo.page - 1) * this.paginationInfo.MOVIES_PER_PAGE;
+    let toMovie =
+      this.paginationInfo.page * this.paginationInfo.MOVIES_PER_PAGE;
 
     return moviesArray.slice(fromMovie, toMovie);
   }
@@ -109,18 +120,10 @@ export class LDStorageAPI {
 
   static #countTotalPages() {
     const moviesQuantity = Object.keys(this.#activeStorage).length;
-    const paginationPagesQuantity = moviesQuantity / 18;
+    const paginationPagesQuantity =
+      moviesQuantity / this.paginationInfo.MOVIES_PER_PAGE;
 
-    return paginationPagesQuantity === 0
-      ? paginationPagesQuantity
-      : Math.ceil(paginationPagesQuantity);
-  }
-
-  static #setActiveStorage(storageValue) {
-    if (this.#activeStorage === storageValue) return;
-    else {
-      this.#activeStorage = storageValue;
-    }
+    return Math.ceil(paginationPagesQuantity);
   }
 
   /**
