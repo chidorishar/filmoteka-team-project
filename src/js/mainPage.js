@@ -73,24 +73,3 @@ async function onFormSubmit(ev) {
     console.log(error.message);
   }
 })();
-
-/**{
-  watched: 0,
-    queue: 1,
-}
-{
-    movie-id: movie-data,
-    movie-id: movie-data,
-    movie-id: movie-data,
-    movie-id: movie-data,
-  }
-queuedMovies['847944']
-const MOVIE_INFO = {
-    WATCHED: 'watched',
-    QUEUED: 'queued',
-  }
-
-  MOVIE_INFO.WATCHED;
-  MOVIE_INFO.QUEUED
-value === MOVIE_INFO.WATCHED
- **/
