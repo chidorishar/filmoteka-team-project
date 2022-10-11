@@ -40,11 +40,20 @@ export class GalleryAPI {
     this.#rootEl.innerHTML = '';
 
     let createdImgsNumber = 0;
-    const cardsMarkup = moviesData.reduce((acc, movieData) => {
-      const { markup, hasPoster } = this.#createMovieCardMarkup(movieData);
+    let isCriticalRendered = false;
+    const cardsMarkup = moviesData.reduce((acc, movieData, indx, arr) => {
+      const { markup, hasPoster } = this.#createMovieCardMarkup(
+        movieData,
+        arr[indx - 1]?.id,
+        arr[indx + 1]?.id
+      );
       if (hasPoster) createdImgsNumber++;
       //render bunch of critical images to gallery
-      if (createdImgsNumber === this.#numberOfCriticalImages + 1) {
+      if (
+        createdImgsNumber === this.#numberOfCriticalImages + 1 &&
+        !isCriticalRendered
+      ) {
+        isCriticalRendered = true;
         this.#rootEl.innerHTML = acc;
         acc = '';
       }
@@ -60,17 +69,20 @@ export class GalleryAPI {
     this.#trackImagesLoadingEnd();
   }
 
-  //cardNumber starts from 0
-  #createMovieCardMarkup({
-    poster_path,
-    title,
-    name,
-    genre_ids,
-    vote_average,
-    release_date,
-    first_air_date,
-    id,
-  }) {
+  #createMovieCardMarkup(
+    {
+      poster_path,
+      title,
+      name,
+      genre_ids,
+      vote_average,
+      release_date,
+      first_air_date,
+      id,
+    },
+    prevMovieID,
+    nextMovieID
+  ) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
     const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
@@ -94,7 +106,8 @@ export class GalleryAPI {
     // prettier-ignore
     const markup =
       `<li class="movie-card">
-        <a class="movie-card__link" href="/" data-movie-id="${id}">
+        <a class="movie-card__link" href="/" data-movie-id="${id}" 
+          data-prev-movie-id="${prevMovieID ?? '' }" data-next-movie-id="${ nextMovieID ?? '' }">
           <div class="movie-card__img-thumb ${poster_path ? '' : "movie-card__img-thumb--no-poster"}">
             ${posterEl}
           </div>

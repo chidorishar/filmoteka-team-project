@@ -24,12 +24,17 @@
 
   width: calc(100vw - 34px);
   padding: 24px;
+  overflow-y: auto;
 
   // background-color: getColorFromPalette('primary', 'light');
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 
   transition: createTransitionFor('transform', '400ms');
+
+  @include mediaUpTo('tablet') {
+    height: 95vh;
+  }
 
   .backdrop.is-hidden & {
     transform: translate(-50%, -50%) scale(0.7);
@@ -39,14 +44,15 @@
 .modal {
   flex-direction: column;
   background-color: getColorFromPalette('modal', 'background-color');
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
   padding-top: 48px;
   padding-bottom: 40px;
 
   @include mediaUpTo('tablet') {
     min-width: 280px;
     max-width: getBreakpointValue('mobile');
+    max-height: 700px;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -93,6 +99,70 @@
   fill: getColorFromPalette('modal-buttons', 'focus-watched-btn');
 }
 
+.modal-movies-nav__buttons-wrapper {
+  @extend %flex;
+
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  transform: translateY(50%);
+
+  justify-content: space-between;
+  width: 100%;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    bottom: 20%;
+  }
+
+  @include mediaOver('desktop') {
+    bottom: 50%;
+  }
+}
+
+.modal-movies-nav__item {
+  @extend %unmarked-list;
+}
+
+.modal-movies-nav__button {
+  $bordersRadius: 10px;
+  $shadowColor: rgba(getColorFromPalette('primary', 'dark'), 0.2);
+
+  font-size: 32px;
+
+  display: block;
+  padding: 20px 10px;
+
+  color: rgba(getColorFromPalette('background', 'additional'), 0.75);
+  background-color: rgba(getColorFromPalette('primary', 'dark'), 0.45);
+
+  transition: createTransitionFor('color' 'opacity');
+  user-select: none;
+
+  &:hover,
+  &:focus {
+    color: getColorFromPalette('secondary', 'orange');
+  }
+
+  &#prev-movie-btn {
+    border-top-right-radius: $bordersRadius;
+    border-bottom-right-radius: $bordersRadius;
+
+    box-shadow: 5px 2px 10px $shadowColor;
+  }
+
+  &#next-movie-btn {
+    border-top-left-radius: $bordersRadius;
+    border-bottom-left-radius: $bordersRadius;
+
+    box-shadow: -4px 3px 10px 0px $shadowColor;
+  }
+
+  &[disabled='true'] {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 .modal-poster {
   @include mediaUpTo('tablet') {
     margin-left: auto;
@@ -101,6 +171,10 @@
 
   @include mediaInBetween('tablet', 'desktop') {
     margin-right: 68px;
+  }
+
+  @include mediaOver('desktop') {
+    margin-right: 16px;
   }
 }
 
@@ -122,7 +196,6 @@
 
   @include mediaOver('desktop') {
     width: 375px;
-    margin-right: 16px;
     margin-bottom: 0;
   }
 }
@@ -149,8 +222,6 @@
 }
 
 .modal-data {
-  display: flex;
-  align-items: flex-end;
   margin-bottom: 20px;
 }
 
@@ -174,10 +245,6 @@
   margin-bottom: 8px;
 }
 
-.modal__characteristic-rating {
-  @extend %flex--v-centred;
-}
-
 .modal__characteristic-genre {
   margin-bottom: 0;
 }
@@ -190,8 +257,6 @@
 
 .modal__characteristic-inform-accent {
   background: getColorFromPalette('modal', 'accent-color');
-  display: flex;
-  align-items: flex-end;
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 10px;

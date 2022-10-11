@@ -1,4 +1,3 @@
-// import { galleryAPI } from '../mainPage.js';
 import { IDsParser } from '../utils/IDsToGenresParser.js';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage';
 import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
@@ -8,6 +7,9 @@ export class MovieModalHandler {
     closeBtn: null,
     queueBtn: null,
     watchedBtn: null,
+    moviesNavBtnsWrapper: null,
+    prevMovieBtn: document.querySelector('#prev-movie-btn'),
+    nextMovieBtn: document.querySelector('#next-movie-btn'),
     modalBackdrop: null,
     libActionsBtnsWrapper: null,
   };
@@ -16,6 +18,9 @@ export class MovieModalHandler {
   #movieId = null;
   #clickedMovieData = null;
   #galleryAPI = null;
+
+  #nextMovieId = null;
+  #prevMovieId = null;
 
   constructor(
     watchedBtnSelector,
@@ -33,6 +38,9 @@ export class MovieModalHandler {
     this.#modalWindowEls.closeBtn = document.querySelector(closeBtnSelector);
     this.#modalWindowEls.libActionsBtnsWrapper = document.querySelector(
       libActionsBtnsWrapperSelector
+    );
+    this.#modalWindowEls.moviesNavBtnsWrapper = document.querySelector(
+      '#movies-nav-btns-wrapper'
     );
 
     this.#galleryAPI = galleryAPI;
@@ -62,15 +70,29 @@ export class MovieModalHandler {
       this.#onBackdropClick
     );
     this.#modalWindowEls.closeBtn.addEventListener('click', this.#closeModal);
+    this.#modalWindowEls.moviesNavBtnsWrapper.addEventListener(
+      'click',
+      this.#onNavThroughMoviesBtnClick
+    );
     //cut body content by viewport sizes ti prevent from scrolling
     document.body.classList.add('js-modal-is-hidden');
 
     this.#movieId = movieCardLink.dataset.movieId;
-    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
-    this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
+    this.#setMovieData(movieCardLink);
 
     this.#renderModal(this.#clickedMovieData);
   };
+
+  #setMovieData(movieCardLink = null) {
+    movieCardLink ??= document.querySelector(
+      `a[data-movie-id="${this.#movieId}"]`
+    );
+
+    this.#prevMovieId = movieCardLink.dataset.prevMovieId;
+    this.#nextMovieId = movieCardLink.dataset.nextMovieId;
+    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
+    this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
+  }
 
   #renderModal(movieData) {
     const {
@@ -111,6 +133,7 @@ export class MovieModalHandler {
     refs.movieAbout.textContent = `${overview}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
+    this.#updateMoviesNavButtons();
 
     //show whole modal window
     this.#modalWindowEls.modalBackdrop.classList.remove('is-hidden');
@@ -121,6 +144,15 @@ export class MovieModalHandler {
   ${watched ? 'REMOVE FROM' : 'ADD TO'} WATCHED`;
     this.#modalWindowEls.queueBtn.textContent = `
   ${queued ? 'REMOVE FROM' : 'ADD TO'} QUEUE`;
+  }
+
+  #updateMoviesNavButtons() {
+    this.#prevMovieId
+      ? this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', false)
+      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', true);
+    this.#nextMovieId
+      ? this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', false)
+      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', true);
   }
 
   #onLibraryButtonsClick = e => {
@@ -182,9 +214,45 @@ export class MovieModalHandler {
     }
   };
 
+  #onNavThroughMoviesBtnClick = e => {
+    if (e.target.nodeName !== 'B') return;
+
+    const nextMovieId =
+      e.target.id === 'prev-movie-btn' ? this.#prevMovieId : this.#nextMovieId;
+    if (!nextMovieId) {
+      return;
+    }
+
+    this.#movieId = nextMovieId;
+    this.#setMovieData();
+    this.#updateMoviesNavButtons();
+    this.#renderModal(this.#clickedMovieData);
+  };
+
   #onEscKeyPress = event => {
-    if (event.code === 'Escape') {
-      this.#closeModal();
+    let nextMovieId = null;
+    let switchMovie = false;
+
+    switch (event.code) {
+      case 'Escape':
+        this.#closeModal();
+        break;
+      case 'ArrowLeft':
+        nextMovieId = this.#prevMovieId;
+        switchMovie = true;
+        break;
+      case 'ArrowRight':
+        nextMovieId = this.#nextMovieId;
+        switchMovie = true;
+        break;
+    }
+
+    //render next/previous movie data
+    if (switchMovie && nextMovieId) {
+      this.#movieId = nextMovieId;
+      this.#setMovieData();
+      this.#updateMoviesNavButtons();
+      this.#renderModal(this.#clickedMovieData);
     }
   };
 
