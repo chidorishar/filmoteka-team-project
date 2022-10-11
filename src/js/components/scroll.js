@@ -5,7 +5,7 @@ window.addEventListener('scroll', onScrollClick);
 
 function onScrollClick(e) {
   e.preventDefault();
-  if (window.scrollY > 320) {
+  if (window.scrollY < 320) {
     scrollBtn.classList.remove('scroll--isShown');
   } else {
     scrollBtn.classList.add('scroll--isShown');
