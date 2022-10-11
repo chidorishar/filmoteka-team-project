@@ -4,7 +4,6 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
-import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
   renderPagination,
   paginationNextBtn,
@@ -18,8 +17,6 @@ paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
 paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
 paginationPagesList.addEventListener('click', onPaginationListBtnNumberClick);
 window.addEventListener('resize', onWindowResize);
-
-const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
 let tmdbAPI = null;
@@ -128,7 +125,6 @@ async function onPaginationListBtnNumberClick(e) {
     tmdbAPI = new TMDBAPI();
     LDStorageAPI.init();
     await BackendConfigStorage.init();
-    const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     const { results: moviesData, total_pages: totalPages } =
       await tmdbAPI.getTopMovies();
     pagination.totalPages = totalPages;
