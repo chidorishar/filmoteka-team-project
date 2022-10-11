@@ -15,6 +15,14 @@ export class GalleryAPI {
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
   }
 
+  addOnCardClickCallback(cb) {
+    this.#rootEl.addEventListener('click', cb);
+  }
+
+  removeOnCardClickCallback(cb) {
+    this.#rootEl.removeEventListener('click', cb);
+  }
+
   renderMoviesCards(moviesData) {
     this.#totalImages = moviesData.length;
     this.#currentMoviesData = moviesData;
@@ -36,21 +44,19 @@ export class GalleryAPI {
     id,
   }) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
-    const rating = Number(vote_average).toFixed(1);
+    const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
 
     // prettier-ignore
     const posterEl = poster_path
-      ? 
-      `<img
+      ? `<img
         class="movie-card__img"
         src="${this.#pathToPoster}w500${poster_path}"
         alt=""
       />`
-      : 
-      `<span class="movie-card__poster-placeholder">
+      : `<span class="movie-card__poster-placeholder">
         <span class="movie-card__poster-placeholder--title">
-          ${title}
+          ${title ?? name}
         </span>has no poster
       </span>`;
 
@@ -80,7 +86,7 @@ export class GalleryAPI {
   }
 
   #parseIDsToGenresString(IDs) {
-    if (!IDs.length) return '';
+    if (!IDs?.length) return '';
 
     const isTooManyIDs = IDs.length > 2;
     const ids = isTooManyIDs ? IDs.slice(0, 2) : IDs;
