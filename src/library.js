@@ -1,4 +1,4 @@
-import './js/teamModalWindow.js';
+import './js/components/teamModalWindow.js';
 
 // import { GalleryAPI } from './galleryAPI';
 // import { TMDBAPI } from './theMovieAPI';

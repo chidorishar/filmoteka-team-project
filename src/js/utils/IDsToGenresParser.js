@@ -1,9 +1,7 @@
-export class IDsParser {
-  #genresAndIdsObj = null;
+import { BackendConfigStorage } from '../libs/BackendConfigStorage.js';
 
-  constructor(genresAndIdsObj) {
-    this.#genresAndIdsObj = genresAndIdsObj;
-  }
+export class IDsParser {
+  constructor() {}
 
   /**
    *Function that takes array with IDs and return string, that contain all genres corresponding to passed IDs
@@ -14,18 +12,18 @@ export class IDsParser {
    *
    * @returns {string} string that contains all genres combined together and separated with comma: 'genre-1, genre-2'.
    */
-  idsToGenres(ids) {
+  static idsToGenres(ids) {
     return ids
       .reduce((acc, id) => {
-        const genre = this.#findGenreByID(id);
+        const genre = IDsParser.#findGenreByID(id);
 
         return genre ? (acc += `${genre}, `) : acc;
       }, '')
       .slice(0, -2);
   }
 
-  #findGenreByID(idToFind) {
-    const foundedName = this.#genresAndIdsObj.find(
+  static #findGenreByID(idToFind) {
+    const foundedName = BackendConfigStorage.genresAndIDs?.find(
       ({ id }) => id === idToFind
     )?.name;
 
