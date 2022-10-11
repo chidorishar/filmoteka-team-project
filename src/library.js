@@ -1,14 +1,33 @@
 import './js/components/teamModalWindow.js';
-
-// import { GalleryAPI } from './galleryAPI';
-// import { TMDBAPI } from './theMovieAPI';
-// const GENRES_DATA_LS_KEY = 'genres-data';
+import { GalleryAPI } from './js/components/GalleryAPI';
+import { TMDBAPI } from './js/libs/TMDBAPI';
+import { LDStorageAPI } from './js/utils/LibraryDataStorageAPI';
+import { readFromLocalStorage } from './js/utils/WebStorageMethods';
+const GENRES_DATA_LS_KEY = 'genres-data';
+const MOVIE_INFO = {
+  WATCHED: 'watched',
+  QUEUED: 'queued',
+};
+import {
+  renderPagination,
+  paginationNextBtn,
+  paginationPreviousBtn,
+  paginationPagesList,
+  pagination,
+  onWindowResize,
+} from './js/components/pagination';
 
 let galleryAPI = null;
 
 // MAIN
 (async () => {
   try {
+    // All Storage API methods
+    LDStorageAPI.init();
+    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
+    LDStorageAPI.getTotalPages();
+    LDStorageAPI.getMoviesByPage(1);
+
     const tmdbAPI = new TMDBAPI();
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
@@ -21,18 +40,8 @@ let galleryAPI = null;
     );
 
     //render movies
-    galleryAPI.renderMoviesCards(moviesData);
+    // galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 })();
-
-function readFromLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
-
-    return JSON.parse(item);
-  } catch (error) {
-    return null;
-  }
-}
