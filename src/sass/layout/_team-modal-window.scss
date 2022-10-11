@@ -43,6 +43,7 @@
     min-width: 280px;
     max-width: 420px;
     max-height: 95vh;
+    width: 90vw;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -124,7 +125,7 @@
   margin: 0 auto;
   margin-bottom: 30px;
   background-color: #f7f5ec;
-  width: 230px;
+  width: calc(100% - 2 * 30px);
   border-radius: 5px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
@@ -136,7 +137,7 @@
 
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;
-    width: calc(50% - 30px);
+    width: calc(33% - 30px);
   }
 
   @include mediaOver('desktop') {
