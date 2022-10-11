@@ -89,8 +89,8 @@ export class MovieModalHandler {
       overview,
     } = movieData;
 
-    const fixedAverageRating = vote.toFixed(1);
-    const fixedPopularity = popularity.toFixed(1);
+    const fixedAverageRating = vote ? vote.toFixed(1) : 'N/D';
+    const fixedPopularity = popularity ? popularity.toFixed(1) : 'N/D';
     const movieGenresString = IDsParser.idsToGenres(genreIDs);
     const posterFullPath =
       BackendConfigStorage.pathToPoster + 'w500' + pathToPoster;
