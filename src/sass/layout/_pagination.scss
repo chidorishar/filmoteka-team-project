@@ -4,7 +4,7 @@
     &--sticky {
         position: sticky;
         bottom: 10;
-        display: flex;
+        @extend %flex;
         margin: 0 auto;
 
         
@@ -17,27 +17,24 @@
         }
 
         @include mediaOver('tablet') {
-            width: 600px
+            width: 610px
         }
     }
 }
 
 .pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flex--vh-centred;
 }
 
 .pagination__list {
     font-size: 12px;
     line-height: 1.33;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @extend %flex--vh-centred;
+    column-gap: 16px;
 
     &--width-L {
-        min-width: 444px;
+        min-width: 432px;
     }
 
     @extend %unmarked-list;
@@ -48,12 +45,17 @@
         margin-right: 16px;
     }
 
+    &--margin-left {
+        margin-left: 16px;
+    }
+
     &--hidden {
         @extend %visually-hidden;
     }
     
     &-dots {
         color: white;
+        user-select: none;
     }
 }
 
@@ -64,9 +66,7 @@
     border-radius: 5px;
     min-height: 40px;
     
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @extend %flex--vh-centred;
     text-align: center;
 
     background-color: getColorFromPalette('primary', 'light');

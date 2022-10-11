@@ -45,9 +45,7 @@ export class GalleryAPI {
   }) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
     const rating = Number(vote_average).toFixed(1);
-    let genresStr = this.#parseIDsToGenresString(
-      genre_ids === undefined ? [] : genre_ids
-    );
+    let genresStr = this.#parseIDsToGenresString(genre_ids ? genre_ids : []);
 
     // prettier-ignore
     const posterEl = poster_path
