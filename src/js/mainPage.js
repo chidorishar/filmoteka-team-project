@@ -62,8 +62,9 @@ async function onFormSubmit(ev) {
     galleryAPI.renderMoviesCards(moviesData);
 
     //Строка ниже создана для проверки работы рендера карточек с локалСтореджа,так как метода для записи фильмов в ЛС еще не сделан
-    // console.log(moviesData)
+    console.log(moviesData)
     // localStorage.setItem('queue', JSON.stringify(moviesData));
+    localStorage.setItem('watched', JSON.stringify(moviesData));
 
 
   } catch (error) {

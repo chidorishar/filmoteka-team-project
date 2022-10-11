@@ -1,8 +1,8 @@
-class LocalStorageUtil {
-  constructor() {
-    this.keyName = 'watched';
-  }
 
+
+refs = {
+  
+}
 
   putFilms(film) {
     let watched = this.getFilms();
@@ -22,6 +22,4 @@ class LocalStorageUtil {
 
     return { pushFilm, watched };
   }
-}
 
-const localStorageUtil = new LocalStorageUtil();
