@@ -1,14 +1,28 @@
 import './js/components/teamModalWindow.js';
 
-// import { GalleryAPI } from './galleryAPI';
-// import { TMDBAPI } from './theMovieAPI';
-// const GENRES_DATA_LS_KEY = 'genres-data';
+import { GalleryAPI } from './js/components/GalleryAPI';
+import { TMDBAPI } from './js/libs/TMDBAPI';
+import { LDStorageAPI } from './js/utils/LibraryDataStorageAPI';
+const GENRES_DATA_LS_KEY = 'genres-data';
+import {
+  renderPagination,
+  paginationNextBtn,
+  paginationPreviousBtn,
+  paginationPagesList,
+  pagination,
+  onWindowResize,
+} from './js/components/pagination';
 
 let galleryAPI = null;
 
 // MAIN
 (async () => {
   try {
+    LDStorageAPI.init();
+    moviesData = LDStorageAPI.getMovies();
+
+    pagination.totalPages = LDStorageAPI.getTotalPages();
+
     const tmdbAPI = new TMDBAPI();
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
       .secure_base_url;
@@ -21,9 +35,9 @@ let galleryAPI = null;
     );
 
     //render movies
-    galleryAPI.renderMoviesCards(moviesData);
+    // galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
   }
 })();
 
