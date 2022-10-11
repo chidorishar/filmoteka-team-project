@@ -178,10 +178,6 @@
   @extend %flex--v-centred;
 }
 
-.modal__characteristic-title {
-  text-transform: uppercase;
-}
-
 .modal__characteristic-genre {
   margin-bottom: 0;
 }
@@ -194,6 +190,8 @@
 
 .modal__characteristic-inform-accent {
   background: getColorFromPalette('modal', 'accent-color');
+  display: flex;
+  align-items: flex-end;
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 10px;

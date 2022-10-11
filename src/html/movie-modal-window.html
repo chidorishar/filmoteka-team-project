@@ -1,4 +1,9 @@
-<div class="backdrop is-hidden" data-modal__window>
+<div
+  class="backdrop is-hidden"
+  style="display: none"
+  data-modal__window
+  id="movies-modal-window"
+>
   <div class="modal">
     <div class="modal-close-btn">
       <button
@@ -21,10 +26,11 @@
         src="https://resizing.flixster.com/AyfMXKSDwYzOp2baHwyap39cYLU=/206x305/v2/https://flxt.tmsimg.com/assets/p16188223_p_v8_aa.jpg"
         alt="poster"
         class="poster"
-      >
+        id="poster"
+      />
     </div>
     <div class="modal-info">
-      <h2 class="modal__title">A FISTFUL OF LEAD</h2>
+      <h2 class="modal__title" id="modalTitle"></h2>
       <div class="modal-data">
         <ul class="modal__characteristic">
           <li class="modal__characteristic-rating">Vote / Votes</li>
@@ -34,40 +40,41 @@
         </ul>
         <ul class="modal__characteristic-data">
           <li class="modal__characteristic-rating">
-            <span class="modal__characteristic-inform-accent">7.3</span> /
-            <span class="modal__characteristic-inform">1260</span>
+            <span
+              class="modal__characteristic-inform-accent"
+              id="averageRating"
+            ></span>
+            /
+            <span class="modal__characteristic-inform" id="rating"></span>
           </li>
           <li class="modal__characteristic-popularity">
-            <span class="modal__characteristic-inform">100.2</span>
+            <span class="modal__characteristic-inform" id="popularity"></span>
           </li>
           <li class="modal__characteristic-title">
-            <span class="modal__characteristic-inform">A FISTFUL OF LEAD</span>
+            <span class="modal__characteristic-inform" id="title"></span>
           </li>
           <li class="modal__characteristic-genre">
-            <span class="modal__characteristic-inform">Western</span>
+            <span class="modal__characteristic-inform" id="genre"></span>
           </li>
         </ul>
       </div>
       <h3 class="modal__about">ABOUT</h3>
-      <p class="modal__about-text">
-        Four of the West’s most infamous outlaws assemble to steal a huge stash
-        of gold from the most corrupt settlement of the gold rush towns. But not
-        all goes to plan one is killed and the other three escapes with bags of
-        gold hide out in the abandoned gold mine where they happen across
-        another gang of three – who themselves were planning to hit the very
-        same bank! As tensions rise, things go from bad to worse as they realise
-        the bags of gold are filled with lead... they’ve been double crossed –
-        but by who and how?
-      </p>
-      <div class="modal-buttons">
+      <p class="modal__about-text" id="aboutMovie"></p>
+      <div class="modal-buttons" id="movie-modal-buttons-wrapper">
         <button
           class="modal__add-to-watched"
           type="button"
           name="add-watched-btn"
+          id="watched-btn"
         >
           ADD TO WATCHED
         </button>
-        <button class="modal__add-to-queue" type="button" name="add-queue-btn">
+        <button
+          class="modal__add-to-queue"
+          type="button"
+          name="add-queue-btn"
+          id="queue-btn"
+        >
           ADD TO QUEUE
         </button>
       </div>

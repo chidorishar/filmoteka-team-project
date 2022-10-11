@@ -15,6 +15,14 @@ export class GalleryAPI {
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
   }
 
+  addOnCardClickCallback(cb) {
+    this.#rootEl.addEventListener('click', cb);
+  }
+
+  removeOnCardClickCallback(cb) {
+    this.#rootEl.removeEventListener('click', cb);
+  }
+
   renderMoviesCards(moviesData) {
     this.#totalImages = moviesData.length;
     this.#currentMoviesData = moviesData;

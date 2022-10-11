@@ -1,6 +1,7 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
@@ -24,7 +25,7 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
-    if (searchingMovieName === '') {
+    if (!searchingMovieName) {
       moviesData = (await tmdbAPI.getTopMovies()).results;
 
       galleryAPI.renderMoviesCards(moviesData);
@@ -32,12 +33,10 @@ async function onFormSubmit(ev) {
     }
 
     moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
-
-    if (moviesData.length === 0) {
+    if (!moviesData.length) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
-
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
     console.log(error.message);
@@ -60,6 +59,14 @@ async function onFormSubmit(ev) {
 
     //render movies
     galleryAPI.renderMoviesCards(moviesData);
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
   } catch (error) {
     console.log(error.message);
   }
