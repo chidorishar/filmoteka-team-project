@@ -1,1 +1,1 @@
-import './js/LibraryPage';
+import './js/libraryPage';
