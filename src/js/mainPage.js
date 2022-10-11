@@ -1,6 +1,7 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 
@@ -47,6 +48,7 @@ async function onFormSubmit(ev) {
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
+    LDStorageAPI.init();
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = (await tmdbAPI.getTopMovies()).results;

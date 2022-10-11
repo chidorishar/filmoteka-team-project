@@ -1,11 +1,18 @@
-export const operationsLS = {
-  MOVIE_INFO: {
+import { readFromLocalStorage } from './WebStorageMethods';
+
+export class LDStorageAPI {
+  static MOVIE_INFO = {
     WATCHED: 'watched',
     QUEUED: 'queued',
-  },
+  };
 
-  watched: {},
-  queued: {},
+  static #watched = {};
+  static #queued = {};
+
+  static init() {
+    this.#watched = readFromLocalStorage(this.MOVIE_INFO.WATCHED) ?? {};
+    this.#queued = readFromLocalStorage(this.MOVIE_INFO.QUEUED) ?? {};
+  }
 
   /**
    * adding movie data to local storage
@@ -14,40 +21,38 @@ export const operationsLS = {
    * @param {Object} obj.movieData - the obj of movie data
    * @param {string} obj.storageKey - the key (where to safe (watched/ queued))
    */
-  addToLocalStorage({ id, movieData, storageKey } = {}) {
+  static addToLocalStorage({ id, movieData, storageKey } = {}) {
+    const writeToLS = this.#writeObjToLS;
+
     try {
       if (storageKey === this.MOVIE_INFO.WATCHED) {
-        this.watched['' + id] = movieData;
-        const toAdd = JSON.stringify(this.watched);
-        localStorage.setItem(storageKey, toAdd);
+        this.#watched['' + id] = movieData;
+        writeToLS(storageKey, this.#watched);
       } else if (storageKey === this.MOVIE_INFO.QUEUED) {
-        this.queued['' + id] = movieData;
-        const toAdd = JSON.stringify(this.queued);
-        localStorage.setItem(storageKey, toAdd);
+        this.#queued['' + id] = movieData;
+        writeToLS(storageKey, this.#queued);
       }
     } catch (error) {
       console.log(error.message);
     }
-  },
+  }
 
   /**
    * removing movie from local storage
    * @param {number} id - id of obj of movie data we need to remove
    * @param {string} storageKey - the key (where data was saved (watched/ queued))
    */
-  removeFromLocalStorage(id, storageKey) {
+  static removeFromLocalStorage(id, storageKey) {
+    const writeToLS = this.#writeObjToLS;
+
     if (storageKey === this.MOVIE_INFO.WATCHED) {
-      delete this.watched['' + id];
-      const toAdd = JSON.stringify(this.watched);
-
-      localStorage.setItem(storageKey, toAdd);
+      delete this.#watched['' + id];
+      writeToLS(storageKey, this.#watched);
     } else if (storageKey === this.MOVIE_INFO.QUEUED) {
-      delete this.queued['' + id];
-      const toAdd = JSON.stringify(this.queued);
-
-      localStorage.setItem(storageKey, toAdd);
+      delete this.#queued['' + id];
+      writeToLS(storageKey, this.#queued);
     }
-  },
+  }
 
   // /**
   //  * gettting movie data from local storaage
@@ -70,12 +75,18 @@ export const operationsLS = {
    * @param {number} id  id of obj of movie we need to find
    * @returns {Object} object of information about storing the film
    */
-  findInLocalStorage(id) {
+  static findInLocalStorage(id) {
     const movInf = {
-      watched: !!this.watched['' + id],
-      queued: !!this.queued['' + id],
+      watched: !!this.#watched['' + id],
+      queued: !!this.#queued['' + id],
     };
 
     return movInf;
-  },
-};
+  }
+
+  static #writeObjToLS(key, obj) {
+    const toAdd = JSON.stringify(obj);
+
+    localStorage.setItem(key, toAdd);
+  }
+}

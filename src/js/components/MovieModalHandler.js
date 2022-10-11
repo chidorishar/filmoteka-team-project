@@ -1,13 +1,7 @@
 // import { galleryAPI } from '../mainPage.js';
 import { IDsParser } from '../utils/IDsToGenresParser.js';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage';
-// import {
-//   MOVIE_INFO,
-//   getMovieLSInfo,
-//   saveToLS,
-//   removeFromLS,
-// } from '../utils/testLSSaver.js';
-import { operationsLS } from '../utils/localStorageMain.js';
+import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
 
 export class MovieModalHandler {
   #modalWindowEls = {
@@ -72,7 +66,7 @@ export class MovieModalHandler {
     document.body.classList.add('js-modal-is-hidden');
 
     this.#movieId = movieCardLink.dataset.movieId;
-    this.#movieLibData = operationsLS.findInLocalStorage(this.#movieId);
+    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
     this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
 
     this.#renderModal(this.#clickedMovieData);
@@ -137,31 +131,31 @@ export class MovieModalHandler {
 
   #updateLSData(btnID) {
     const movieNewLibData = {
-      ...operationsLS.findInLocalStorage(this.#movieId),
+      ...LDStorageAPI.findInLocalStorage(this.#movieId),
     };
 
     if (btnID === 'queue-btn') {
       movieNewLibData.queued
-        ? operationsLS.removeFromLocalStorage(
+        ? LDStorageAPI.removeFromLocalStorage(
             this.#movieId,
-            operationsLS.MOVIE_INFO.QUEUED
+            LDStorageAPI.MOVIE_INFO.QUEUED
           )
-        : operationsLS.addToLocalStorage({
+        : LDStorageAPI.addToLocalStorage({
             id: this.#movieId,
             movieData: this.#clickedMovieData,
-            storageKey: operationsLS.MOVIE_INFO.QUEUED,
+            storageKey: LDStorageAPI.MOVIE_INFO.QUEUED,
           });
       movieNewLibData.queued = !movieNewLibData.queued;
     } else {
       movieNewLibData.watched
-        ? operationsLS.removeFromLocalStorage(
+        ? LDStorageAPI.removeFromLocalStorage(
             this.#movieId,
-            operationsLS.MOVIE_INFO.WATCHED
+            LDStorageAPI.MOVIE_INFO.WATCHED
           )
-        : operationsLS.addToLocalStorage({
+        : LDStorageAPI.addToLocalStorage({
             id: this.#movieId,
             movieData: this.#clickedMovieData,
-            storageKey: operationsLS.MOVIE_INFO.WATCHED,
+            storageKey: LDStorageAPI.MOVIE_INFO.WATCHED,
           });
       movieNewLibData.watched = !movieNewLibData.watched;
     }
