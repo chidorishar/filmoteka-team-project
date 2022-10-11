@@ -66,15 +66,14 @@ export class LDStorageAPI {
 
   static getTotalPages() {
     this.paginationInfo.totalPages = this.#countTotalPages();
+
     return this.paginationInfo.totalPages;
   }
 
-  static getMovies() {
-    const moviesObjectKeysArray = Object.keys(this.#activeStorage);
+  static getMoviesByPage(pageNumber) {
+    this.paginationInfo.page = pageNumber;
 
-    let moviesPropertiesArray = this.#moviesObjectIntoPropertiesArray(
-      moviesObjectKeysArray
-    );
+    let moviesPropertiesArray = [...Object.values(this.#activeStorage)];
 
     let moviesData = this.#sliceMoviesArrayByPage(moviesPropertiesArray);
 
@@ -89,12 +88,6 @@ export class LDStorageAPI {
     }
   }
 
-  static getMoviesByPage(pageNumber) {
-    this.paginationInfo.page = pageNumber;
-
-    return this.getMovies();
-  }
-
   static #sliceMoviesArrayByPage(moviesArray) {
     // cutting sausage into slices
     let fromMovie =
@@ -103,19 +96,6 @@ export class LDStorageAPI {
       this.paginationInfo.page * this.paginationInfo.MOVIES_PER_PAGE;
 
     return moviesArray.slice(fromMovie, toMovie);
-  }
-
-  static #moviesObjectIntoPropertiesArray(keysArray) {
-    const moviesPropertiesArray = keysArray.reduce(
-      (allPropertiesArray, key) => {
-        allPropertiesArray.push(this.#activeStorage[key]);
-
-        return allPropertiesArray;
-      },
-      []
-    );
-
-    return moviesPropertiesArray;
   }
 
   static #countTotalPages() {

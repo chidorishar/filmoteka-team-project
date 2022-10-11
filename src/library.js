@@ -24,10 +24,9 @@ let galleryAPI = null;
   try {
     // All Storage API methods
     LDStorageAPI.init();
-    LDStorageAPI.setActiveStorage('watched');
+    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
     LDStorageAPI.getTotalPages();
-    LDStorageAPI.getMovies();
-    LDStorageAPI.getMoviesByPage(2);
+    LDStorageAPI.getMoviesByPage(1);
 
     const tmdbAPI = new TMDBAPI();
     const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
