@@ -1,11 +1,14 @@
-import { GalleryAPI } from './galleryAPI';
-import { TMDBAPI } from './theMovieAPI';
+import { GalleryAPI } from './components/GalleryAPI';
+import { TMDBAPI } from './libs/TMDBAPI';
+import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
+import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
 let tmdbAPI = null;
-let galleryAPI = null;
+export let galleryAPI = null;
 
 let unsuccessfulSearchEl = null;
 
@@ -22,7 +25,7 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
-    if (searchingMovieName === '') {
+    if (!searchingMovieName) {
       moviesData = (await tmdbAPI.getTopMovies()).results;
 
       galleryAPI.renderMoviesCards(moviesData);
@@ -30,23 +33,21 @@ async function onFormSubmit(ev) {
     }
 
     moviesData = (await tmdbAPI.getMoviesByName(searchingMovieName)).results;
-
-    if (moviesData.length === 0) {
+    if (!moviesData.length) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
-
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
     console.log(error.message);
   }
 }
+
 // MAIN
 (async () => {
   try {
     tmdbAPI = new TMDBAPI();
-    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-      .secure_base_url;
+    await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     moviesData = (await tmdbAPI.getTopMovies()).results;
     //movie search form
@@ -54,37 +55,19 @@ async function onFormSubmit(ev) {
     const searchFormEl = document.querySelector('#movie-search-form');
     searchFormEl.addEventListener('submit', onFormSubmit);
     //get array of IDs and genres
-    let genresAndIDs = null;
-    if (!genresDataFromLS) {
-      const genresDataFromBackend = (await tmdbAPI.getGenresData()).genres;
-
-      genresAndIDs = genresDataFromBackend;
-      localStorage.setItem(
-        GENRES_DATA_LS_KEY,
-        JSON.stringify(genresDataFromBackend)
-      );
-    } else {
-      genresAndIDs = genresDataFromLS;
-    }
-    galleryAPI = new GalleryAPI(
-      '#movies-wrapper',
-      pathToPosterImg,
-      genresAndIDs
-    );
+    galleryAPI = new GalleryAPI('#movies-wrapper');
 
     //render movies
     galleryAPI.renderMoviesCards(moviesData);
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
   } catch (error) {
     console.log(error.message);
   }
 })();
-
-function readFromLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
-
-    return JSON.parse(item);
-  } catch (error) {
-    return null;
-  }
-}
