@@ -81,17 +81,39 @@ export class MovieModalHandler {
     const {
       genre_ids: genreIDs,
       original_title: movieTitle,
+      name: movieName,
       poster_path: pathToPoster,
       vote_average: vote,
       vote_count: votes,
+      popularity,
       overview,
     } = movieData;
 
+    const fixedAverageRating = vote.toFixed(1);
+    const fixedPopularity = popularity.toFixed(1);
     const movieGenresString = IDsParser.idsToGenres(genreIDs);
     const posterFullPath =
       BackendConfigStorage.pathToPoster + 'w500' + pathToPoster;
 
-    //здесь подменить данные в модалке
+    const refs = {
+      moviePoster: document.getElementById('poster'),
+      modalTitle: document.getElementById('modalTitle'),
+      movieAverageRating: document.getElementById('averageRating'),
+      movieRating: document.getElementById('rating'),
+      moviePopularity: document.getElementById('popularity'),
+      movieTitle: document.getElementById('title'),
+      movieGenre: document.getElementById('genre'),
+      movieAbout: document.getElementById('aboutMovie'),
+    };
+
+    refs.moviePoster.src = `${posterFullPath}`;
+    refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
+    refs.movieAverageRating.textContent = `${fixedAverageRating}`;
+    refs.movieRating.textContent = `${votes}`;
+    refs.moviePopularity.textContent = `${fixedPopularity}`;
+    refs.movieTitle.textContent = `${movieTitle ?? movieName}`;
+    refs.movieGenre.textContent = `${movieGenresString}`;
+    refs.movieAbout.textContent = `${overview}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
 
