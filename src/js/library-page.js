@@ -22,7 +22,7 @@ const contentEmptyLocalStorageWatched = document.createElement('p');
 contentEmptyLocalStorageWatched.style.fontSize = '24px';
 contentEmptyLocalStorageWatched.style.textAlign = 'center';
 contentEmptyLocalStorageWatched.innerHTML =
-  '"Вы не посмотрели ни одного фильма.Мы долго старались чтоб вы были довольны,скорее загружай к просмотру фильмец"';
+  '"Вы не посмотрели ни одного фильма"';
 refs.galleryContainer.prepend(contentEmptyLocalStorageWatched);
 
 //Функция на клик по кнопке Watched
