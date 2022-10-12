@@ -4,19 +4,22 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
-import {
-  renderPagination,
-  paginationNextBtn,
-  paginationPreviousBtn,
-  paginationPagesList,
-  pagination,
-  onWindowResize,
-} from './components/pagination';
+import { PaginationAPI } from './components/pagination';
 
-paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
-paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
-paginationPagesList.addEventListener('click', onPaginationListBtnNumberClick);
-window.addEventListener('resize', onWindowResize);
+PaginationAPI.paginationNextBtn.addEventListener(
+  'click',
+  onPaginationBtnChangeClick
+);
+PaginationAPI.paginationPreviousBtn.addEventListener(
+  'click',
+  onPaginationBtnChangeClick
+);
+PaginationAPI.paginationPagesList.addEventListener(
+  'click',
+  onPaginationListBtnNumberClick
+);
+
+window.addEventListener('resize', PaginationAPI.onWindowResize);
 
 let moviesData = null;
 let tmdbAPI = null;
@@ -41,42 +44,42 @@ async function onFormSubmit(ev) {
       const { results: moviesData, total_pages: totalPages } =
         await tmdbAPI.getTopMovies();
 
-      pagination.totalPages = totalPages;
-      pagination.currentPage = 1;
-      pagination.moviesName = null;
+      PaginationAPI.totalPages = totalPages;
+      PaginationAPI.currentPage = 1;
+      PaginationAPI.moviesName = null;
 
       galleryAPI.renderMoviesCards(moviesData);
-      renderPagination();
+      PaginationAPI.renderPagination();
       return;
     }
 
     const { results: moviesData, total_pages: totalPages } =
       await tmdbAPI.getMoviesByName(searchingMovieName);
 
-    pagination.totalPages = totalPages;
-    pagination.currentPage = 1;
+    PaginationAPI.totalPages = totalPages;
+    PaginationAPI.currentPage = 1;
 
     if (!moviesData.length) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
 
-    pagination.moviesName = searchingMovieName;
+    PaginationAPI.moviesName = searchingMovieName;
 
     galleryAPI.renderMoviesCards(moviesData);
-    renderPagination();
+    PaginationAPI.renderPagination();
   } catch (error) {
     console.log(error.message);
   }
 }
 
 async function renderGalleryByPage() {
-  if (pagination.moviesName) {
+  if (PaginationAPI.moviesName) {
     try {
       moviesData = (
         await tmdbAPI.getMoviesByNameFromPage(
-          pagination.currentPage,
-          pagination.moviesName
+          PaginationAPI.currentPage,
+          PaginationAPI.moviesName
         )
       ).results;
 
@@ -87,7 +90,7 @@ async function renderGalleryByPage() {
     return;
   }
   try {
-    moviesData = (await tmdbAPI.getTopMoviesFromPage(pagination.currentPage))
+    moviesData = (await tmdbAPI.getTopMoviesFromPage(PaginationAPI.currentPage))
       .results;
 
     galleryAPI.renderMoviesCards(moviesData);
@@ -98,25 +101,25 @@ async function renderGalleryByPage() {
 
 async function onPaginationBtnChangeClick(e) {
   if (e.currentTarget.id === 'pagination-button-next') {
-    pagination.currentPageIncreaseByOne();
+    PaginationAPI.currentPageIncreaseByOne();
   } else {
-    pagination.currentPageReduceByOne();
+    PaginationAPI.currentPageReduceByOne();
   }
 
   await renderGalleryByPage();
 
-  renderPagination();
+  PaginationAPI.renderPagination();
 }
 
 async function onPaginationListBtnNumberClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
-  if (parseInt(e.target.textContent) === pagination.currentPage) return;
+  if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
 
-  pagination.updateCurrentPage(parseInt(e.target.textContent));
+  PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
 
   await renderGalleryByPage();
 
-  renderPagination();
+  PaginationAPI.renderPagination();
 }
 
 // MAIN
@@ -127,7 +130,7 @@ async function onPaginationListBtnNumberClick(e) {
     await BackendConfigStorage.init();
     const { results: moviesData, total_pages: totalPages } =
       await tmdbAPI.getTopMovies();
-    pagination.totalPages = totalPages;
+    PaginationAPI.totalPages = totalPages;
 
     //movie search form
     unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
@@ -138,7 +141,7 @@ async function onPaginationListBtnNumberClick(e) {
 
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
-    renderPagination();
+    PaginationAPI.renderPagination();
     const mmh = new MovieModalHandler(
       '#watched-btn',
       '#queue-btn',

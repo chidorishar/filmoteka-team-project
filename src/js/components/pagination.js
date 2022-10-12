@@ -1,218 +1,239 @@
-const pagination = {
-  currentPage: 1,
-  totalPages: null,
-  moviesName: null,
+class PaginationAPI {
+  static #MOBILE_MAX_WIDTH = 767;
+  static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn">1</button></li>`;
+  static #dotsLeftMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>`;
+  static #dotsRightMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>`;
 
-  currentPageIncreaseByOne() {
+  static #totalMarkup = '';
+
+  static currentPage = 1;
+  static totalPages = null;
+  static moviesName = null;
+
+  static paginationPagesList = document.getElementById('pagination-pages');
+  static paginationNextBtn = document.getElementById('pagination-button-next');
+  static paginationPreviousBtn = document.getElementById(
+    'pagination-button-previous'
+  );
+
+  static currentPageIncreaseByOne() {
     if (this.currentPage === this.totalPages) {
       return;
     }
 
     this.currentPage += 1;
-  },
+  }
 
-  currentPageReduceByOne() {
+  static currentPageReduceByOne() {
     if (this.currentPage === 1) {
       return;
     }
 
     this.currentPage -= 1;
-  },
+  }
 
-  updateCurrentPage(newCurrentPage) {
+  static updateCurrentPage(newCurrentPage) {
     this.currentPage = newCurrentPage;
-  },
-};
-
-const paginationPagesList = document.getElementById('pagination-pages');
-const paginationNextBtn = document.getElementById('pagination-button-next');
-const paginationPreviousBtn = document.getElementById(
-  'pagination-button-previous'
-);
-
-// window.addEventListener('resize', onWindowResize);
-
-function renderPagination() {
-  renderPaginationMarkup();
-  correctPaginationMarkup();
-}
-
-// if we change screen size on our mobile phone, then we just rerender our pagination list.
-function onWindowResize() {
-  renderPagination();
-}
-
-function renderPaginationMarkup() {
-  let totalMarkup = '';
-
-  if (pagination.totalPages === 0) {
-    paginationNextBtn.classList.add('pagination__btn--hidden');
-    paginationPreviousBtn.classList.add('pagination__btn--hidden');
-    return;
-  } else {
-    paginationNextBtn.classList.remove('pagination__btn--hidden');
-    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
   }
 
-  // Buttons disabling and enabling
-  if (pagination.currentPage === pagination.totalPages) {
-    paginationNextBtn.disabled = true;
-    paginationPreviousBtn.disabled = false;
-  } else {
-    paginationPreviousBtn.disabled = false;
+  static renderPagination() {
+    this.#renderPaginationMarkup();
+    this.paginationPagesList.innerHTML = this.#totalMarkup;
+    this.#afterRendering();
   }
 
-  if (pagination.currentPage === 1) {
-    paginationPreviousBtn.disabled = true;
-    paginationNextBtn.disabled = false;
-  } else if (pagination.currentPage !== pagination.totalPages) {
-    paginationNextBtn.disabled = false;
+  static onWindowResize() {
+    PaginationAPI.renderPagination();
   }
 
-  if (pagination.totalPages === 0) {
-    return;
-  }
+  static #renderPaginationMarkup() {
+    this.#totalMarkup = '';
 
-  totalMarkup += `
-        <li class="pagination__item" id="pagination-number-1"><button class="pagination__btn">1</button></li>
-        <li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>
-    `;
-
-  for (let i = 2; i <= pagination.totalPages - 1; i++) {
-    totalMarkup += `
-        <li class="pagination__item " id="pagination-number-${i}"><button class="pagination__btn">${i}</button></li>
-        `;
-  }
-
-  // For single-paged markup and for more than one paged
-  if (pagination.totalPages !== 1) {
-    totalMarkup += `
-      <li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>
-      <li class="pagination__item" id="pagination-number-${pagination.totalPages}"><button class="pagination__btn">${pagination.totalPages}</button></li>
-  `;
-    paginationNextBtn.classList.remove('pagination__btn--hidden');
-    paginationPreviousBtn.classList.remove('pagination__btn--hidden');
-  } else {
-    totalMarkup += `
-        <li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>      
-      `;
-    paginationNextBtn.classList.add('pagination__btn--hidden');
-    paginationPreviousBtn.classList.add('pagination__btn--hidden');
-  }
-
-  // creating markup
-  paginationPagesList.innerHTML = totalMarkup;
-}
-
-function correctPaginationMarkup() {
-  if (pagination.totalPages === 0) {
-    paginationPagesList.setAttribute('style', 'display: none');
-    return;
-  } else {
-    paginationPagesList.removeAttribute('style');
-  }
-
-  const dotsLeft = document.getElementById('pagination-dots-left');
-  const dotsRight = document.getElementById('pagination-dots-right');
-
-  // Adding background for our currentPage
-  const activePageItem = document.getElementById(
-    `pagination-number-${pagination.currentPage}`
-  );
-  const activePageBtn = activePageItem.firstElementChild;
-  activePageBtn.classList.add('pagination__btn--active');
-
-  // If we don't have many pages, hide all the dots (on the left and on the right)
-  if (pagination.totalPages <= 8) {
-    dotsLeft.classList.add('pagination__item--hidden');
-    dotsRight.classList.add('pagination__item--hidden');
-    paginationPagesList.classList.remove('pagination__list--width-L');
-    return;
-  } else {
-    // for mobiles we disable fixed width which was created to comfort nextPage clicking
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      paginationPagesList.classList.remove('pagination__list--width-L');
+    // if we somehow get 0 total pages, then we just hide our pagination
+    if (this.totalPages === 0) {
+      document
+        .querySelector('.pagination-section')
+        .setAttribute('style', 'display: none');
+      return;
     } else {
-      paginationPagesList.classList.add('pagination__list--width-L');
+      document.querySelector('.pagination-section').removeAttribute('style');
+    }
+
+    // if our active page is the last one of the whole pagination, then we disable it.
+    // otherwise, we enable it.
+    if (this.currentPage === this.totalPages) {
+      this.paginationNextBtn.disabled = true;
+      this.paginationPreviousBtn.disabled = false;
+    } else {
+      this.paginationPreviousBtn.disabled = false;
+    }
+
+    // if our active page is equal to 1, then we disable our previous value button of pagination.
+    // otherwise we show the next button
+    if (this.currentPage === 1) {
+      this.paginationPreviousBtn.disabled = true;
+      this.paginationNextBtn.disabled = false;
+    } else if (this.currentPage !== this.totalPages) {
+      this.paginationNextBtn.disabled = false;
+    }
+
+    // if our total pages value is 1, then we need to hide buttons, but if we update our total pages value, we need to the pagination buttons again in the pagination bar
+    if (this.totalPages !== 1) {
+      this.paginationNextBtn.classList.remove('pagination__btn--hidden');
+      this.paginationPreviousBtn.classList.remove('pagination__btn--hidden');
+    } else {
+      this.paginationNextBtn.classList.add('pagination__btn--hidden');
+      this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
+    }
+
+    if (window.innerWidth <= this.#MOBILE_MAX_WIDTH) {
+      this.#createMobileMarkup();
+      return;
+    }
+
+    // If our active page is less or equal than 5,
+    // then we create mark up with 5 first elements in the pagination bar
+    if (this.currentPage <= 5) {
+      this.#createStartingMarkup();
+      return;
+    }
+
+    // if our active page is equal to the last five elements of total pagination pages,
+    // then we create markup for the last five elements of the pagination bar
+    if (this.totalPages - 4 <= this.currentPage && !(this.currentPage <= 5)) {
+      this.#createEndingMarkup();
+      return;
+    }
+
+    // if our active page is in the middle of pagination (after 5 and before the last five elements),
+    // then we create markup of 5 elements with the active in the middle
+    if (this.currentPage >= 6 && this.currentPage <= this.totalPages - 5) {
+      this.#createMiddleActivePagesMarkup();
+      return;
     }
   }
 
-  // If our active page is from 1 to 5, we hide all other buttons
-  if (pagination.currentPage <= 5) {
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      dotsRight.classList.add('pagination__item--hidden');
+  static #createStartingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
 
-      const lastPageItem = document.getElementById(
-        `pagination-number-${pagination.totalPages}`
-      );
+    const maxRenderPagesNum = this.totalPages >= 6 ? 5 : this.totalPages;
 
-      lastPageItem.classList.add('pagination__item--hidden');
-    }
-    dotsLeft.classList.add('pagination__item--hidden');
-
-    for (let i = 6; i <= pagination.totalPages - 1; i++) {
-      const pagItem = document.getElementById(`pagination-number-${i}`);
-      pagItem.classList.add('pagination__item--hidden');
+    for (let i = 2; i <= maxRenderPagesNum; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 
-    return;
+    if (this.totalPages >= 6) {
+      this.#totalMarkup += this.#dotsRightMarkup;
+      this.#totalMarkup += this.#getLastPageMarkup();
+    }
   }
 
-  // if our active page is close to the end, then we hide all buttons except for those which are close.
-  if (pagination.totalPages - pagination.currentPage <= 4) {
-    // for mobiles we hide dots from both sides as well
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      dotsLeft.classList.add('pagination__item--hidden');
-
-      const firstPageItem = document.getElementById('pagination-number-1');
-      firstPageItem.classList.add('pagination__item--hidden');
+  static #createMiddleActivePagesMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+    this.#totalMarkup += this.#dotsLeftMarkup;
+    for (let i = this.currentPage - 2; i <= this.currentPage + 2; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
-
-    dotsRight.classList.add('pagination__item--hidden');
-    for (let i = 2; i <= pagination.totalPages - 5; i++) {
-      const pagItem = document.getElementById(`pagination-number-${i}`);
-      pagItem.classList.add('pagination__item--hidden');
-    }
-
-    return;
+    this.#totalMarkup += this.#dotsRightMarkup;
+    this.#totalMarkup += this.#getLastPageMarkup();
   }
-  // if we are in the middle. Nor the beginning, nor the end, then we hide all the buttons except for active and near active ones.
-  if (
-    pagination.currentPage >= 5 &&
-    pagination.currentPage <= pagination.totalPages - 5
-  ) {
-    // if we are using a mobile phone, then hide all dots and first-last pages. Leave just the active page and +-2 next to it.
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      dotsLeft.classList.add('pagination__item--hidden');
-      dotsRight.classList.add('pagination__item--hidden');
 
-      for (
-        let i = 1;
-        i <= pagination.totalPages;
-        i += pagination.totalPages - 1
-      ) {
-        const pagItem = document.getElementById(`pagination-number-${i}`);
-        pagItem.classList.add('pagination__item--hidden');
+  static #createEndingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+    this.#totalMarkup += this.#dotsLeftMarkup;
+
+    for (let i = this.totalPages - 4; i <= this.totalPages; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+    }
+  }
+
+  static #createMobileMarkup() {
+    if (this.totalPages <= 4) {
+      this.#totalMarkup += this.#firstPageMarkup;
+
+      for (let i = 2; i <= this.totalPages; i++) {
+        this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
       }
+      return;
     }
 
-    for (let i = 2; i <= pagination.totalPages - 1; i++) {
-      if (i === pagination.currentPage - 2) {
-        i = pagination.currentPage + 2;
-        continue;
-      }
-
-      const pagItem = document.getElementById(`pagination-number-${i}`);
-      pagItem.classList.add('pagination__item--hidden');
+    if (this.currentPage <= 3) {
+      this.#createMobileStartingMarkup();
+      return;
     }
+
+    if (this.totalPages - 2 <= this.currentPage && !(this.currentPage <= 3)) {
+      this.#createMobileEndingMarkup();
+      return;
+    }
+
+    if (this.currentPage >= 4 && this.currentPage <= this.totalPages - 3) {
+      this.#createMobileMiddleActivePageMarkup();
+      return;
+    }
+  }
+
+  static #createMobileStartingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+
+    const maxRenderPagesNum = this.totalPages >= 4 ? 3 : this.totalPages;
+
+    for (i = 2; i <= maxRenderPagesNum; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+    }
+
+    if (this.totalPages >= 4) {
+      this.#totalMarkup += this.#dotsRightMarkup;
+      this.#totalMarkup += this.#getLastPageMarkup();
+    }
+  }
+
+  static #createMobileMiddleActivePageMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+    this.#totalMarkup += this.#dotsLeftMarkup;
+    this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(this.currentPage);
+    this.#totalMarkup += this.#dotsRightMarkup;
+    this.#totalMarkup += this.#getLastPageMarkup();
+  }
+
+  static #createMobileEndingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+    this.#totalMarkup += this.#dotsLeftMarkup;
+
+    for (let i = this.totalPages - 2; i <= this.totalPages; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+    }
+  }
+
+  static #afterRendering() {
+    this.#activateCurrentPageBtn();
+    this.#correctPaginationBarSize();
+  }
+
+  static #activateCurrentPageBtn() {
+    const activePageItem = document.getElementById(
+      `pagination-number-${this.currentPage}`
+    );
+    const activePageBtn = activePageItem.firstElementChild;
+    activePageBtn.classList.add('pagination__btn--active');
+  }
+
+  static #correctPaginationBarSize() {
+    // For better experience, we lock the size of the bar if we have a lot of pages. So it is comfortable to switch between the pages by pressing the arrows buttons.
+    if (this.totalPages >= 10) {
+      this.paginationPagesList.classList.add('pagination__list--width-L');
+    } else {
+      this.paginationPagesList.classList.remove('pagination__list--width-L');
+    }
+  }
+
+  static #getPageBtnMarkupWithIdInsered(id) {
+    return `<li class="pagination__item" id="pagination-number-${id}"><button class="pagination__btn">${id}</button></li>`;
+  }
+
+  static #getLastPageMarkup() {
+    return `<li class="pagination__item" id="pagination-number-${this.totalPages}"><button class="pagination__btn">${this.totalPages}</button></li>`;
   }
 }
 
-export {
-  renderPagination,
-  paginationNextBtn,
-  paginationPreviousBtn,
-  paginationPagesList,
-  pagination,
-  onWindowResize,
-};
+export { PaginationAPI };

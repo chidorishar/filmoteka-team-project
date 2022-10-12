@@ -32,9 +32,13 @@
 
     @extend %flex--vh-centred;
     column-gap: 16px;
+    
+    @include mediaUpTo('tablet') {
+        width: 240px;
+    }
 
     &--width-L {
-        min-width: 432px;
+        width: 432px;
     }
 
     @extend %unmarked-list;
