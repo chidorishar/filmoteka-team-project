@@ -42,7 +42,6 @@ export class GalleryAPI {
 
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
-    console.log(moviesData);
 
     // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
@@ -125,11 +124,13 @@ export class GalleryAPI {
           ${movieName}
         </span>has no poster
       </span>`;
+
     const imgThumbAdditionalClasses =
-      (poster_path ? '' : 'movie-card__img-thumb--no-poster') +
-      (mustBeCritical && poster_path
-        ? ''
-        : 'movie-card__img-thumb--img-loading');
+      (hasPoster ? '' : 'movie-card__img-thumb--no-poster') +
+      ' ' +
+      (hasPoster && !mustBeCritical
+        ? 'movie-card__img-thumb--img-loading'
+        : '');
 
     //${this.#posterImageCSSClass}--img-loading
     // prettier-ignore
@@ -190,8 +191,9 @@ export class GalleryAPI {
       imageToLoadEl.removeAttribute('true-src');
       imageToLoadEl.setAttribute('src', pathToPoster);
       //remove placeholder, which showed while image loading
-      imageToLoadEl.closest('.movie-card__img-thumb');
-      // .classList.remove('movie-card__img-thumb--img-loading');
+      imageToLoadEl
+        .closest('.movie-card__img-thumb')
+        .classList.remove('movie-card__img-thumb--img-loading');
     }
 
     if (
