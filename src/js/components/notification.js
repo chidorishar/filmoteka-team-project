@@ -4,7 +4,7 @@ let timeoutId = null;
 const notificationEl = document.querySelector('p[js-alert]');
 notificationEl.addEventListener('click', onNotificationClick);
 
-showNotification();
+// showNotification();
 
 function onNotificationClick() {
   hideNotification();
