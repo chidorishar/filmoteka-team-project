@@ -19,8 +19,10 @@ export class Spinner {
   }
 
   show() {
-    const deltaFromRootElTop = window.innerHeight / 2; //-1 * this.#rootEl.getBoundingClientRect().y; //+ window.innerHeight / 2
+    //centring element vertically
+    const deltaFromRootElTop = window.innerHeight / 2;
     this.setDeltaY(deltaFromRootElTop);
+
     this.#rootElPrevPositionStyleValue = this.#rootEl.style.position;
     this.#rootEl.style.position = 'relative';
     this.#selfDOMEl.style.display = 'flex';
