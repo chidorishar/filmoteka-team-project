@@ -1,5 +1,6 @@
 import { IDsParser } from '../utils/IDsToGenresParser';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage.js';
+import { Spinner } from '../components/Spinner';
 
 export class GalleryAPI {
   #loadedImages = 0;
@@ -8,12 +9,14 @@ export class GalleryAPI {
   #rootEl = null;
   #onCriticalImagesLoadedCallbacks = [];
   #currentMoviesData = null;
+  #spinner = null;
 
   #numberOfCriticalImages = 3;
 
   constructor(rootElementSelector) {
     this.#rootEl = document.querySelector(rootElementSelector);
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
+    this.#spinner = new Spinner('.gallery', 'loader-gallery');
   }
 
   addOnCardClickCallback(cb) {
@@ -38,6 +41,9 @@ export class GalleryAPI {
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
     this.#rootEl.innerHTML = '';
+
+    // const this.#spinner = this.#this.#spinner;
+    this.#spinner.show();
 
     let createdImgsNumber = 0;
     let isCriticalRendered = false;
@@ -146,9 +152,14 @@ export class GalleryAPI {
     console.log(this.#loadedImages);
     e.currentTarget.removeEventListener('load', this.#onImageLoaded);
 
-    if (this.#loadedImages === this.#numberOfCriticalImages) {
+    if (
+      this.#loadedImages === this.#numberOfCriticalImages &&
+      this.#totalImages
+    ) {
       this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
+
+    if (this.#loadedImages === 1 && this.#totalImages) this.#spinner.hide();
 
     // if (this.#loadedImages === this.#totalImages) {
     //   this.#onImagesLoadedCallback();

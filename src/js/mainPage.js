@@ -63,11 +63,13 @@ let unsuccessfulSearchEl = null;
       galleryAPI
     );
   } catch (error) {
+    document.querySelector('.loader').style.display = 'none';
     console.log(error.message);
   }
 })();
 
 function onGalleryLoadedCriticalImages() {
+  document.querySelector('.loader').style.display = 'none';
   console.log('loaded');
 }
 
