@@ -42,6 +42,7 @@ export class GalleryAPI {
 
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
+    console.log(moviesData);
 
     // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
@@ -60,14 +61,14 @@ export class GalleryAPI {
         arr[indx + 1]?.id,
         !isAllCriticalAdded
       );
+
       if (hasPoster) imgsWithPoster++;
-      //render bunch of critical images to gallery
       if (
         imgsWithPoster === this.#numberOfCriticalImages &&
         !isAllCriticalAdded
-      ) {
+      )
         isAllCriticalAdded = true;
-      }
+
       return (acc += markup);
     }, '');
     //actual created images number is lesser than wanted tracked one, so must set it to real one
@@ -102,7 +103,7 @@ export class GalleryAPI {
     const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
     const movieName = title ?? name;
-    const hasPoster = poster_path;
+    const hasPoster = !!poster_path;
     const mustBeCritical = hasPoster && canBeCritical;
 
     // prettier-ignore
@@ -124,13 +125,20 @@ export class GalleryAPI {
           ${movieName}
         </span>has no poster
       </span>`;
+    const imgThumbAdditionalClasses =
+      (poster_path ? '' : 'movie-card__img-thumb--no-poster') +
+      (mustBeCritical && poster_path
+        ? ''
+        : 'movie-card__img-thumb--img-loading');
 
+    //${this.#posterImageCSSClass}--img-loading
     // prettier-ignore
     const markup =
       `<li class="movie-card">
         <a class="movie-card__link" href="/" data-movie-id="${id}" 
           data-prev-movie-id="${prevMovieID ?? '' }" data-next-movie-id="${ nextMovieID ?? '' }">
-          <div class="movie-card__img-thumb ${poster_path ? '' : "movie-card__img-thumb--no-poster"}">
+          <div class="movie-card__img-thumb ${imgThumbAdditionalClasses}"
+            >
             ${posterEl}
           </div>
           <h3 class="movie-card__title">${movieName}</h3>
@@ -166,6 +174,7 @@ export class GalleryAPI {
   #onImageLoaded = e => {
     const currentImageEl = e.currentTarget;
 
+    //accept events only from images with correct "src" attribute value
     if (currentImageEl.getAttribute('src') === '/') return;
 
     this.#loadedImages++;
@@ -177,11 +186,12 @@ export class GalleryAPI {
       `.${this.#posterImageCSSClass}[true-src]`
     );
     if (imageToLoadEl) {
-      console.log(imageToLoadEl);
       const pathToPoster = imageToLoadEl.getAttribute('true-src');
       imageToLoadEl.removeAttribute('true-src');
       imageToLoadEl.setAttribute('src', pathToPoster);
-      console.log(pathToPoster);
+      //remove placeholder, which showed while image loading
+      imageToLoadEl.closest('.movie-card__img-thumb');
+      // .classList.remove('movie-card__img-thumb--img-loading');
     }
 
     if (

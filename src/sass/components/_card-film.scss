@@ -19,6 +19,8 @@
   @extend %flex;
   flex-grow: 1;
 
+  position: relative;
+
   border-radius: 5px;
   overflow: hidden;
 
@@ -32,6 +34,27 @@
       getColorFromPalette('primary', 'light') $stripesWidth,
       $stripesMainColor $stripesWidth,
       $stripesMainColor $stripesWidth * 2
+    );
+  }
+
+  &--img-loading::before {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(238, 174, 202);
+    background: radial-gradient(
+      circle,
+      rgba(238, 174, 202, 1) 0%,
+      rgba(29, 190, 182, 1) 7%,
+      rgba(148, 166, 45, 1) 16%,
+      rgba(151, 49, 154, 1) 26%,
+      rgba(182, 182, 222, 1) 38%,
+      rgba(35, 65, 108, 1) 84%,
+      rgba(148, 187, 233, 1) 100%
     );
   }
 }
