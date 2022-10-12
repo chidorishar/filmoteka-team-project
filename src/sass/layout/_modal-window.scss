@@ -47,19 +47,27 @@
   @include mediaUpTo('tablet') {
     min-width: 280px;
     max-width: getBreakpointValue('mobile');
+    height: 930px;
+    max-height: 100%;
+    overflow: auto;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
     width: 704px;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
     padding-top: 40px;
+    max-height: 95%;
   }
 
   @include mediaOver('desktop') {
     width: 806px;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
+    height: 560px;
+    max-height: 100%;
   }
 }
 
