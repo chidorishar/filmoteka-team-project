@@ -1,6 +1,7 @@
 export class Spinner {
   #rootEl = null;
   #selfDOMEl = null;
+  #innerSpinnerEl = null;
   #selfCSSClass = null;
   #rootElPrevPositionStyleValue = null;
 
@@ -10,6 +11,9 @@ export class Spinner {
 
     this.#render();
     this.#selfDOMEl = document.querySelector(`.${spinnerClassToCreate}`);
+    this.#innerSpinnerEl = document.querySelector(
+      `.${spinnerClassToCreate} .loader__spinner`
+    );
     this.hide();
   }
 
@@ -22,6 +26,13 @@ export class Spinner {
   hide() {
     this.#selfDOMEl.style.display = 'none';
     this.#rootEl.style.position = this.#rootElPrevPositionStyleValue;
+  }
+
+  //method for positioning the spinner along the Y axis according to root el
+  setDeltaY(delta) {
+    this.#selfDOMEl.style.paddingTop = `${delta}px`;
+    this.#innerSpinnerEl.style.top = `${delta}px`;
+    console.log(this.#innerSpinnerEl.style.top);
   }
 
   #render() {
@@ -47,6 +58,5 @@ export class Spinner {
       </div>`;
 
     this.#rootEl.insertAdjacentHTML('beforeend', markup);
-    console.log(this.#rootEl);
   }
 }
