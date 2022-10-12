@@ -45,7 +45,6 @@ export class GalleryAPI {
 
     // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
-    this.#spinner.setDeltaY(150);
 
     //reset Gallery state
     this.#numberOfCriticalImages = this.#maxNumOfCritImages;

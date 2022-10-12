@@ -19,6 +19,8 @@ export class Spinner {
   }
 
   show() {
+    const deltaFromRootElTop = window.innerHeight / 2; //-1 * this.#rootEl.getBoundingClientRect().y; //+ window.innerHeight / 2
+    this.setDeltaY(deltaFromRootElTop);
     this.#rootElPrevPositionStyleValue = this.#rootEl.style.position;
     this.#rootEl.style.position = 'relative';
     this.#selfDOMEl.style.display = 'flex';
@@ -35,7 +37,7 @@ export class Spinner {
 
   //method for positioning the spinner along the Y axis according to root el
   setDeltaY(delta) {
-    this.#selfDOMEl.style.paddingTop = `${delta}px`;
+    //this.#selfDOMEl.style.paddingTop = `${delta}px`;
     this.#innerSpinnerEl.style.top = `${delta}px`;
     console.log(this.#innerSpinnerEl.style.top);
   }
@@ -50,7 +52,6 @@ export class Spinner {
           left: 0px; 
           display: flex; 
           justify-content: center;
-          padding: 50px; 
           width: 100%;
           height: 100%; 
           transition: opacity ${this.#HIDE_DELAY}ms ease-in-out;
@@ -59,7 +60,6 @@ export class Spinner {
         <div class="loader__spinner" 
           style="
             position: sticky; 
-            top: 50px;
         ">
         </div>
       </div>`;
