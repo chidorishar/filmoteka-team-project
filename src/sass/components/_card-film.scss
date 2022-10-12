@@ -21,6 +21,7 @@
 
   position: relative;
 
+  background: #0000004a;
   border-radius: 5px;
   overflow: hidden;
 
@@ -28,6 +29,7 @@
     $stripesWidth: 15px;
     $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
 
+    background: unset;
     background-image: repeating-linear-gradient(
       to left bottom,
       getColorFromPalette('primary', 'light'),
@@ -64,11 +66,18 @@
   &--img-loading::before {
     opacity: 1;
   }
+
+  &--img-loading .movie-card__img {
+    opacity: 0;
+  }
 }
 
 .movie-card__img {
   width: 100%;
   height: 100%;
+
+  transition: createTransitionFor('opacity', 2s);
+  opacity: 1;
 
   object-fit: cover;
   object-position: 50% 50%;
