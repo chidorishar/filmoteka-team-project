@@ -123,12 +123,13 @@
   align-items: center;
   margin: 0 auto;
   margin-bottom: 30px;
-  background-color: #f7f5ec;
+ 
   width: 230px;
   border-radius: 5px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
-  padding: 30px 0 30px;
+  padding: 0;
+  padding-top: 20px;
   background-color: #f7f5ec;
   text-align: center;
   overflow: hidden;
@@ -229,9 +230,9 @@
   color: getColorFromPalette('primary', 'additional');
 }
 
-// .social {
-//   width: 100%;
-// }
+.social {
+  background-color: green;
+}
 
 .list-social {
   display: flex;
