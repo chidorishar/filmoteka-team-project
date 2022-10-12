@@ -218,11 +218,25 @@
   margin-bottom: 20px;
   font-size: 20px;
   line-height: 23px;
+  height: 47px;
+  overflow: auto;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    height: 50px;
+    overflow: auto;
+  }
 
   @include mediaOver('desktop') {
     font-size: 30px;
     line-height: 35px;
     text-transform: uppercase;
+    height: 70px;
+  }
+}
+
+td {
+  vertical-align: text-top;
+  @include mediaInBetween('tablet', 'desktop') {
   }
 }
 
@@ -254,6 +268,27 @@
   margin-bottom: 0;
 }
 
+.modal__characteristic-title,
+.modal__characteristic-genre {
+  @include mediaInBetween('tablet', 'desktop') {
+    height: 30px;
+    overflow: scroll;
+    border: 0;
+  }
+
+  .block-style {
+    min-height: 30px;
+    display: block;
+    overflow: scroll;
+    margin: auto;
+  }
+
+  @include mediaOver('desktop') {
+    height: 32px;
+    overflow: scroll;
+  }
+}
+
 .modal__characteristic-data {
   @extend %unmarked-list;
   display: flex;
@@ -274,6 +309,8 @@
   font-size: 12px;
   line-height: 14px;
   color: getColorFromPalette('modal', 'color-characteristics-text');
+  height: 30px;
+  overflow: scroll;
 }
 
 .modal__about {
@@ -293,6 +330,7 @@
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
+  height: 140px;
 
   margin-bottom: 20px;
   max-height: 120px;
@@ -304,7 +342,7 @@
 
   @include mediaOver('desktop') {
     line-height: 20px;
-
+    min-width: 335px;
     max-width: 391px;
     max-height: 260px;
   }
