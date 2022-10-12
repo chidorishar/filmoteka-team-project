@@ -10,6 +10,7 @@ export class GalleryAPI {
   #onCriticalImagesLoadedCallbacks = [];
   #currentMoviesData = null;
   #spinner = null;
+  #posterImageCSSClass = 'movie-card__img';
 
   #numberOfCriticalImages = 3;
 
@@ -40,38 +41,38 @@ export class GalleryAPI {
 
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
-    this.#rootEl.innerHTML = '';
 
     // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
+    this.#spinner.setDeltaY(150);
 
-    let createdImgsNumber = 0;
-    let isCriticalRendered = false;
+    let imgsWithPoster = 0;
+    let isAllCriticalAdded = false;
+    this.#untrackImagesLoadingEnd();
     const cardsMarkup = moviesData.reduce((acc, movieData, indx, arr) => {
       const { markup, hasPoster } = this.#createMovieCardMarkup(
         movieData,
         arr[indx - 1]?.id,
-        arr[indx + 1]?.id
+        arr[indx + 1]?.id,
+        !isAllCriticalAdded
       );
-      if (hasPoster) createdImgsNumber++;
+      if (hasPoster) imgsWithPoster++;
       //render bunch of critical images to gallery
       if (
-        createdImgsNumber === this.#numberOfCriticalImages + 1 &&
-        !isCriticalRendered
+        imgsWithPoster === this.#numberOfCriticalImages &&
+        !isAllCriticalAdded
       ) {
-        isCriticalRendered = true;
-        this.#rootEl.innerHTML = acc;
-        acc = '';
+        isAllCriticalAdded = true;
       }
       return (acc += markup);
     }, '');
     //actual created images number is lesser than wanted tracked one, so must set it to real one
-    if (createdImgsNumber < this.#numberOfCriticalImages)
-      this.#numberOfCriticalImages = createdImgsNumber;
-    this.#totalImages = createdImgsNumber;
+    if (imgsWithPoster < this.#numberOfCriticalImages)
+      this.#numberOfCriticalImages = imgsWithPoster;
+    this.#totalImages = imgsWithPoster;
 
-    //render other (not critical) images to gallery
-    this.#rootEl.insertAdjacentHTML('beforeend', cardsMarkup);
+    //render images to gallery
+    this.#rootEl.innerHTML = cardsMarkup;
     this.#trackImagesLoadingEnd();
   }
 
@@ -87,25 +88,33 @@ export class GalleryAPI {
       id,
     },
     prevMovieID,
-    nextMovieID
+    nextMovieID,
+    canBeCritical
   ) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
     const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
+    const movieName = title ?? name;
     const hasPoster = poster_path;
+    const mustBeCritical = hasPoster && canBeCritical;
 
     // prettier-ignore
-    const posterEl = poster_path
-      ? 
+    const posterEl =
+      poster_path ? 
       `<img
-        class="movie-card__img"
-        src="${this.#pathToPoster}w500${poster_path}"
-        alt=""
+        class="${this.#posterImageCSSClass}"
+        ${mustBeCritical
+          ?
+          `src="${this.#pathToPoster}w500${poster_path}"` 
+          : 
+          `src="/" true-src="${this.#pathToPoster}w500${poster_path}"`
+          }
+        alt="Poster of the ${movieName} movie"
       />`
       : 
       `<span class="movie-card__poster-placeholder">
         <span class="movie-card__poster-placeholder--title">
-          ${title ?? name}
+          ${movieName}
         </span>has no poster
       </span>`;
 
@@ -117,7 +126,7 @@ export class GalleryAPI {
           <div class="movie-card__img-thumb ${poster_path ? '' : "movie-card__img-thumb--no-poster"}">
             ${posterEl}
           </div>
-          <h3 class="movie-card__title">${title ?? name}</h3>
+          <h3 class="movie-card__title">${movieName}</h3>
           <ul class="movie-card__movie-info-wrapper">
             <li class="movie-card__item movie-card__item--hidden-overflow">
               <p class="movie-card__genres">${genresStr}</p>
@@ -148,9 +157,25 @@ export class GalleryAPI {
   }
 
   #onImageLoaded = e => {
+    const currentImageEl = e.currentTarget;
+
+    if (currentImageEl.getAttribute('src') === '/') return;
+
     this.#loadedImages++;
+    currentImageEl.removeEventListener('load', this.#onImageLoaded);
     console.log(this.#loadedImages);
-    e.currentTarget.removeEventListener('load', this.#onImageLoaded);
+
+    //load image for next image element with dummy src attribute
+    const imageToLoadEl = document.querySelector(
+      `.${this.#posterImageCSSClass}[true-src]`
+    );
+    if (imageToLoadEl) {
+      console.log(imageToLoadEl);
+      const pathToPoster = imageToLoadEl.getAttribute('true-src');
+      imageToLoadEl.removeAttribute('true-src');
+      imageToLoadEl.setAttribute('src', pathToPoster);
+      console.log(pathToPoster);
+    }
 
     if (
       this.#loadedImages === this.#numberOfCriticalImages &&
@@ -159,7 +184,7 @@ export class GalleryAPI {
       this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
 
-    if (this.#loadedImages === 1 && this.#totalImages) this.#spinner.hide();
+    if (this.#loadedImages === 3 && this.#totalImages) this.#spinner.hide();
 
     // if (this.#loadedImages === this.#totalImages) {
     //   this.#onImagesLoadedCallback();
@@ -167,12 +192,25 @@ export class GalleryAPI {
   };
 
   #trackImagesLoadingEnd() {
-    const allImagesEls = document.querySelectorAll('.movie-card__img');
+    const allImagesEls = document.querySelectorAll(
+      `.${this.#posterImageCSSClass}`
+    );
 
-    this.#loadedImages = 0;
     [...allImagesEls].forEach(el => {
       el.addEventListener('load', this.#onImageLoaded);
       el.addEventListener('error', this.#onImageLoaded);
+    });
+  }
+
+  #untrackImagesLoadingEnd() {
+    const allImagesEls = document.querySelectorAll(
+      `.${this.#posterImageCSSClass}`
+    );
+
+    this.#loadedImages = 0;
+    [...allImagesEls].forEach(el => {
+      el.removeEventListener('load', this.#onImageLoaded);
+      el.removeEventListener('error', this.#onImageLoaded);
     });
   }
 
