@@ -6,12 +6,21 @@ export class LDStorageAPI {
     QUEUED: 'queued',
   };
 
+  static paginationInfo = {
+    page: 1,
+    totalPages: null,
+    MOVIES_PER_PAGE: 18,
+  };
+
+  static #activeStorage = null;
   static #watched = {};
   static #queued = {};
 
   static init() {
     this.#watched = readFromLocalStorage(this.MOVIE_INFO.WATCHED) ?? {};
     this.#queued = readFromLocalStorage(this.MOVIE_INFO.QUEUED) ?? {};
+    this.#activeStorage = this.#watched;
+    this.paginationInfo.totalPages = this.#countTotalPages();
   }
 
   /**
@@ -21,6 +30,7 @@ export class LDStorageAPI {
    * @param {Object} obj.movieData - the obj of movie data
    * @param {string} obj.storageKey - the key (where to safe (watched/ queued))
    */
+
   static addToLocalStorage({ id, movieData, storageKey } = {}) {
     const writeToLS = this.#writeObjToLS;
 
@@ -54,21 +64,47 @@ export class LDStorageAPI {
     }
   }
 
-  // /**
-  //  * gettting movie data from local storaage
-  //  * @param {number} id - id of obj of movie we need to get
-  //  * @returns {Object} - the movie we were lookimg for
-  //  */
-  // readFromLocalStorage(id) {
-  //   let getResult = null;
-  //   if (this.findInLocalStorage(id).watched) {
-  //     getResult = localStorage.getItem(this.MOVIE_INFO.WATCHED);
-  //   } else if (this.findInLocalStorage({ id }).queued) {
-  //     getResult = localStorage.getItem(this.MOVIE_INFO.QUEUED);
-  //   }
+  static getTotalPages() {
+    this.paginationInfo.totalPages = this.#countTotalPages();
 
-  //   return JSON.parse(getResult)[id + ''];
-  // },
+    return this.paginationInfo.totalPages;
+  }
+
+  static getMoviesByPage(pageNumber) {
+    this.paginationInfo.page = pageNumber;
+
+    let moviesPropertiesArray = [...Object.values(this.#activeStorage)];
+
+    let moviesData = this.#sliceMoviesArrayByPage(moviesPropertiesArray);
+
+    return moviesData;
+  }
+
+  static setActiveStorage(storageType) {
+    if (this.MOVIE_INFO.WATCHED === storageType) {
+      this.#activeStorage = this.#watched;
+    } else if (this.MOVIE_INFO.QUEUED === storageType) {
+      this.#activeStorage = this.#queued;
+    }
+  }
+
+  static #sliceMoviesArrayByPage(moviesArray) {
+    // cutting sausage into slices
+    let fromMovie =
+      (this.paginationInfo.page - 1) * this.paginationInfo.MOVIES_PER_PAGE;
+    let toMovie =
+      this.paginationInfo.page * this.paginationInfo.MOVIES_PER_PAGE;
+
+    return moviesArray.slice(fromMovie, toMovie);
+  }
+
+  static #countTotalPages() {
+    const moviesQuantity = Object.keys(this.#activeStorage).length;
+    const paginationPagesQuantity =
+      moviesQuantity / this.paginationInfo.MOVIES_PER_PAGE;
+
+    return Math.ceil(paginationPagesQuantity);
+  }
 
   /**
    * Shows if we have the movie in local storage
