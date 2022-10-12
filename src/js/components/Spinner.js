@@ -4,6 +4,7 @@ export class Spinner {
   #innerSpinnerEl = null;
   #selfCSSClass = null;
   #rootElPrevPositionStyleValue = null;
+  #HIDE_DELAY = 250; //ms
 
   constructor(rootElementSelector, spinnerClassToCreate) {
     this.#rootEl = document.querySelector(rootElementSelector);
@@ -21,11 +22,15 @@ export class Spinner {
     this.#rootElPrevPositionStyleValue = this.#rootEl.style.position;
     this.#rootEl.style.position = 'relative';
     this.#selfDOMEl.style.display = 'flex';
+    this.#selfDOMEl.style.opacity = 1;
   }
 
   hide() {
-    this.#selfDOMEl.style.display = 'none';
-    this.#rootEl.style.position = this.#rootElPrevPositionStyleValue;
+    this.#selfDOMEl.style.opacity = 0;
+    setTimeout(() => {
+      this.#selfDOMEl.style.display = 'none';
+      this.#rootEl.style.position = this.#rootElPrevPositionStyleValue;
+    }, this.#HIDE_DELAY);
   }
 
   //method for positioning the spinner along the Y axis according to root el
@@ -48,7 +53,9 @@ export class Spinner {
           padding: 50px; 
           width: 100%;
           height: 100%; 
-          background-color: rgb(255, 255, 255);">
+          transition: opacity ${this.#HIDE_DELAY}ms ease-in-out;
+          background-color: rgb(255, 255, 255);
+          ">
         <div class="loader__spinner" 
           style="
             position: sticky; 
