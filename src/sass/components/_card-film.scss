@@ -63,11 +63,13 @@
     background-size: 100% 300%;
   }
 
-  &--img-loading::before {
+  &--img-loading::before,
+  &--img-fallback::before {
     opacity: 1;
   }
 
-  &--img-loading .movie-card__img {
+  &--img-loading .movie-card__img,
+  &--img-fallback .movie-card__img {
     opacity: 0;
   }
 }

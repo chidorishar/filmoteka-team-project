@@ -186,13 +186,12 @@ export class GalleryAPI {
       `.${this.#posterImageCSSClass}[true-src]`
     );
     if (imageToLoadEl) {
+      const imgToLoadThumbEl = imageToLoadEl.closest('.movie-card__img-thumb');
       const pathToPoster = imageToLoadEl.getAttribute('true-src');
       imageToLoadEl.removeAttribute('true-src');
       imageToLoadEl.setAttribute('src', pathToPoster);
       //remove placeholder, which showed while image loading
-      imageToLoadEl
-        .closest('.movie-card__img-thumb')
-        .classList.remove('movie-card__img-thumb--img-loading');
+      imgToLoadThumbEl.classList.remove('movie-card__img-thumb--img-loading');
     }
 
     if (
@@ -202,6 +201,11 @@ export class GalleryAPI {
       this.#spinner.hide();
       this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
+
+    //image loading failed, show fallback instead
+    const currImgThumbEl = currentImageEl.closest('.movie-card__img-thumb');
+    if (e.type === 'error')
+      currImgThumbEl.classList.add('movie-card__img-thumb--img-fallback');
   };
 
   #trackImagesLoadingEnd() {
