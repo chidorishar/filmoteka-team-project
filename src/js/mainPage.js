@@ -19,13 +19,49 @@ PaginationAPI.paginationPagesList.addEventListener(
   onPaginationListBtnNumberClick
 );
 
-window.addEventListener('resize', PaginationAPI.onWindowResize);
-
+let resizeObserver = null;
 let moviesData = null;
 let tmdbAPI = null;
 export let galleryAPI = null;
 
 let unsuccessfulSearchEl = null;
+
+// MAIN
+(async () => {
+  try {
+    tmdbAPI = new TMDBAPI();
+    LDStorageAPI.init();
+    await BackendConfigStorage.init();
+    const { results: moviesData, total_pages: totalPages } =
+      await tmdbAPI.getTopMovies();
+    PaginationAPI.totalPages = totalPages;
+
+    //movie search form
+    unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
+    const searchFormEl = document.querySelector('#movie-search-form');
+    searchFormEl.addEventListener('submit', onFormSubmit);
+    //get array of IDs and genres
+    galleryAPI = new GalleryAPI('#movies-wrapper');
+
+    //render movies and pagination as well
+    galleryAPI.renderMoviesCards(moviesData);
+    PaginationAPI.renderPagination();
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
+
+    // Added size listener for body element
+    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
+    resizeObserver.observe(document.body);
+  } catch (error) {
+    console.log(error.message);
+  }
+})();
 
 async function onFormSubmit(ev) {
   ev.preventDefault();
@@ -121,36 +157,3 @@ async function onPaginationListBtnNumberClick(e) {
 
   PaginationAPI.renderPagination();
 }
-
-// MAIN
-(async () => {
-  try {
-    tmdbAPI = new TMDBAPI();
-    LDStorageAPI.init();
-    await BackendConfigStorage.init();
-    const { results: moviesData, total_pages: totalPages } =
-      await tmdbAPI.getTopMovies();
-    PaginationAPI.totalPages = totalPages;
-
-    //movie search form
-    unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
-    const searchFormEl = document.querySelector('#movie-search-form');
-    searchFormEl.addEventListener('submit', onFormSubmit);
-    //get array of IDs and genres
-    galleryAPI = new GalleryAPI('#movies-wrapper');
-
-    //render movies and pagination as well
-    galleryAPI.renderMoviesCards(moviesData);
-    PaginationAPI.renderPagination();
-    const mmh = new MovieModalHandler(
-      '#watched-btn',
-      '#queue-btn',
-      '#movies-modal-window',
-      '.modal-close',
-      '#movie-modal-buttons-wrapper',
-      galleryAPI
-    );
-  } catch (error) {
-    console.log(error.message);
-  }
-})();
