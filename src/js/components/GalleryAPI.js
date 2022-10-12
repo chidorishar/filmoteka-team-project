@@ -12,7 +12,8 @@ export class GalleryAPI {
   #spinner = null;
   #posterImageCSSClass = 'movie-card__img';
 
-  #numberOfCriticalImages = 3;
+  #maxNumOfCritImages = 3;
+  #numberOfCriticalImages = null;
 
   constructor(rootElementSelector) {
     this.#rootEl = document.querySelector(rootElementSelector);
@@ -46,9 +47,12 @@ export class GalleryAPI {
     this.#spinner.show();
     this.#spinner.setDeltaY(150);
 
+    //reset Gallery state
+    this.#numberOfCriticalImages = this.#maxNumOfCritImages;
     let imgsWithPoster = 0;
     let isAllCriticalAdded = false;
     this.#untrackImagesLoadingEnd();
+    //create markup
     const cardsMarkup = moviesData.reduce((acc, movieData, indx, arr) => {
       const { markup, hasPoster } = this.#createMovieCardMarkup(
         movieData,
@@ -73,7 +77,10 @@ export class GalleryAPI {
 
     //render images to gallery
     this.#rootEl.innerHTML = cardsMarkup;
-    this.#trackImagesLoadingEnd();
+    //if there is posters with images then load them in batches (progressive) else hide spinner
+    if (imgsWithPoster) {
+      this.#trackImagesLoadingEnd();
+    } else this.#spinner.hide();
   }
 
   #createMovieCardMarkup(
@@ -181,14 +188,9 @@ export class GalleryAPI {
       this.#loadedImages === this.#numberOfCriticalImages &&
       this.#totalImages
     ) {
+      this.#spinner.hide();
       this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
-
-    if (this.#loadedImages === 3 && this.#totalImages) this.#spinner.hide();
-
-    // if (this.#loadedImages === this.#totalImages) {
-    //   this.#onImagesLoadedCallback();
-    // }
   };
 
   #trackImagesLoadingEnd() {
