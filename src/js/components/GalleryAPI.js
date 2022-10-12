@@ -131,7 +131,6 @@ export class GalleryAPI {
         ? 'movie-card__img-thumb--img-loading'
         : '');
 
-    //${this.#posterImageCSSClass}--img-loading
     // prettier-ignore
     const markup =
       `<li class="movie-card">
@@ -172,15 +171,13 @@ export class GalleryAPI {
   }
 
   #onImageLoaded = e => {
-    const currentImageEl = e.currentTarget;
+    const currentImageEl = e.target;
 
     //accept events only from images with correct "src" attribute value
     if (currentImageEl.getAttribute('src') === '/') return;
 
     this.#loadedImages++;
     currentImageEl.removeEventListener('load', this.#onImageLoaded);
-    console.log(this.#loadedImages);
-
     //load image for next image element with dummy src attribute
     const imageToLoadEl = document.querySelector(
       `.${this.#posterImageCSSClass}[true-src]`
@@ -204,8 +201,9 @@ export class GalleryAPI {
 
     //image loading failed, show fallback instead
     const currImgThumbEl = currentImageEl.closest('.movie-card__img-thumb');
-    if (e.type === 'error')
+    if (e.type === 'error') {
       currImgThumbEl.classList.add('movie-card__img-thumb--img-fallback');
+    }
   };
 
   #trackImagesLoadingEnd() {

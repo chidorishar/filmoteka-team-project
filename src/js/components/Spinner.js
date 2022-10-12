@@ -41,7 +41,6 @@ export class Spinner {
   setDeltaY(delta) {
     //this.#selfDOMEl.style.paddingTop = `${delta}px`;
     this.#innerSpinnerEl.style.top = `${delta}px`;
-    console.log(this.#innerSpinnerEl.style.top);
   }
 
   #render() {

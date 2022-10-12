@@ -70,7 +70,6 @@ let unsuccessfulSearchEl = null;
 
 function onGalleryLoadedCriticalImages() {
   document.querySelector('.loader').style.display = 'none';
-  console.log('loaded');
 }
 
 async function onFormSubmit(ev) {
