@@ -1,11 +1,11 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
+import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
+import { PaginationAPI } from './components/PaginationAPI';
+import { NotificationAPI } from './components/NotificationAPI';
 
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
-import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
-import { PaginationAPI } from './components/PaginationAPI';
-import { addNotification } from './components/notification';
 
 const MODE = { TOP: 'top', NAME: 'name' };
 let currentMode = MODE.TOP;
@@ -22,6 +22,7 @@ let unsuccessfulSearchEl = null;
   try {
     tmdbAPI = new TMDBAPI();
     LDStorageAPI.init();
+    NotificationAPI.init('body');
     await BackendConfigStorage.init();
 
     const { results: moviesData, total_pages: totalPages } =
@@ -69,10 +70,17 @@ let unsuccessfulSearchEl = null;
     // Added size listener for body element
     resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
-    addNotification("Showing week's top movies...", false, 3000);
+    NotificationAPI.addNotification(
+      "Showing week's top movies...",
+      false,
+      3000
+    );
   } catch (error) {
     document.querySelector('.loader').style.display = 'none';
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 })();
 
@@ -102,7 +110,11 @@ async function onMoviesSearchSubmit(ev) {
       PaginationAPI.currentPage = 1;
       currentMode = MODE.TOP;
 
-      addNotification("Showing week's top movies...", false, 3000);
+      NotificationAPI.addNotification(
+        "Showing week's top movies...",
+        false,
+        3000
+      );
       galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.renderPagination();
       return;
@@ -124,15 +136,19 @@ async function onMoviesSearchSubmit(ev) {
       return;
     }
 
-    addNotification(
+    NotificationAPI.addNotification(
       `We found ${totalResults} movies from your query`,
       false,
       3000
     );
+
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
   } catch (error) {
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 }
 
@@ -145,8 +161,9 @@ async function renderGalleryByPage() {
 
       galleryAPI.renderMoviesCards(moviesData);
     } catch (error) {
-      addNotification(
-        'Something went wrong! Here is the log: ' + error.message
+      NotificationAPI.addNotification(
+        'Something went wrong! Here is the log: ' + error.message,
+        true
       );
     }
     return;
@@ -157,7 +174,10 @@ async function renderGalleryByPage() {
 
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 }
 
