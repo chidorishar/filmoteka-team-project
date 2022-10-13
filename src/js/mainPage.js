@@ -4,7 +4,7 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
-import { PaginationAPI } from './components/pagination';
+import { PaginationAPI } from './components/PaginationAPI';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
@@ -152,9 +152,9 @@ async function renderGalleryByPage() {
 
 async function onPaginationBtnChangeClick(e) {
   if (e.currentTarget.id === 'pagination-button-next') {
-    PaginationAPI.currentPageIncreaseByOne();
+    PaginationAPI.changePageByOne(true);
   } else {
-    PaginationAPI.currentPageReduceByOne();
+    PaginationAPI.changePageByOne(false);
   }
 
   await renderGalleryByPage();

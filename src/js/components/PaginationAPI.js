@@ -16,20 +16,9 @@ class PaginationAPI {
     'pagination-button-previous'
   );
 
-  static currentPageIncreaseByOne() {
-    if (this.currentPage === this.totalPages) {
-      return;
-    }
-
-    this.currentPage += 1;
-  }
-
-  static currentPageReduceByOne() {
-    if (this.currentPage === 1) {
-      return;
-    }
-
-    this.currentPage -= 1;
+  static changePageByOne(isIncrementing) {
+    const deltaPage = isIncrementing ? 1 : -1;
+    this.currentPage += deltaPage;
   }
 
   static updateCurrentPage(newCurrentPage) {

@@ -11,8 +11,13 @@
         border-radius: 10px;
         
         background-color: rgba(getColorFromPalette('primary', 'dark'), 0.65);
-        
-        @include mediaUpTo('tablet') {
+
+        @include mediaUpTo('mobile') {
+            max-width: 460px;
+            margin: 0 20px;
+        }
+
+        @include mediaInBetween('mobile', 'tablet') {
             width: 420px;
         }
 

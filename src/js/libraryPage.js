@@ -3,14 +3,7 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
-import {
-  renderPagination,
-  paginationNextBtn,
-  paginationPreviousBtn,
-  paginationPagesList,
-  pagination,
-  onWindowResize,
-} from './components/pagination';
+import { PaginationAPI } from './components/PaginationAPI';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
 const MOVIE_INFO = {
