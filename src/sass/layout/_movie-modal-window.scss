@@ -236,7 +236,13 @@
 
 td {
   vertical-align: text-top;
+
+  @include mediaUpTo('tablet') {
+    width: 120px;
+  }
+
   @include mediaInBetween('tablet', 'desktop') {
+    width: 100px;
   }
 }
 
@@ -266,6 +272,7 @@ td {
 
 .modal__characteristic-genre {
   margin-bottom: 0;
+  width: 150px;
 }
 
 .modal__characteristic-title,
