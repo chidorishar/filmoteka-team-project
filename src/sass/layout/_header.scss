@@ -72,6 +72,7 @@
 .nav-header__item {
   position: relative;
   margin-left: 40px;
+  margin-right: 40px
 }
 
 .nav-header__link {
@@ -85,7 +86,7 @@
   transition: 250ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   &:hover,
-  &:focus{
+  &:focus {
     color: getColorFromPalette('secondary', 'orange');
   }
 }
@@ -99,6 +100,10 @@
   color: getColorFromPalette('controls', 'accent');
   background-color: getColorFromPalette('controls', 'accent');
   height: 3px;
+}
+
+#library {
+  display: none;
 }
 
 .search-form {
