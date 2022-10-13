@@ -4,6 +4,7 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
+import { addNotification } from './components/notification';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
   renderPagination,
@@ -62,9 +63,10 @@ let unsuccessfulSearchEl = null;
       '#movie-modal-buttons-wrapper',
       galleryAPI
     );
+    addNotification("Showing week's top movies...", false, 3000);
   } catch (error) {
     document.querySelector('.loader').style.display = 'none';
-    console.log(error.message);
+    addNotification('Something went wrong! Here is the log: ' + error.message);
   }
 })();
 
@@ -85,6 +87,7 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
+    //user's input is empty string and user's last search was successful, then we show week's top movies
     if (!searchingMovieName) {
       const { results: moviesData, total_pages: totalPages } =
         await tmdbAPI.getTopMovies();
@@ -93,13 +96,17 @@ async function onFormSubmit(ev) {
       pagination.currentPage = 1;
       pagination.moviesName = null;
 
+      addNotification("Showing week's top movies...", false, 3000);
       galleryAPI.renderMoviesCards(moviesData);
       renderPagination();
       return;
     }
 
-    const { results: moviesData, total_pages: totalPages } =
-      await tmdbAPI.getMoviesByName(searchingMovieName);
+    const {
+      results: moviesData,
+      total_pages: totalPages,
+      total_results: totalResults,
+    } = await tmdbAPI.getMoviesByName(searchingMovieName);
 
     pagination.totalPages = totalPages;
     pagination.currentPage = 1;
@@ -111,10 +118,15 @@ async function onFormSubmit(ev) {
 
     pagination.moviesName = searchingMovieName;
 
+    addNotification(
+      `We found ${totalResults} movies from your query`,
+      false,
+      3000
+    );
     galleryAPI.renderMoviesCards(moviesData);
     renderPagination();
   } catch (error) {
-    console.log(error.message);
+    addNotification('Something went wrong! Here is the log: ' + error.message);
   }
 }
 
@@ -130,7 +142,9 @@ async function renderGalleryByPage() {
 
       galleryAPI.renderMoviesCards(moviesData);
     } catch (error) {
-      console.log(error.message);
+      addNotification(
+        'Something went wrong! Here is the log: ' + error.message
+      );
     }
     return;
   }
@@ -140,7 +154,7 @@ async function renderGalleryByPage() {
 
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    console.log(error.message);
+    addNotification('Something went wrong! Here is the log: ' + error.message);
   }
 }
 
