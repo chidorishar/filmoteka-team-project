@@ -150,8 +150,12 @@
   justify-content: center;
   position: absolute;
   z-index: 2000;
-  right: 0;
-  border-radius: 5px;
+  padding: 10px 10px;
+  font-size: 24px;
+  font-weight: 700;
+  right: 5;
+  top: 0;
+  background-color: transparent;
   border: none;
 }
 .btn-auth {
