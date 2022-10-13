@@ -1,4 +1,4 @@
-const NOTIFICATION_DELAY = 3000;
+const NOTIFICATION_DELAY = 10000;
 let timeoutId = null;
 
 const notificationEl = document.querySelector('p[js-alert]');
@@ -7,13 +7,15 @@ notificationEl.addEventListener('click', onNotificationClick);
 // showNotification();
 
 function onNotificationClick() {
+  console.log('click');
   hideNotification();
   clearInterval(timeoutId);
 }
 
-function showNotification() {
+function showNotification(text = '', isAlert = false) {
   notificationEl.classList.add('notification-is-visible');
-  notificationEl.textContent = 'Ось що нам вдалось найти';
+  if (isAlert) notificationEl.classList.add('notification--alert');
+  notificationEl.textContent = text;
   timeoutId = setInterval(() => {
     hideNotification();
   }, NOTIFICATION_DELAY);
@@ -21,4 +23,5 @@ function showNotification() {
 
 function hideNotification() {
   notificationEl.classList.remove('notification-is-visible');
+  notificationEl.classList.remove('notification--alert');
 }
