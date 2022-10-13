@@ -1,0 +1,42 @@
+.btn {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  padding: 14px 36px 12px;
+
+  font-size: 12px;
+  line-height: 16px;
+
+  text-transform: uppercase;
+
+  color: getColorFromPalette('primary', 'light');
+
+  border: 1px solid getColorFromPalette('primary', 'light');
+  background-color: transparent;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: getColorFromPalette('modal-buttons', 'hover-queue-btn');
+    color: getColorFromPalette('primary', 'dark');
+    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'hover-queue-btn'));
+  }
+  &:focus {
+    background-color: getColorFromPalette('modal-buttons', 'focus-queue-btn');
+    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'focus-queue-btn'));
+  }
+}
+
+.btn-active {
+  background: getColorFromPalette('secondary', 'orange');
+  box-shadow: 0px 8px 43px getColorFromPalette('secondary', 'orange-shadow');
+  border: none;
+
+  &:hover {
+    background-color: getColorFromPalette('modal-buttons', 'hover-watched-btn');
+    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'hover-watched-btn'));
+  }
+  &:focus {
+    background-color: getColorFromPalette('modal-buttons', 'focus-watched-btn');
+    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'focus-watched-btn'));
+  }
+}

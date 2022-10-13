@@ -1,0 +1,11 @@
+@keyframes loader {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  20% {
+    transform: scale(0.9);
+  }
+}
