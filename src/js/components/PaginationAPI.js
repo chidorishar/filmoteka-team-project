@@ -8,7 +8,6 @@ class PaginationAPI {
 
   static currentPage = 1;
   static totalPages = null;
-  static moviesName = null;
 
   static paginationPagesList = document.getElementById('pagination-pages');
   static paginationNextBtn = document.getElementById('pagination-button-next');

@@ -13,6 +13,7 @@ let resizeObserver = null;
 let moviesData = null;
 let tmdbAPI = null;
 export let galleryAPI = null;
+let moviesName = null;
 
 let unsuccessfulSearchEl = null;
 
@@ -97,7 +98,7 @@ async function onFormSubmit(ev) {
 
       PaginationAPI.totalPages = totalPages;
       PaginationAPI.currentPage = 1;
-      PaginationAPI.moviesName = null;
+      moviesName = null;
 
       galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.renderPagination();
@@ -115,7 +116,7 @@ async function onFormSubmit(ev) {
       return;
     }
 
-    PaginationAPI.moviesName = searchingMovieName;
+    moviesName = searchingMovieName;
 
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
@@ -125,12 +126,12 @@ async function onFormSubmit(ev) {
 }
 
 async function renderGalleryByPage() {
-  if (PaginationAPI.moviesName) {
+  if (moviesName) {
     try {
       moviesData = (
         await tmdbAPI.getMoviesByNameFromPage(
           PaginationAPI.currentPage,
-          PaginationAPI.moviesName
+          moviesName
         )
       ).results;
 
