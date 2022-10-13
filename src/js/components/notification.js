@@ -1,27 +1,56 @@
-const NOTIFICATION_DELAY = 10000;
-let timeoutId = null;
+const NOTIFICATION_HIDE_DELAY = 10000;
+const DELETE_NOTIFICATION_EL_DELAY = 250;
+let numberOfMessages = 0;
+const notifTimeoutsIds = {};
 
-const notificationEl = document.querySelector('p[js-alert]');
-notificationEl.addEventListener('click', onNotificationClick);
+const notifListEl = document.querySelector('.notif-list');
+notifListEl.addEventListener('click', onNotificationClick);
 
-// showNotification();
+function onNotificationClick(e) {
+  if (e.target.nodeName !== 'P') return;
 
-function onNotificationClick() {
-  console.log('click');
-  hideNotification();
-  clearInterval(timeoutId);
+  hideNotification(e.target.dataset.notifId);
 }
 
-function showNotification(text = '', isAlert = false) {
-  notificationEl.classList.add('notification-is-visible');
-  if (isAlert) notificationEl.classList.add('notification--alert');
-  notificationEl.textContent = text;
-  timeoutId = setInterval(() => {
-    hideNotification();
-  }, NOTIFICATION_DELAY);
+export function addNotification(
+  text = '',
+  isAlert = false,
+  visibleDuration = NOTIFICATION_HIDE_DELAY
+) {
+  if (numberOfMessages > 100) numberOfMessages = 0;
+  numberOfMessages++;
+
+  //render markup
+  // prettier-ignore
+  const id = numberOfMessages;
+  const markup = `
+    <li class="notif-list__item">
+      <p class="
+          notif-list__text
+          ${isAlert ? 'notif-list__text--alert' : ''}
+          notif-list__text--is-visible" 
+        data-notif-id=${id}>
+        ${text}
+      </p>
+    </li>
+  `;
+  notifListEl.insertAdjacentHTML('beforeend', markup);
+
+  //hide notification after timeout
+  notifTimeoutsIds['' + id] = setTimeout(() => {
+    hideNotification(id);
+  }, visibleDuration);
+
+  return id;
 }
 
-function hideNotification() {
-  notificationEl.classList.remove('notification-is-visible');
-  notificationEl.classList.remove('notification--alert');
+export function hideNotification(id) {
+  clearInterval(notifTimeoutsIds['' + id]);
+  delete notifTimeoutsIds['' + id];
+
+  const notificationEl = document.querySelector(`p[data-notif-id="${id}"]`);
+  notificationEl.classList.remove('notif-list__text--is-visible');
+  setTimeout(() => {
+    notificationEl.closest('li').remove();
+  }, DELETE_NOTIFICATION_EL_DELAY);
 }
