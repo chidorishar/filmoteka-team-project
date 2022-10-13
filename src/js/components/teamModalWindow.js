@@ -11,6 +11,7 @@ let isShow = false;
   refs.openModalLink.addEventListener('click', onOpenModalLinkClick);
   refs.closeModalBtn.addEventListener('click', toggleModal);
   refs.modal.addEventListener('click', onBackdropClick);
+  refs.modal.removeAttribute('style');
 })();
 
 function onOpenModalLinkClick(event) {
@@ -27,6 +28,7 @@ function toggleModal() {
     : document.body.addEventListener('keydown', onKeyDown);
   isShow = !isShow;
 }
+
 function onBackdropClick(event) {
   if (event.target != event.currentTarget) {
     return;
@@ -35,5 +37,5 @@ function onBackdropClick(event) {
 }
 
 function onKeyDown(event) {
-  event.code === 'Escape' ? toggleModal() : none;
+  event.code === 'Escape' ? toggleModal() : null;
 }

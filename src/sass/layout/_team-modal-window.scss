@@ -35,13 +35,14 @@
   transform: translate(-50%, -50%) scale(1);
 
   transition: transform 0.8s ease,
-  createTransitionFor('height' 'width' 'max-height' 'max-width');
+    createTransitionFor('height' 'width' 'max-height' 'max-width');
   overflow-y: auto;
 
   @include mediaUpTo('tablet') {
     min-width: 280px;
     max-width: 420px;
     max-height: 95vh;
+    width: 90vw;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -121,6 +122,7 @@
   align-items: center;
   margin: 0 auto;
   margin-bottom: 30px;
+  background-color: #f7f5ec;
   width: 230px;
   border-radius: 5px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
@@ -240,7 +242,7 @@
   justify-content: center;
   align-items: center;
   width: 55px;
-  height: 55px; 
+  height: 55px;
   border-radius: 50%;
   transition: background-color 0.3s ease 0s;
   color: getColorFromPalette('primary', 'light');
@@ -260,4 +262,3 @@
 .link-social:focus {
   background-color: getColorFromPalette('secondary', 'orange');
 }
-

@@ -15,49 +15,63 @@ export class GalleryAPI {
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
   }
 
+  addOnCardClickCallback(cb) {
+    this.#rootEl.addEventListener('click', cb);
+  }
+
+  removeOnCardClickCallback(cb) {
+    this.#rootEl.removeEventListener('click', cb);
+  }
+
   renderMoviesCards(moviesData) {
     this.#totalImages = moviesData.length;
     this.#currentMoviesData = moviesData;
-    this.#rootEl.innerHTML = moviesData.reduce(
-      (acc, movieData) => (acc += this.#createMovieCardMarkup(movieData)),
-      ''
-    );
+    this.#rootEl.innerHTML = moviesData.reduce((acc, movieData, indx, arr) => {
+      return (acc += this.#createMovieCardMarkup(
+        movieData,
+        arr[indx - 1]?.id,
+        arr[indx + 1]?.id
+      ));
+    }, '');
     this.#trackImagesLoadingEnd();
   }
 
-  #createMovieCardMarkup({
-    poster_path,
-    title,
-    name,
-    genre_ids,
-    vote_average,
-    release_date,
-    first_air_date,
-    id,
-  }) {
+  #createMovieCardMarkup(
+    {
+      poster_path,
+      title,
+      name,
+      genre_ids,
+      vote_average,
+      release_date,
+      first_air_date,
+      id,
+    },
+    prevMovieID,
+    nextMovieID
+  ) {
     const releaseDate = (release_date ?? first_air_date)?.slice(0, 4) ?? '';
-    const rating = Number(vote_average).toFixed(1);
+    const rating = vote_average ? Number(vote_average).toFixed(1) : 'N/D';
     let genresStr = this.#parseIDsToGenresString(genre_ids);
 
     // prettier-ignore
     const posterEl = poster_path
-      ? 
-      `<img
+      ? `<img
         class="movie-card__img"
         src="${this.#pathToPoster}w500${poster_path}"
         alt=""
       />`
-      : 
-      `<span class="movie-card__poster-placeholder">
+      : `<span class="movie-card__poster-placeholder">
         <span class="movie-card__poster-placeholder--title">
-          ${title}
+          ${title ?? name}
         </span>has no poster
       </span>`;
 
     // prettier-ignore
     const resMarkup =
       `<li class="movie-card">
-        <a class="movie-card__link" href="/" data-movie-id="${id}">
+        <a class="movie-card__link" href="/" data-movie-id="${id}" 
+          data-prev-movie-id="${prevMovieID ?? '' }" data-next-movie-id="${ nextMovieID ?? '' }">
           <div class="movie-card__img-thumb ${poster_path ? '' : "movie-card__img-thumb--no-poster"}">
             ${posterEl}
           </div>
@@ -80,7 +94,7 @@ export class GalleryAPI {
   }
 
   #parseIDsToGenresString(IDs) {
-    if (!IDs.length) return '';
+    if (!IDs?.length) return '';
 
     const isTooManyIDs = IDs.length > 2;
     const ids = isTooManyIDs ? IDs.slice(0, 2) : IDs;
