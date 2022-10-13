@@ -5,19 +5,9 @@ import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
 import { PaginationAPI } from './components/pagination';
+import { readFromLocalStorage } from './utils/WebStorageMethods';
 
-PaginationAPI.paginationNextBtn.addEventListener(
-  'click',
-  onPaginationBtnChangeClick
-);
-PaginationAPI.paginationPreviousBtn.addEventListener(
-  'click',
-  onPaginationBtnChangeClick
-);
-PaginationAPI.paginationPagesList.addEventListener(
-  'click',
-  onPaginationListBtnNumberClick
-);
+const GENRES_DATA_LS_KEY = 'genres-data';
 
 let resizeObserver = null;
 let moviesData = null;
@@ -32,6 +22,8 @@ let unsuccessfulSearchEl = null;
     tmdbAPI = new TMDBAPI();
     LDStorageAPI.init();
     await BackendConfigStorage.init();
+    const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
+
     const { results: moviesData, total_pages: totalPages } =
       await tmdbAPI.getTopMovies();
     PaginationAPI.totalPages = totalPages;
@@ -42,6 +34,24 @@ let unsuccessfulSearchEl = null;
     searchFormEl.addEventListener('submit', onFormSubmit);
     //get array of IDs and genres
     galleryAPI = new GalleryAPI('#movies-wrapper');
+
+    //init pagination variables
+    PaginationAPI.paginationNextBtn.addEventListener(
+      'click',
+      onPaginationBtnChangeClick
+    );
+    PaginationAPI.paginationPreviousBtn.addEventListener(
+      'click',
+      onPaginationBtnChangeClick
+    );
+    PaginationAPI.paginationPagesList.addEventListener(
+      'click',
+      onPaginationListBtnNumberClick
+    );
+    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
+    resizeObserver.observe(document.body);
+
+    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
 
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
@@ -59,9 +69,14 @@ let unsuccessfulSearchEl = null;
     resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
   } catch (error) {
+    document.querySelector('.loader').style.display = 'none';
     console.log(error.message);
   }
 })();
+
+function onGalleryLoadedCriticalImages() {
+  document.querySelector('.loader').style.display = 'none';
+}
 
 async function onFormSubmit(ev) {
   ev.preventDefault();
