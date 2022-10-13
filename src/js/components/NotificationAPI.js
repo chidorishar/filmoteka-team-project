@@ -56,6 +56,8 @@ export class NotificationAPI {
   }
 
   static clearNotification = id => {
+    if (!this.#notifTimeoutsIds['' + id]) return;
+
     clearInterval(this.#notifTimeoutsIds['' + id]);
     delete this.#notifTimeoutsIds['' + id];
 
