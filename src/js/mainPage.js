@@ -6,7 +6,6 @@ import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
 import { PaginationAPI } from './components/PaginationAPI';
 import { addNotification } from './components/notification';
-import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const MODE = { TOP: 'top', NAME: 'name' };
 let currentMode = MODE.TOP;
