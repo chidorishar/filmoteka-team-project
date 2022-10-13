@@ -23,14 +23,11 @@ export class NotificationAPI {
     this.clearNotification(e.target.dataset.notifId);
   };
 
-  static addNotification(
-    text = '',
-    isAlert = false,
-    visibleDuration = this.#NOTIFICATION_HIDE_DELAY
-  ) {
+  static addNotification(text = '', isAlert = false, visibleDuration = null) {
     if (this.#numberOfMessages > 100) this.#numberOfMessages = 0;
     this.#numberOfMessages++;
 
+    visibleDuration ??= this.#NOTIFICATION_HIDE_DELAY;
     //render markup
     const id = this.#numberOfMessages;
     // prettier-ignore
@@ -44,7 +41,7 @@ export class NotificationAPI {
         ${text}
       </p>
     </li>
-  `;
+    `;
     this.#notifListEl.insertAdjacentHTML('beforeend', markup);
 
     //hide notification after timeout
