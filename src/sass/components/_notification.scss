@@ -4,8 +4,12 @@
   font-size: 14px;
 
   position: absolute;
-  top: 82px;
+  top: 150px;
   right: 10;
+
+  @include mediaOver('desktop') {
+    top: 82px;
+  }
 }
 
 .notif-list__item {
@@ -17,7 +21,7 @@
 .notif-list__text {
   transform: translateX(-100%);
   padding: 20px;
-  width: 300px;
+  width: 200px;
   min-height: 50px;
 
   opacity: 0;
@@ -27,6 +31,10 @@
   border-radius: 8px;
 
   transition: createTransitionFor('opacity' 'transform');
+
+  @include mediaOver('tablet') {
+    width: 300px;
+  }
 
   &:hover,
   &:focus {
