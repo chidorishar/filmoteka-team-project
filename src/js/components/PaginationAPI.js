@@ -37,16 +37,6 @@ class PaginationAPI {
   static #renderPaginationMarkup() {
     this.#totalMarkup = '';
 
-    // if we somehow get 0 total pages, then we just hide our pagination
-    if (this.totalPages === 0) {
-      document
-        .querySelector('.pagination-section')
-        .setAttribute('style', 'display: none');
-      return;
-    } else {
-      document.querySelector('.pagination-section').removeAttribute('style');
-    }
-
     // if our active page is the last one of the whole pagination, then we disable it.
     // otherwise, we enable it.
     if (this.currentPage === this.totalPages) {
@@ -81,21 +71,31 @@ class PaginationAPI {
 
     // If our active page is less or equal than 5,
     // then we create mark up with 5 first elements in the pagination bar
-    if (this.currentPage <= 5) {
+    if (this.currentPage <= 4) {
       this.#createStartingMarkup();
+      return;
+    }
+
+    if (this.currentPage === 5) {
+      this.#createMiddleActivePagesMarkup();
       return;
     }
 
     // if our active page is equal to the last five elements of total pagination pages,
     // then we create markup for the last five elements of the pagination bar
-    if (this.totalPages - 4 <= this.currentPage && !(this.currentPage <= 5)) {
+    if (this.totalPages - 3 <= this.currentPage && !(this.currentPage <= 5)) {
       this.#createEndingMarkup();
+      return;
+    }
+
+    if (this.currentPage === this.totalPages - 4) {
+      this.#createMiddleActivePagesMarkup();
       return;
     }
 
     // if our active page is in the middle of pagination (after 5 and before the last five elements),
     // then we create markup of 5 elements with the active in the middle
-    if (this.currentPage >= 6 && this.currentPage <= this.totalPages - 5) {
+    if (this.currentPage >= 6 && this.currentPage <= this.totalPages - 4) {
       this.#createMiddleActivePagesMarkup();
       return;
     }
@@ -145,17 +145,27 @@ class PaginationAPI {
       return;
     }
 
-    if (this.currentPage <= 3) {
+    if (this.currentPage <= 2) {
       this.#createMobileStartingMarkup();
       return;
     }
 
-    if (this.totalPages - 2 <= this.currentPage && !(this.currentPage <= 3)) {
+    if (this.currentPage === 3) {
+      this.#createMobileMiddleActivePageMarkup();
+      return;
+    }
+
+    if (this.totalPages - 1 <= this.currentPage && !(this.currentPage <= 3)) {
       this.#createMobileEndingMarkup();
       return;
     }
 
-    if (this.currentPage >= 4 && this.currentPage <= this.totalPages - 3) {
+    if (this.currentPage === this.totalPages - 2) {
+      this.#createMobileMiddleActivePageMarkup();
+      return;
+    }
+
+    if (this.currentPage >= 4 && this.currentPage <= this.totalPages - 2) {
       this.#createMobileMiddleActivePageMarkup();
       return;
     }
