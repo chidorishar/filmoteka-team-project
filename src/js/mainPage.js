@@ -4,6 +4,7 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
+import { addNotification } from './components/notification';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
   renderPagination,
@@ -14,11 +15,6 @@ import {
   onWindowResize,
 } from './components/pagination';
 
-paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
-paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
-paginationPagesList.addEventListener('click', onPaginationListBtnNumberClick);
-window.addEventListener('resize', onWindowResize);
-
 const GENRES_DATA_LS_KEY = 'genres-data';
 
 let moviesData = null;
@@ -26,6 +22,57 @@ let tmdbAPI = null;
 export let galleryAPI = null;
 
 let unsuccessfulSearchEl = null;
+
+// MAIN
+(async () => {
+  try {
+    tmdbAPI = new TMDBAPI();
+    LDStorageAPI.init();
+    await BackendConfigStorage.init();
+    const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
+    const { results: moviesData, total_pages: totalPages } =
+      await tmdbAPI.getTopMovies();
+    pagination.totalPages = totalPages;
+
+    //movie search form
+    unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
+    const searchFormEl = document.querySelector('#movie-search-form');
+    searchFormEl.addEventListener('submit', onFormSubmit);
+    //get array of IDs and genres
+    galleryAPI = new GalleryAPI('#movies-wrapper');
+
+    //init pagination variables
+    paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
+    paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
+    paginationPagesList.addEventListener(
+      'click',
+      onPaginationListBtnNumberClick
+    );
+    window.addEventListener('resize', onWindowResize);
+
+    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
+
+    //render movies and pagination as well
+    galleryAPI.renderMoviesCards(moviesData);
+    renderPagination();
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
+    addNotification("Showing week's top movies...", false, 3000);
+  } catch (error) {
+    document.querySelector('.loader').style.display = 'none';
+    addNotification('Something went wrong! Here is the log: ' + error.message);
+  }
+})();
+
+function onGalleryLoadedCriticalImages() {
+  document.querySelector('.loader').style.display = 'none';
+}
 
 async function onFormSubmit(ev) {
   ev.preventDefault();
@@ -40,6 +87,7 @@ async function onFormSubmit(ev) {
       unsuccessfulSearchEl.setAttribute('style', 'display: none');
     }
 
+    //user's input is empty string and user's last search was successful, then we show week's top movies
     if (!searchingMovieName) {
       const { results: moviesData, total_pages: totalPages } =
         await tmdbAPI.getTopMovies();
@@ -48,13 +96,17 @@ async function onFormSubmit(ev) {
       pagination.currentPage = 1;
       pagination.moviesName = null;
 
+      addNotification("Showing week's top movies...", false, 3000);
       galleryAPI.renderMoviesCards(moviesData);
       renderPagination();
       return;
     }
 
-    const { results: moviesData, total_pages: totalPages } =
-      await tmdbAPI.getMoviesByName(searchingMovieName);
+    const {
+      results: moviesData,
+      total_pages: totalPages,
+      total_results: totalResults,
+    } = await tmdbAPI.getMoviesByName(searchingMovieName);
 
     pagination.totalPages = totalPages;
     pagination.currentPage = 1;
@@ -66,10 +118,15 @@ async function onFormSubmit(ev) {
 
     pagination.moviesName = searchingMovieName;
 
+    addNotification(
+      `We found ${totalResults} movies from your query`,
+      false,
+      3000
+    );
     galleryAPI.renderMoviesCards(moviesData);
     renderPagination();
   } catch (error) {
-    console.log(error.message);
+    addNotification('Something went wrong! Here is the log: ' + error.message);
   }
 }
 
@@ -85,7 +142,9 @@ async function renderGalleryByPage() {
 
       galleryAPI.renderMoviesCards(moviesData);
     } catch (error) {
-      console.log(error.message);
+      addNotification(
+        'Something went wrong! Here is the log: ' + error.message
+      );
     }
     return;
   }
@@ -95,7 +154,7 @@ async function renderGalleryByPage() {
 
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    console.log(error.message);
+    addNotification('Something went wrong! Here is the log: ' + error.message);
   }
 }
 
@@ -121,37 +180,3 @@ async function onPaginationListBtnNumberClick(e) {
 
   renderPagination();
 }
-
-// MAIN
-(async () => {
-  try {
-    tmdbAPI = new TMDBAPI();
-    LDStorageAPI.init();
-    await BackendConfigStorage.init();
-    const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
-    const { results: moviesData, total_pages: totalPages } =
-      await tmdbAPI.getTopMovies();
-    pagination.totalPages = totalPages;
-
-    //movie search form
-    unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
-    const searchFormEl = document.querySelector('#movie-search-form');
-    searchFormEl.addEventListener('submit', onFormSubmit);
-    //get array of IDs and genres
-    galleryAPI = new GalleryAPI('#movies-wrapper');
-
-    //render movies and pagination as well
-    galleryAPI.renderMoviesCards(moviesData);
-    renderPagination();
-    const mmh = new MovieModalHandler(
-      '#watched-btn',
-      '#queue-btn',
-      '#movies-modal-window',
-      '.modal-close',
-      '#movie-modal-buttons-wrapper',
-      galleryAPI
-    );
-  } catch (error) {
-    console.log(error.message);
-  }
-})();
