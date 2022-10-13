@@ -4,7 +4,7 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
-import { addNotification } from './components/notification';
+import { NotificationAPI } from './components/NotificationAPI';
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 import {
   renderPagination,
@@ -28,6 +28,7 @@ let unsuccessfulSearchEl = null;
   try {
     tmdbAPI = new TMDBAPI();
     LDStorageAPI.init();
+    NotificationAPI.init('body');
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     const { results: moviesData, total_pages: totalPages } =
@@ -63,10 +64,17 @@ let unsuccessfulSearchEl = null;
       '#movie-modal-buttons-wrapper',
       galleryAPI
     );
-    addNotification("Showing week's top movies...", false, 3000);
+    NotificationAPI.addNotification(
+      "Showing week's top movies...",
+      false,
+      3000
+    );
   } catch (error) {
     document.querySelector('.loader').style.display = 'none';
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 })();
 
@@ -96,7 +104,11 @@ async function onFormSubmit(ev) {
       pagination.currentPage = 1;
       pagination.moviesName = null;
 
-      addNotification("Showing week's top movies...", false, 3000);
+      NotificationAPI.addNotification(
+        "Showing week's top movies...",
+        false,
+        3000
+      );
       galleryAPI.renderMoviesCards(moviesData);
       renderPagination();
       return;
@@ -118,7 +130,7 @@ async function onFormSubmit(ev) {
 
     pagination.moviesName = searchingMovieName;
 
-    addNotification(
+    NotificationAPI.addNotification(
       `We found ${totalResults} movies from your query`,
       false,
       3000
@@ -126,7 +138,10 @@ async function onFormSubmit(ev) {
     galleryAPI.renderMoviesCards(moviesData);
     renderPagination();
   } catch (error) {
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 }
 
@@ -142,8 +157,9 @@ async function renderGalleryByPage() {
 
       galleryAPI.renderMoviesCards(moviesData);
     } catch (error) {
-      addNotification(
-        'Something went wrong! Here is the log: ' + error.message
+      NotificationAPI.addNotification(
+        'Something went wrong! Here is the log: ' + error.message,
+        true
       );
     }
     return;
@@ -154,7 +170,10 @@ async function renderGalleryByPage() {
 
     galleryAPI.renderMoviesCards(moviesData);
   } catch (error) {
-    addNotification('Something went wrong! Here is the log: ' + error.message);
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 }
 

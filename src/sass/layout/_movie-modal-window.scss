@@ -52,20 +52,25 @@
   @include mediaUpTo('tablet') {
     min-width: 280px;
     max-width: getBreakpointValue('mobile');
-    max-height: 700px;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
     width: 704px;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
     padding-top: 40px;
+    height: 550px;
+    max-height: 95%;
   }
 
   @include mediaOver('desktop') {
     width: 806px;
+    max-width: 100%;
     display: flex;
     flex-direction: row;
+    height: 560px;
+    max-height: 100%;
   }
 }
 
@@ -135,12 +140,16 @@
   color: rgba(getColorFromPalette('background', 'additional'), 0.75);
   background-color: rgba(getColorFromPalette('primary', 'dark'), 0.45);
 
-  transition: createTransitionFor('color' 'opacity');
+  transition: createTransitionFor(
+    'color' 'opacity' 'box-shadow' 'background-color'
+  );
   user-select: none;
 
   &:hover,
   &:focus {
+    cursor: pointer;
     color: getColorFromPalette('secondary', 'orange');
+    background-color: rgba(getColorFromPalette('primary', 'dark'), 0.65);
   }
 
   &#prev-movie-btn {
@@ -148,6 +157,11 @@
     border-bottom-right-radius: $bordersRadius;
 
     box-shadow: 5px 2px 10px $shadowColor;
+
+    &:hover,
+    &:focus {
+      box-shadow: 2px 2px 4px #0003;
+    }
   }
 
   &#next-movie-btn {
@@ -155,6 +169,11 @@
     border-bottom-left-radius: $bordersRadius;
 
     box-shadow: -4px 3px 10px 0px $shadowColor;
+
+    &:hover,
+    &:focus {
+      box-shadow: -2px 2px 4px #0003;
+    }
   }
 
   &[disabled='true'] {
@@ -195,8 +214,8 @@
   }
 
   @include mediaOver('desktop') {
-    width: 375px;
     margin-bottom: 0;
+    min-width: 375px;
   }
 }
 
@@ -213,11 +232,31 @@
   margin-bottom: 20px;
   font-size: 20px;
   line-height: 23px;
+  height: 47px;
+  overflow: auto;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    height: 50px;
+    overflow: auto;
+  }
 
   @include mediaOver('desktop') {
     font-size: 30px;
     line-height: 35px;
     text-transform: uppercase;
+    height: 70px;
+  }
+}
+
+td {
+  vertical-align: text-top;
+
+  @include mediaUpTo('tablet') {
+    width: 120px;
+  }
+
+  @include mediaInBetween('tablet', 'desktop') {
+    width: 100px;
   }
 }
 
@@ -247,6 +286,28 @@
 
 .modal__characteristic-genre {
   margin-bottom: 0;
+  width: 150px;
+}
+
+.modal__characteristic-title,
+.modal__characteristic-genre {
+  @include mediaInBetween('tablet', 'desktop') {
+    height: 30px;
+    overflow: scroll;
+    border: 0;
+  }
+
+  .block-style {
+    min-height: 30px;
+    display: block;
+    overflow: scroll;
+    margin: auto;
+  }
+
+  @include mediaOver('desktop') {
+    height: 32px;
+    overflow: scroll;
+  }
 }
 
 .modal__characteristic-data {
@@ -269,6 +330,8 @@
   font-size: 12px;
   line-height: 14px;
   color: getColorFromPalette('modal', 'color-characteristics-text');
+  height: 30px;
+  overflow: scroll;
 }
 
 .modal__about {
@@ -288,6 +351,7 @@
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
+  height: 140px;
 
   margin-bottom: 20px;
   max-height: 120px;
@@ -299,7 +363,7 @@
 
   @include mediaOver('desktop') {
     line-height: 20px;
-
+    min-width: 335px;
     max-width: 391px;
     max-height: 260px;
   }

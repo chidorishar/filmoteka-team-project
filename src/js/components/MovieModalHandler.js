@@ -126,11 +126,13 @@ export class MovieModalHandler {
     refs.moviePoster.src = `${posterFullPath}`;
     refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
     refs.movieAverageRating.textContent = `${fixedAverageRating}`;
-    refs.movieRating.textContent = `${votes}`;
+    refs.movieRating.textContent = `${votes ? votes : 'N/D'}`;
     refs.moviePopularity.textContent = `${fixedPopularity}`;
     refs.movieTitle.textContent = `${movieTitle ?? movieName}`;
-    refs.movieGenre.textContent = `${movieGenresString}`;
-    refs.movieAbout.textContent = `${overview}`;
+    refs.movieGenre.textContent = `${
+      movieGenresString ? movieGenresString : 'N/D'
+    }`;
+    refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
     this.#updateMoviesNavButtons();
