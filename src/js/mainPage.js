@@ -69,6 +69,7 @@ let unsuccessfulSearchEl = null;
       3000
     );
   } catch (error) {
+    console.log(error);
     document.querySelector('.loader').style.display = 'none';
     NotificationAPI.addNotification(
       'Something went wrong! Here is the log: ' + error.message,

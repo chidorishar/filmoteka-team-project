@@ -10,6 +10,8 @@ export class NotificationAPI {
     this.#notificationListEl = null;
   }
 
+  constructor() {}
+
   static init(rootElSelector) {
     //adding root el for messages
     const markup = `<ul class="notif-list"></ul>`;
@@ -30,7 +32,11 @@ export class NotificationAPI {
     this.clearNotification(e.target.dataset.notifId);
   };
 
-  static addNotification(text = '', isAlert = false, visibleDuration = null) {
+  static addNotification = (
+    text = '',
+    isAlert = false,
+    visibleDuration = null
+  ) => {
     if (this.#numberOfMessages > 100) this.#numberOfMessages = 0;
     this.#numberOfMessages++;
 
@@ -57,7 +63,7 @@ export class NotificationAPI {
     }, visibleDuration);
 
     return id;
-  }
+  };
 
   static clearNotification = id => {
     if (!this.#notifTimeoutsIds['' + id]) return;
