@@ -70,7 +70,7 @@ let unsuccessfulSearchEl = null;
     );
   } catch (error) {
     console.log(error);
-    document.querySelector('.loader').style.display = 'none';
+    document.querySelector('.loader--critical').style.display = 'none';
     NotificationAPI.addNotification(
       'Something went wrong! Here is the log: ' + error.message,
       true
