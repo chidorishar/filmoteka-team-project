@@ -4,7 +4,13 @@ export class NotificationAPI {
   static #numberOfMessages = 0;
   static #notifTimeoutsIds = {};
 
-  static #notifListEl = null;
+  static #notificationListEl;
+
+  static {
+    this.#notificationListEl = null;
+  }
+
+  constructor() {}
 
   static init(rootElSelector) {
     //adding root el for messages
@@ -13,8 +19,11 @@ export class NotificationAPI {
       .querySelector(rootElSelector)
       .insertAdjacentHTML('afterbegin', markup);
 
-    this.#notifListEl = document.querySelector('.notif-list');
-    this.#notifListEl.addEventListener('click', this.#onNotificationClick);
+    this.#notificationListEl = document.querySelector('.notif-list');
+    this.#notificationListEl.addEventListener(
+      'click',
+      this.#onNotificationClick
+    );
   }
 
   static #onNotificationClick = e => {
@@ -23,14 +32,15 @@ export class NotificationAPI {
     this.clearNotification(e.target.dataset.notifId);
   };
 
-  static addNotification(
+  static addNotification = (
     text = '',
     isAlert = false,
-    visibleDuration = this.#NOTIFICATION_HIDE_DELAY
-  ) {
+    visibleDuration = null
+  ) => {
     if (this.#numberOfMessages > 100) this.#numberOfMessages = 0;
     this.#numberOfMessages++;
 
+    visibleDuration ??= this.#NOTIFICATION_HIDE_DELAY;
     //render markup
     const id = this.#numberOfMessages;
     // prettier-ignore
@@ -44,8 +54,8 @@ export class NotificationAPI {
         ${text}
       </p>
     </li>
-  `;
-    this.#notifListEl.insertAdjacentHTML('beforeend', markup);
+    `;
+    this.#notificationListEl.insertAdjacentHTML('beforeend', markup);
 
     //hide notification after timeout
     this.#notifTimeoutsIds['' + id] = setTimeout(() => {
@@ -53,7 +63,7 @@ export class NotificationAPI {
     }, visibleDuration);
 
     return id;
-  }
+  };
 
   static clearNotification = id => {
     if (!this.#notifTimeoutsIds['' + id]) return;
