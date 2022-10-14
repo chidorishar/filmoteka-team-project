@@ -1,21 +1,16 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
-import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
-import { MovieModalHandler } from './components/MovieModalHandler';
+import { PaginationAPI } from './components/PaginationAPI';
 import { NotificationAPI } from './components/NotificationAPI';
-import { readFromLocalStorage } from './utils/WebStorageMethods';
-import {
-  renderPagination,
-  paginationNextBtn,
-  paginationPreviousBtn,
-  paginationPagesList,
-  pagination,
-  onWindowResize,
-} from './components/pagination';
 
-const GENRES_DATA_LS_KEY = 'genres-data';
+import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
 
+const MODE = { TOP: 'top', NAME: 'name' };
+let currentMode = MODE.TOP;
+
+let resizeObserver = null;
 let moviesData = null;
 let tmdbAPI = null;
 export let galleryAPI = null;
@@ -29,32 +24,40 @@ let unsuccessfulSearchEl = null;
     LDStorageAPI.init();
     NotificationAPI.init('body');
     await BackendConfigStorage.init();
-    const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
+
     const { results: moviesData, total_pages: totalPages } =
       await tmdbAPI.getTopMovies();
-    pagination.totalPages = totalPages;
+    PaginationAPI.totalPages = totalPages;
 
     //movie search form
     unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
     const searchFormEl = document.querySelector('#movie-search-form');
-    searchFormEl.addEventListener('submit', onFormSubmit);
+    searchFormEl.addEventListener('submit', onMoviesSearchSubmit);
     //get array of IDs and genres
     galleryAPI = new GalleryAPI('#movies-wrapper');
 
     //init pagination variables
-    paginationNextBtn.addEventListener('click', onPaginationBtnChangeClick);
-    paginationPreviousBtn.addEventListener('click', onPaginationBtnChangeClick);
-    paginationPagesList.addEventListener(
+    PaginationAPI.paginationNextBtn.addEventListener(
+      'click',
+      onPaginationBtnChangeClick
+    );
+    PaginationAPI.paginationPreviousBtn.addEventListener(
+      'click',
+      onPaginationBtnChangeClick
+    );
+    PaginationAPI.paginationPagesList.addEventListener(
       'click',
       onPaginationListBtnNumberClick
     );
-    window.addEventListener('resize', onWindowResize);
+
+    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
+    resizeObserver.observe(document.body);
 
     galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
 
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
-    renderPagination();
+    PaginationAPI.renderPagination();
     const mmh = new MovieModalHandler(
       '#watched-btn',
       '#queue-btn',
@@ -63,6 +66,10 @@ let unsuccessfulSearchEl = null;
       '#movie-modal-buttons-wrapper',
       galleryAPI
     );
+
+    // Added size listener for body element
+    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
+    resizeObserver.observe(document.body);
     NotificationAPI.addNotification(
       "Showing week's top movies...",
       false,
@@ -83,7 +90,7 @@ function onGalleryLoadedCriticalImages() {
   document.body.classList.remove('body-clip-overflow');
 }
 
-async function onFormSubmit(ev) {
+async function onMoviesSearchSubmit(ev) {
   ev.preventDefault();
 
   const searchingMovieName = ev.currentTarget.elements.query.value;
@@ -101,9 +108,9 @@ async function onFormSubmit(ev) {
       const { results: moviesData, total_pages: totalPages } =
         await tmdbAPI.getTopMovies();
 
-      pagination.totalPages = totalPages;
-      pagination.currentPage = 1;
-      pagination.moviesName = null;
+      PaginationAPI.totalPages = totalPages;
+      PaginationAPI.currentPage = 1;
+      currentMode = MODE.TOP;
 
       NotificationAPI.addNotification(
         "Showing week's top movies...",
@@ -111,9 +118,11 @@ async function onFormSubmit(ev) {
         3000
       );
       galleryAPI.renderMoviesCards(moviesData);
-      renderPagination();
+      PaginationAPI.renderPagination();
       return;
     }
+
+    currentMode = MODE.NAME;
 
     const {
       results: moviesData,
@@ -121,23 +130,22 @@ async function onFormSubmit(ev) {
       total_results: totalResults,
     } = await tmdbAPI.getMoviesByName(searchingMovieName);
 
-    pagination.totalPages = totalPages;
-    pagination.currentPage = 1;
+    PaginationAPI.totalPages = totalPages;
+    PaginationAPI.currentPage = 1;
 
     if (!moviesData.length) {
       unsuccessfulSearchEl.removeAttribute('style');
       return;
     }
 
-    pagination.moviesName = searchingMovieName;
-
     NotificationAPI.addNotification(
       `We found ${totalResults} movies from your query`,
       false,
       3000
     );
+
     galleryAPI.renderMoviesCards(moviesData);
-    renderPagination();
+    PaginationAPI.renderPagination();
   } catch (error) {
     NotificationAPI.addNotification(
       'Something went wrong! Here is the log: ' + error.message,
@@ -147,13 +155,10 @@ async function onFormSubmit(ev) {
 }
 
 async function renderGalleryByPage() {
-  if (pagination.moviesName) {
+  if (currentMode === MODE.NAME) {
     try {
       moviesData = (
-        await tmdbAPI.getMoviesByNameFromPage(
-          pagination.currentPage,
-          pagination.moviesName
-        )
+        await tmdbAPI.getMoviesByNameFromPage(PaginationAPI.currentPage)
       ).results;
 
       galleryAPI.renderMoviesCards(moviesData);
@@ -166,7 +171,7 @@ async function renderGalleryByPage() {
     return;
   }
   try {
-    moviesData = (await tmdbAPI.getTopMoviesFromPage(pagination.currentPage))
+    moviesData = (await tmdbAPI.getTopMoviesFromPage(PaginationAPI.currentPage))
       .results;
 
     galleryAPI.renderMoviesCards(moviesData);
@@ -180,23 +185,23 @@ async function renderGalleryByPage() {
 
 async function onPaginationBtnChangeClick(e) {
   if (e.currentTarget.id === 'pagination-button-next') {
-    pagination.currentPageIncreaseByOne();
+    PaginationAPI.changePageByOne(true);
   } else {
-    pagination.currentPageReduceByOne();
+    PaginationAPI.changePageByOne(false);
   }
 
   await renderGalleryByPage();
 
-  renderPagination();
+  PaginationAPI.renderPagination();
 }
 
 async function onPaginationListBtnNumberClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
-  if (parseInt(e.target.textContent) === pagination.currentPage) return;
+  if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
 
-  pagination.updateCurrentPage(parseInt(e.target.textContent));
+  PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
 
   await renderGalleryByPage();
 
-  renderPagination();
+  PaginationAPI.renderPagination();
 }
