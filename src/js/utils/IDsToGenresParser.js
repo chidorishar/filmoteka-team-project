@@ -16,7 +16,7 @@ export class IDsParser {
     if (!ids) return '';
     return ids
       .reduce((acc, id) => {
-        const genre = IDsParser.#findGenreByID(id);
+        const genre = this.#findGenreByID(id);
 
         return genre ? (acc += `${genre}, `) : acc;
       }, '')
