@@ -15,16 +15,27 @@
       href="./images/decorative/site-favicon.png"
     />
     <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+    /></noscript>
     <!-- CSS -->
-    <link rel="stylesheet" href="./sass/index.scss" />
+    <link
+      rel="preload"
+      href="./sass/index.scss"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="./sass/index.scss" /></noscript>
     <!-- JS -->
-    <script src="./index.js" type="module"></script>
+    <script src="./index.js" type="module" defer></script>
     <!-- CRITICAL STYLES -->
     <style type="text/css">
       @keyframes loader {
