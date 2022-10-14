@@ -5,11 +5,5 @@
   "reporters": [
     "...",
     "parcel-reporter-clean-dist"
-  ],
-  "compressors": {
-    "*.{html,css,js,svg,map}": [
-      "@parcel/compressor-gzip",
-      "@parcel/compressor-brotli"
-    ]
-  }
+  ]
 }
