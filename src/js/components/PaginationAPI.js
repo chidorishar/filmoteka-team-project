@@ -63,6 +63,9 @@ class PaginationAPI {
       this.#paginationWrapperDiv.classList.add('pagination--width-S');
       this.paginationNextBtn.classList.add('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
+
+      this.#totalMarkup += this.#firstPageMarkup;
+      return;
     } else {
       this.#paginationWrapperDiv.classList.remove('pagination--width-S');
       this.paginationNextBtn.classList.remove('pagination__btn--hidden');
