@@ -202,7 +202,11 @@ export class GalleryAPI {
     //image loading failed, show fallback instead
     const currImgThumbEl = currentImageEl.closest('.movie-card__img-thumb');
     if (e.type === 'error') {
-      currImgThumbEl.classList.add('movie-card__img-thumb--img-fallback');
+      //it checks for image loaded flag after some timeout, because sometimes we get events with "error" type for loaded images
+      setTimeout(() => {
+        if (!currentImageEl.complete)
+          currImgThumbEl?.classList.add('movie-card__img-thumb--img-fallback');
+      }, 100);
     }
   };
 
