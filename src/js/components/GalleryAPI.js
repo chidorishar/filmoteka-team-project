@@ -48,6 +48,13 @@ export class GalleryAPI {
     // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
 
+    //set constants according to device
+    if (window.matchMedia('(max-width: 1280px)').matches)
+      this.#MAX_NUM_OF_CRIT_IMAGES = 2;
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      this.#MAX_NUM_OF_CRIT_IMAGES = 1;
+      this.#NUMB_OF_IMAGES_TO_LOAD_AT_ONCE = 2;
+    }
     //reset Gallery state
     this.#numberOfCriticalImages = this.#MAX_NUM_OF_CRIT_IMAGES;
     let imgsWithPoster = 0;
