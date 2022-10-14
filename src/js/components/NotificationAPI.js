@@ -20,8 +20,8 @@ export class NotificationAPI {
       .insertAdjacentHTML('afterbegin', markup);
     console.log('after query');
 
-    console.log(this.#notifListEl);
     this.#notifListEl = document.querySelector('.notif-list');
+    console.log(this.#notifListEl);
     this.#notifListEl.addEventListener('click', this.#onNotificationClick);
     console.log('init finished');
   }

@@ -16,11 +16,11 @@ export class BackendConfigStorage {
   constructor() {}
 
   static async init() {
-    const POSTER_SS_KEY = BackendConfigStorage.#PATH_TO_POSTER_SS_KEY;
-    const GENRES_DATA_LS_KEY = BackendConfigStorage.#GENRES_DATA_LS_KEY;
-    const FETCH_MODES = BackendConfigStorage.#GET_MODE;
-    let pathToPoster = BackendConfigStorage.#pathToPoster;
-    let genresAndIDs = BackendConfigStorage.#genresAndIDs;
+    const POSTER_SS_KEY = this.#PATH_TO_POSTER_SS_KEY;
+    const GENRES_DATA_LS_KEY = this.#GENRES_DATA_LS_KEY;
+    const FETCH_MODES = this.#GET_MODE;
+    let pathToPoster = this.#pathToPoster;
+    let genresAndIDs = this.#genresAndIDs;
 
     //try to get data from storage
     pathToPoster ??= sessionStorage.getItem(POSTER_SS_KEY);
@@ -28,29 +28,25 @@ export class BackendConfigStorage {
 
     //try get data from backend
     if (!pathToPoster) {
-      pathToPoster = await BackendConfigStorage.#getDataFromBackend(
-        FETCH_MODES.PATH
-      );
+      pathToPoster = await this.#getDataFromBackend(FETCH_MODES.PATH);
       //save path to SS
       sessionStorage.setItem(POSTER_SS_KEY, pathToPoster);
     }
     if (!genresAndIDs) {
-      genresAndIDs = await BackendConfigStorage.#getDataFromBackend(
-        FETCH_MODES.GENRES_IDS
-      );
+      genresAndIDs = await this.#getDataFromBackend(FETCH_MODES.GENRES_IDS);
       //save ids to LS
       localStorage.setItem(GENRES_DATA_LS_KEY, JSON.stringify(genresAndIDs));
     }
-    BackendConfigStorage.#pathToPoster = pathToPoster;
-    BackendConfigStorage.#genresAndIDs = genresAndIDs;
+    this.#pathToPoster = pathToPoster;
+    this.#genresAndIDs = genresAndIDs;
   }
 
   static get genresAndIDs() {
-    return BackendConfigStorage.#genresAndIDs;
+    return this.#genresAndIDs;
   }
 
   static get pathToPoster() {
-    return BackendConfigStorage.#pathToPoster;
+    return this.#pathToPoster;
   }
 
   static async #getDataFromBackend(mode) {
@@ -59,10 +55,9 @@ export class BackendConfigStorage {
     try {
       //get from backend
       res =
-        mode === BackendConfigStorage.#GET_MODE.PATH
-          ? (await BackendConfigStorage.#tmdbAPI.getConfiguration()).images
-              .secure_base_url
-          : (await BackendConfigStorage.#tmdbAPI.getGenresData()).genres;
+        mode === this.#GET_MODE.PATH
+          ? (await this.#tmdbAPI.getConfiguration()).images.secure_base_url
+          : (await this.#tmdbAPI.getGenresData()).genres;
     } catch (error) {
       console.log(error.message);
     }
