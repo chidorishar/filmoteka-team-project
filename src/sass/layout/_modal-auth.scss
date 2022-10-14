@@ -9,7 +9,7 @@
   left: 0;
   background-color: rgba($color: #792727, $alpha: 0.7);
   width: 100vw;
-  height: 100%;
+  height: 100vh;
   transition: 0.5s;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .block__title {
-  color: #fff;
+  color: #604f4f;
 }
 
 .block__item {
@@ -115,7 +115,7 @@
 .form__title {
   font-size: 1.5rem;
   font-weight: 500;
-  color: #333;
+  color: #604f4f;
 }
 
 .form__input {
@@ -143,6 +143,15 @@
 
 .form__btn--singup {
   background-color: #f43648;
+  
+}
+
+.form__btn--signin{
+margin-bottom: 10px;
+}
+
+.form__btn--google{
+  background-color: rgb(33, 27, 27);
 }
 
 .btn-close-modal {
@@ -161,6 +170,10 @@
 .btn-auth {
   display: flex;
   justify-content: center;
+  border: 1px solid #ff6b08;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 4px;
   align-items: center;
   text-transform: uppercase;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -168,7 +181,7 @@
   font-weight: 500;
   color: #fff;
   background-color: transparent;
-  border: none;
+
   font-size: 12px;
   line-height: 1.17;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);

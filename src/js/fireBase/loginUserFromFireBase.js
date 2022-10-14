@@ -1,3 +1,4 @@
+import 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -6,6 +7,9 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+//Инициализация FireBase
 const firebaseConfig = {
   apiKey: 'AIzaSyCrmZQN_HzgF2oazPo7DibtRq3f0gth7Qg',
   authDomain: 'authorization-filmoteka.firebaseapp.com',
@@ -14,7 +18,6 @@ const firebaseConfig = {
   messagingSenderId: '127184676871',
   appId: '1:127184676871:web:345e00f6fc1764a14c22a2',
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -27,7 +30,11 @@ const refs = {
   btnGoOut: document.querySelector('.btn-close-profile'),
 };
 
-refs.formSingIn.addEventListener('submit', e => {
+//Слушатель собития на форме Входа
+refs.formSingIn.addEventListener('submit', userLogin);
+
+//Функция регистрации пользователя
+function userLogin(e) {
   e.preventDefault();
   const {
     elements: { email, password },
@@ -37,25 +44,53 @@ refs.formSingIn.addEventListener('submit', e => {
   const UserPassword = password.value;
   console.log(UserEmail, UserPassword);
 
+  //Валидация контента полей формы
+  if (UserEmail === '' || UserPassword === '') {
+    Notify.warning(`Введите данные`);
+    return;
+  }
+
+  //Регистрация по email and login
+
   signInWithEmailAndPassword(auth, UserEmail, UserPassword)
     .then(userCredential => {
       // Signed in
       const user = userCredential.user;
       console.log(user);
+      Notify.info('You have been login', {
+        timeout: 1000,
+        clickToClose: true,
+      });
     })
     .catch(error => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      Notify.warning('This user does not exist', {
+        timeout: 1000,
+        clickToClose: true,
+      });
     });
 
-  e.currentTarget.reset();
-});
+  // //Регистрация по Google
+  // const provider = new GoogleAuthProvider(app);
+  // signInWithPopup(auth, provider)
+  //   .then(result => {
+  //     const credential = GoogleAuthProvider.credentialFromResult(result);
+  //     const token = credential.accessToken;
 
+  //     const user = result.user;
+  //     console.log(user);
+  //   })
+  //   .catch(error => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+
+  //     const credential = GoogleAuthProvider.credentialFromError(error);
+  //   });
+
+  e.currentTarget.reset();
+}
+
+//Наблюдателm состояния аутентификации
 onAuthStateChanged(auth, user => {
-  console.log(user);
-  if (user) {
-    const uid = user.uid;
-  }
   if (user) {
     refs.btnOpenModal.style.display = 'none';
     refs.myLibraryPage.style.display = 'flex';
@@ -68,6 +103,11 @@ onAuthStateChanged(auth, user => {
   }
 });
 
+//Выход пользователя с профиля
 refs.btnCloseProfile.addEventListener('click', e => {
   signOut(auth);
+  Notify.info('You have been logged out', {
+    timeout: 1000,
+    clickToClose: true,
+  });
 });
