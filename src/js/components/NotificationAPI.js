@@ -8,7 +8,7 @@ export class NotificationAPI {
 
   constructor() {}
 
-  static init(rootElSelector) {
+  static init = rootElSelector => {
     console.log('init');
     console.log(this);
     console.log(rootElSelector);
@@ -24,7 +24,7 @@ export class NotificationAPI {
     this.#notifListEl = document.querySelector('.notif-list');
     this.#notifListEl.addEventListener('click', this.#onNotificationClick);
     console.log('init finished');
-  }
+  };
 
   static #onNotificationClick = e => {
     if (e.target.nodeName !== 'P') return;
