@@ -4,26 +4,26 @@ export class NotificationAPI {
   static #numberOfMessages = 0;
   static #notifTimeoutsIds = {};
 
-  static #notifListEl = null;
+  static #notificationListEl;
+
+  static {
+    this.#notificationListEl = null;
+  }
 
   constructor() {}
 
   static init(rootElSelector) {
-    console.log('init');
-    console.log(this);
-    console.log(rootElSelector);
     //adding root el for messages
     const markup = `<ul class="notif-list"></ul>`;
-    console.log(markup);
     document
       .querySelector(rootElSelector)
       .insertAdjacentHTML('afterbegin', markup);
-    console.log('after query');
 
-    this.#notifListEl = document.querySelector('.notif-list');
-    console.log(this.#notifListEl);
-    this.#notifListEl.addEventListener('click', this.#onNotificationClick);
-    console.log('init finished');
+    this.#notificationListEl = document.querySelector('.notif-list');
+    this.#notificationListEl.addEventListener(
+      'click',
+      this.#onNotificationClick
+    );
   }
 
   static #onNotificationClick = e => {
@@ -55,7 +55,7 @@ export class NotificationAPI {
       </p>
     </li>
     `;
-    this.#notifListEl.insertAdjacentHTML('beforeend', markup);
+    this.#notificationListEl.insertAdjacentHTML('beforeend', markup);
 
     //hide notification after timeout
     this.#notifTimeoutsIds['' + id] = setTimeout(() => {

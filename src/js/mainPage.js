@@ -1,6 +1,5 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
-
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';
@@ -25,10 +24,10 @@ let unsuccessfulSearchEl = null;
 
 // MAIN
 (async () => {
-  NotificationAPI.init('body');
   try {
     tmdbAPI = new TMDBAPI();
     LDStorageAPI.init();
+    NotificationAPI.init('body');
     await BackendConfigStorage.init();
     const genresDataFromLS = readFromLocalStorage(GENRES_DATA_LS_KEY);
     const { results: moviesData, total_pages: totalPages } =
