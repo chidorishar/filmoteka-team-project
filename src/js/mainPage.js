@@ -1,6 +1,5 @@
 import { GalleryAPI } from './components/GalleryAPI';
 import { TMDBAPI } from './libs/TMDBAPI';
-
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
 import { MovieModalHandler } from './components/MovieModalHandler';

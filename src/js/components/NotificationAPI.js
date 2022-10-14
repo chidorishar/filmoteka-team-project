@@ -4,7 +4,11 @@ export class NotificationAPI {
   static #numberOfMessages = 0;
   static #notifTimeoutsIds = {};
 
-  static #notifListEl = null;
+  static #notificationListEl;
+
+  static {
+    this.#notificationListEl = null;
+  }
 
   static init(rootElSelector) {
     //adding root el for messages
@@ -13,8 +17,11 @@ export class NotificationAPI {
       .querySelector(rootElSelector)
       .insertAdjacentHTML('afterbegin', markup);
 
-    this.#notifListEl = document.querySelector('.notif-list');
-    this.#notifListEl.addEventListener('click', this.#onNotificationClick);
+    this.#notificationListEl = document.querySelector('.notif-list');
+    this.#notificationListEl.addEventListener(
+      'click',
+      this.#onNotificationClick
+    );
   }
 
   static #onNotificationClick = e => {
@@ -42,7 +49,7 @@ export class NotificationAPI {
       </p>
     </li>
     `;
-    this.#notifListEl.insertAdjacentHTML('beforeend', markup);
+    this.#notificationListEl.insertAdjacentHTML('beforeend', markup);
 
     //hide notification after timeout
     this.#notifTimeoutsIds['' + id] = setTimeout(() => {
