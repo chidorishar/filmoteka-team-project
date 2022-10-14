@@ -6,17 +6,22 @@ export class NotificationAPI {
 
   static #notifListEl = null;
 
+  constructor() {}
+
   static init(rootElSelector) {
     console.log('init');
     console.log(this);
     console.log(rootElSelector);
     //adding root el for messages
     const markup = `<ul class="notif-list"></ul>`;
+    console.log(markup);
     document
       .querySelector(rootElSelector)
       .insertAdjacentHTML('afterbegin', markup);
+    console.log('after query');
 
     this.#notifListEl = document.querySelector('.notif-list');
+    console.log('this.#notifListEl');
     this.#notifListEl.addEventListener('click', this.#onNotificationClick);
     console.log('init finished');
   }
