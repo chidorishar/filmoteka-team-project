@@ -1,8 +1,11 @@
 class PaginationAPI {
   static #MOBILE_MAX_WIDTH = 767;
+  static #MOBILE_MIN_WIDTH = 479;
   static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn">1</button></li>`;
   static #dotsLeftMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>`;
   static #dotsRightMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>`;
+
+  static #paginationWrapperDiv = document.getElementById('pagination-wrapper');
 
   static #totalMarkup = '';
 
@@ -56,16 +59,38 @@ class PaginationAPI {
     }
 
     // if our total pages value is 1, then we need to hide buttons, but if we update our total pages value, we need to the pagination buttons again in the pagination bar
-    if (this.totalPages !== 1) {
-      this.paginationNextBtn.classList.remove('pagination__btn--hidden');
-      this.paginationPreviousBtn.classList.remove('pagination__btn--hidden');
-    } else {
+    if (this.totalPages === 1) {
+      this.#paginationWrapperDiv.classList.add('pagination--width-S');
       this.paginationNextBtn.classList.add('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
+    } else {
+      this.#paginationWrapperDiv.classList.remove('pagination--width-S');
+      this.paginationNextBtn.classList.remove('pagination__btn--hidden');
+      this.paginationPreviousBtn.classList.remove('pagination__btn--hidden');
+    }
+
+    if (this.totalPages <= 2 && !(this.totalPages === 1)) {
+      this.#paginationWrapperDiv.classList.add('pagination--width-M');
+    } else {
+      this.#paginationWrapperDiv.classList.remove('pagination--width-M');
+    }
+
+    if (window.innerWidth <= this.#MOBILE_MIN_WIDTH) {
+      this.#createSmallMobileMarkup();
+      return;
     }
 
     if (window.innerWidth <= this.#MOBILE_MAX_WIDTH) {
       this.#createMobileMarkup();
+      return;
+    }
+
+    if (this.totalPages <= 7) {
+      this.#totalMarkup += this.#firstPageMarkup;
+      for (let i = 2; i <= this.totalPages - 1; i++) {
+        this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+      }
+      this.#totalMarkup += this.#getLastPageMarkup();
       return;
     }
 
@@ -110,6 +135,11 @@ class PaginationAPI {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 
+    if (this.totalPages >= 2 && this.totalPages <= 4) {
+      this.#paginationWrapperDiv.classList.add('pagination--width-L');
+    } else {
+      this.#paginationWrapperDiv.classList.remove('pagination--width-L');
+    }
     if (this.totalPages >= 6) {
       this.#totalMarkup += this.#dotsRightMarkup;
       this.#totalMarkup += this.#getLastPageMarkup();
@@ -119,9 +149,24 @@ class PaginationAPI {
   static #createMiddleActivePagesMarkup() {
     this.#totalMarkup += this.#firstPageMarkup;
     this.#totalMarkup += this.#dotsLeftMarkup;
+
+    if (this.currentPage === 5 && this.currentPage + 2 >= this.totalPages) {
+      const maxRenderPagesNum =
+        this.currentPage + 1 >= this.totalPages
+          ? this.currentPage
+          : this.currentPage - 1;
+
+      for (let i = this.currentPage - 2; i <= maxRenderPagesNum; i++) {
+        this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+      }
+
+      return;
+    }
+
     for (let i = this.currentPage - 2; i <= this.currentPage + 2; i++) {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
+
     this.#totalMarkup += this.#dotsRightMarkup;
     this.#totalMarkup += this.#getLastPageMarkup();
   }
@@ -199,6 +244,56 @@ class PaginationAPI {
     this.#totalMarkup += this.#dotsLeftMarkup;
 
     for (let i = this.totalPages - 2; i <= this.totalPages; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+    }
+  }
+
+  static #createSmallMobileMarkup() {
+    if (this.totalPages <= 3) {
+      this.#totalMarkup += this.#firstPageMarkup;
+
+      for (let i = 2; i <= this.totalPages; i++) {
+        this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+      }
+      return;
+    }
+
+    if (this.currentPage <= 2) {
+      this.#createSmallMobileStartingMarkup();
+      return;
+    }
+
+    if (this.totalPages - 1 <= this.currentPage && !(this.currentPage <= 2)) {
+      this.#createSmallMobileEndingMarkup();
+      return;
+    }
+
+    if (this.currentPage >= 3 && this.currentPage <= this.totalPages - 2) {
+      this.#createMobileMiddleActivePageMarkup();
+      return;
+    }
+  }
+
+  static #createSmallMobileStartingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+
+    const maxRenderPagesNum = this.totalPages >= 3 ? 2 : this.totalPages;
+
+    for (i = 2; i <= maxRenderPagesNum; i++) {
+      this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
+    }
+
+    if (this.totalPages >= 3) {
+      this.#totalMarkup += this.#dotsRightMarkup;
+      this.#totalMarkup += this.#getLastPageMarkup();
+    }
+  }
+
+  static #createSmallMobileEndingMarkup() {
+    this.#totalMarkup += this.#firstPageMarkup;
+    this.#totalMarkup += this.#dotsLeftMarkup;
+
+    for (let i = this.totalPages - 1; i <= this.totalPages; i++) {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
   }
