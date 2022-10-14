@@ -79,7 +79,8 @@ let unsuccessfulSearchEl = null;
 })();
 
 function onGalleryLoadedCriticalImages() {
-  document.querySelector('.loader').style.display = 'none';
+  document.querySelector('.loader--critical').style.display = 'none';
+  document.body.classList.remove('body-clip-overflow');
 }
 
 async function onFormSubmit(ev) {
