@@ -27,7 +27,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  background-color: getColorFromPalette('primary', 'light');
+  background-color: var(--bg-color);
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
   opacity: 1;
@@ -68,8 +68,8 @@
   cursor: pointer;
   width: 30px;
   height: 30px;
-  color: black;
-  background-color: getColorFromPalette('primary', 'light');
+  fill: var(--text-color);
+  background-color: var(--bg-color);
   border: 1px solid getColorFromPalette('primary', 'light');
   // transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -88,7 +88,7 @@
   font-weight: 700;
   text-align: center;
   letter-spacing: 0.03em;
-  color: getColorFromPalette('primary', 'dark');
+  color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 24px;
@@ -124,13 +124,12 @@
   align-items: center;
   margin: 0 auto;
   margin-bottom: 30px;
-  background-color: #f7f5ec;
+  background-color: var(--bgr-color);
   width: calc(100% - 2 * 30px);
   border-radius: 5px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
   padding: 30px 0 40px;
-  background-color: #f7f5ec;
   text-align: center;
   overflow: hidden;
   position: relative;
@@ -215,7 +214,7 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 1.15;
-  color: getColorFromPalette('primary', 'dark');
+  color: var(--text-color);
 }
 
 .team-info__role {
@@ -226,7 +225,7 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 1.15;
-  color: getColorFromPalette('primary', 'additional');
+  color: var(--text-color);
 }
 
 .list-social {
