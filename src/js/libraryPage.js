@@ -197,6 +197,7 @@ function onLibraryMoviesSearchFormSubmit(e) {
   if (moviesSearchRequest === LDStorageAPI.lastSearchRequest) return;
 
   if (moviesSearchRequest === '') {
+    if (LDStorageAPI.lastSearchRequest === null) return;
     LDStorageAPI.lastSearchRequest = '';
 
     LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
