@@ -84,6 +84,11 @@
   left: 50%;
 }
 
+.form-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 .form {
   width: 100%;
   padding: 50px;
@@ -127,6 +132,10 @@
   margin-bottom: 10px;
 }
 
+.form__buttons {
+  margin-top: 25px;
+}
+
 .form__btn {
   display: flex;
   align-items: center;
@@ -141,17 +150,53 @@
   padding: 10px 50px;
 }
 
+.form__btn--google {
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2px 30px;
+}
+
 .form__btn--singup {
   background-color: #f43648;
-  
+
 }
 
 .form__btn--signin{
-margin-bottom: 10px;
+  margin-bottom: 10px;
 }
+
+// start animation buttons form
+.btn__animation {
+  border-radius: 15px;
+  outline: none;
+  transition:0.2s;
+}
+
+.form__btn:hover {
+  transform:translateY(-3px);
+  box-shadow:0 5px 0 #06739f;
+  color:#d5d5d5;
+}
+.form__btn:active {
+  transform:translateY(-1px);
+  box-shadow:0 2px 0 #06739f;
+}
+
+// end of animation buttons form
 
 .form__btn--google{
   background-color: rgb(33, 27, 27);
+}
+
+.form__btn--google:hover {
+  transform:translateY(-3px);
+  box-shadow:0 5px 0 #575555;
+  color:#d5d5d5;
+}
+.form__btn--google:active {
+  transform:translateY(-1px);
+  box-shadow:0 2px 0 #575555;
 }
 
 .btn-close-modal {

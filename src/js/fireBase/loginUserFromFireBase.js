@@ -4,6 +4,8 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
   onAuthStateChanged,
 } from 'firebase/auth';
 
@@ -18,11 +20,13 @@ const firebaseConfig = {
   messagingSenderId: '127184676871',
   appId: '1:127184676871:web:345e00f6fc1764a14c22a2',
 };
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const refs = {
   formSingIn: document.querySelector('.form__singin'),
+  btnGoogleSignIn: document.querySelector('.form__btn--google'),
   btnOpenModal: document.querySelector('.btn-open-modal'),
   btnCloseProfile: document.querySelector('.btn-close-profile'),
   myLibraryPage: document.querySelector('#library'),
@@ -32,6 +36,7 @@ const refs = {
 
 //Слушатель собития на форме Входа
 refs.formSingIn.addEventListener('submit', userLogin);
+refs.btnGoogleSignIn.addEventListener('click', googleLogin);
 
 //Функция регистрации пользователя
 function userLogin(e) {
@@ -68,6 +73,7 @@ function userLogin(e) {
         clickToClose: true,
       });
     });
+
 
   // //Регистрация по Google
   // const provider = new GoogleAuthProvider(app);
@@ -111,3 +117,22 @@ refs.btnCloseProfile.addEventListener('click', e => {
     clickToClose: true,
   });
 });
+
+function googleLogin() {
+  const provider = new GoogleAuthProvider(app);
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user);
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+  });
+}
