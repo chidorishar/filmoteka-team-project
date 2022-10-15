@@ -40,6 +40,12 @@ class PaginationAPI {
   static #renderPaginationMarkup() {
     this.#totalMarkup = '';
 
+    if (this.totalPages === 0) {
+      this.#paginationWrapperDiv.setAttribute('style', 'display: none');
+    } else {
+      this.#paginationWrapperDiv.removeAttribute('style');
+    }
+
     // if our active page is the last one of the whole pagination, then we disable it.
     // otherwise, we enable it.
     if (this.currentPage === this.totalPages) {
@@ -224,7 +230,7 @@ class PaginationAPI {
 
     const maxRenderPagesNum = this.totalPages >= 4 ? 3 : this.totalPages;
 
-    for (i = 2; i <= maxRenderPagesNum; i++) {
+    for (let i = 2; i <= maxRenderPagesNum; i++) {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 

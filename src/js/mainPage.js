@@ -32,7 +32,7 @@ let unsuccessfulSearchEl = null;
     //movie search form
     unsuccessfulSearchEl = document.querySelector('#no-movies-found-message');
     const searchFormEl = document.querySelector('#movie-search-form');
-    searchFormEl.addEventListener('submit', onMoviesSearchSubmit);
+    searchFormEl.addEventListener('submit', onMoviesSearchFormSubmit);
     //get array of IDs and genres
     galleryAPI = new GalleryAPI('#movies-wrapper');
 
@@ -58,6 +58,7 @@ let unsuccessfulSearchEl = null;
     //render movies and pagination as well
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
+
     const mmh = new MovieModalHandler(
       '#watched-btn',
       '#queue-btn',
@@ -67,9 +68,6 @@ let unsuccessfulSearchEl = null;
       galleryAPI
     );
 
-    // Added size listener for body element
-    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
-    resizeObserver.observe(document.body);
     NotificationAPI.addNotification(
       "Showing week's top movies...",
       false,
@@ -90,7 +88,7 @@ function onGalleryLoadedCriticalImages() {
   document.body.classList.remove('body-clip-overflow');
 }
 
-async function onMoviesSearchSubmit(ev) {
+async function onMoviesSearchFormSubmit(ev) {
   ev.preventDefault();
 
   const searchingMovieName = ev.currentTarget.elements.query.value;
