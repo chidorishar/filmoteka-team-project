@@ -45,7 +45,6 @@ export class GalleryAPI {
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
 
-    // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
 
     //set constants according to device
@@ -89,7 +88,7 @@ export class GalleryAPI {
     if (imgsWithPoster) {
       this.#trackImagesLoadingEnd();
       this.#imagesElsToLoad = [
-        ...document.querySelectorAll(`.${this.#posterImageCSSClass}[true-src]`),
+        ...document.querySelectorAll(`.${this.#posterImageCSSClass}[data-src]`),
       ];
     } else this.#spinner.hide();
   }
@@ -125,7 +124,7 @@ export class GalleryAPI {
           ?
           `src="${this.#pathToPoster}w500${poster_path}"` 
           : 
-          `src="/" true-src="${this.#pathToPoster}w500${poster_path}"`
+          `src="#" data-src="${this.#pathToPoster}w500${poster_path}"`
           }
         alt="Poster of the ${movieName} movie"
       />`
@@ -186,7 +185,7 @@ export class GalleryAPI {
     const currentImageEl = e.target;
 
     //accept events only from images with correct "src" attribute value
-    if (currentImageEl.getAttribute('src') === '/') return;
+    if (currentImageEl.getAttribute('src') === '#') return;
 
     this.#loadedImages++;
     const numbOfImgsToLoadAtOnce = this.#NUMB_OF_IMAGES_TO_LOAD_AT_ONCE;
@@ -212,9 +211,9 @@ export class GalleryAPI {
         const imgToLoadThumbEl = imageToLoadEl.closest(
           '.movie-card__img-thumb'
         );
-        const pathToPoster = imageToLoadEl.getAttribute('true-src');
-        imageToLoadEl.removeAttribute('true-src');
-        imageToLoadEl.setAttribute('src', pathToPoster);
+        const pathToPoster = imageToLoadEl.dataset.src;
+        imageToLoadEl.removeAttribute('data-src');
+        imageToLoadEl.src = pathToPoster;
         //remove placeholder, which showed while image loading
         imgToLoadThumbEl.classList.remove('movie-card__img-thumb--img-loading');
         counter++;
