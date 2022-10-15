@@ -197,6 +197,8 @@ function onLibraryMoviesSearchFormSubmit(e) {
   if (moviesSearchRequest === LDStorageAPI.lastSearchRequest) return;
 
   if (moviesSearchRequest === '') {
+    LDStorageAPI.lastSearchRequest = '';
+
     LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
     activeLibMode = LDStorageAPI.lastActiveMovieInfo;
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
@@ -220,7 +222,7 @@ function onLibraryMoviesSearchFormSubmit(e) {
   }
 
   NotificationAPI.addNotification(
-    `Here are the movies with '${moviesSearchRequest}'`,
+    `Here are the movies matching '${moviesSearchRequest}' request`,
     false,
     3000
   );
@@ -256,7 +258,9 @@ function onMovieStatusChanged(action) {
 
   if (
     (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED ||
-      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED) &&
+      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED ||
+      action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED ||
+      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED) &&
     activeLibMode === MOVIE_INFO.SEARCHED
   ) {
     LDStorageAPI.searchInLastActiveStorageMovies(
@@ -265,6 +269,14 @@ function onMovieStatusChanged(action) {
     LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
     needRerender = true;
   }
+
+  // ) {
+  //   LDStorageAPI.searchInLastActiveStorageMovies(
+  //     LDStorageAPI.lastSearchRequest
+  //   );
+  //   LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
+  //   needRerender = true;
+  // }
 
   if (needRerender) {
     renderGalleryByPage();
