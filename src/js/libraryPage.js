@@ -44,6 +44,7 @@ const libraryQueuedBtn = document.getElementById('library-queue');
       genresAndIDs
     );
 
+    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
     const mmh = new MovieModalHandler(
@@ -74,12 +75,20 @@ const libraryQueuedBtn = document.getElementById('library-queue');
     resizeObserver.observe(document.body);
 
     NotificationAPI.addNotification('Showing your watched movies', false, 3000);
-
-    // galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
   } catch (error) {
     console.log(error.message);
+    document.querySelector('.loader--critical').style.display = 'none';
+    NotificationAPI.addNotification(
+      'Something went wrong! Here is the log: ' + error.message,
+      true
+    );
   }
 })();
+
+function onGalleryLoadedCriticalImages() {
+  document.querySelector('.loader--critical').style.display = 'none';
+  document.body.classList.remove('body-clip-overflow');
+}
 
 function onPaginationListBtnNumberClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
