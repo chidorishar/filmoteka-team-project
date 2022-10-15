@@ -14,11 +14,8 @@ const MOVIE_INFO = {
   QUEUED: 'queued',
 };
 let galleryAPI = null;
-let activeMoviesType = null;
+let activeLibMode = null;
 let moviesData = null;
-
-const libraryWatchedBtn = document.getElementById('library-watched');
-const libraryQueuedBtn = document.getElementById('library-queue');
 
 // MAIN
 (async () => {
@@ -28,7 +25,7 @@ const libraryQueuedBtn = document.getElementById('library-queue');
     await BackendConfigStorage.init();
 
     LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
-    activeMoviesType = MOVIE_INFO.WATCHED;
+    activeLibMode = MOVIE_INFO.WATCHED;
 
     moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
@@ -69,8 +66,11 @@ const libraryQueuedBtn = document.getElementById('library-queue');
       'click',
       onPaginationListBtnNumberClick
     );
-    libraryWatchedBtn.addEventListener('click', onLibraryWatchedBtnClick);
-    libraryQueuedBtn.addEventListener('click', onLibraryQueueBtnClick);
+
+    const libButtonsWrapper = document.querySelector(
+      '.header-library__buttons'
+    );
+    libButtonsWrapper.addEventListener('click', onLibraryBtnsClick);
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
@@ -128,32 +128,30 @@ function renderGalleryByPage() {
   return;
 }
 
-function onLibraryWatchedBtnClick() {
-  if (activeMoviesType === MOVIE_INFO.WATCHED) return;
+function onLibraryBtnsClick(e) {
+  if (e.target.nodeName !== 'BUTTON') return;
 
-  NotificationAPI.addNotification('Showing your watched movies', false, 3000);
+  const clickedLibMode =
+    e.target.id === 'library-watched' ? MOVIE_INFO.WATCHED : MOVIE_INFO.QUEUED;
+  if (clickedLibMode === activeLibMode) return;
 
-  // setting data for switching between movie types
+  activeLibMode = clickedLibMode;
   PaginationAPI.currentPage = 1;
-  activeMoviesType = MOVIE_INFO.WATCHED;
-  LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
 
-  moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
-  PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
-
-  galleryAPI.renderMoviesCards(moviesData);
-  PaginationAPI.renderPagination();
-}
-
-function onLibraryQueueBtnClick() {
-  if (activeMoviesType === MOVIE_INFO.QUEUED) return;
-
-  NotificationAPI.addNotification('Showing your movies queue', false, 3000);
-
-  // setting data for switching between movie types
-  PaginationAPI.currentPage = 1;
-  activeMoviesType = MOVIE_INFO.QUEUED;
-  LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
+  switch (activeLibMode) {
+    case MOVIE_INFO.WATCHED:
+      NotificationAPI.addNotification(
+        'Showing your watched movies',
+        false,
+        3000
+      );
+      LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
+      break;
+    case MOVIE_INFO.QUEUED:
+      NotificationAPI.addNotification('Showing your movies queue', false, 3000);
+      LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
+      break;
+  }
 
   moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
