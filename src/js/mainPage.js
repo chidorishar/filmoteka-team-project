@@ -59,14 +59,7 @@ let unsuccessfulSearchEl = null;
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
 
-    const mmh = new MovieModalHandler(
-      '#watched-btn',
-      '#queue-btn',
-      '#movies-modal-window',
-      '.modal-close',
-      '#movie-modal-buttons-wrapper',
-      galleryAPI
-    );
+    const mmh = new MovieModalHandler(galleryAPI, MovieModalHandler.MODE.HOME);
 
     NotificationAPI.addNotification(
       "Showing week's top movies...",

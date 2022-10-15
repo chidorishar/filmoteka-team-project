@@ -15,28 +15,27 @@
   background-color: transparent;
   border-radius: 5px;
 
+  transition: createTransitionFor('color' 'background-color');
+
   &:hover {
     background-color: getColorFromPalette('modal-buttons', 'hover-queue-btn');
     color: getColorFromPalette('primary', 'dark');
-    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'hover-queue-btn'));
   }
   &:focus {
     background-color: getColorFromPalette('modal-buttons', 'focus-queue-btn');
-    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'focus-queue-btn'));
   }
 }
 
 .btn-active {
   background: getColorFromPalette('secondary', 'orange');
-  box-shadow: 0px 8px 43px getColorFromPalette('secondary', 'orange-shadow');
+  box-shadow: 0px 1px 16px 0px
+    rgba(getColorFromPalette('secondary', 'white'), 0.75);
   border: none;
 
   &:hover {
     background-color: getColorFromPalette('modal-buttons', 'hover-watched-btn');
-    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'hover-watched-btn'));
   }
   &:focus {
     background-color: getColorFromPalette('modal-buttons', 'focus-watched-btn');
-    transition: createTransitionFor(getColorFromPalette('modal-buttons', 'focus-watched-btn'));
   }
 }
