@@ -230,7 +230,7 @@ class PaginationAPI {
 
     const maxRenderPagesNum = this.totalPages >= 4 ? 3 : this.totalPages;
 
-    for (i = 2; i <= maxRenderPagesNum; i++) {
+    for (let i = 2; i <= maxRenderPagesNum; i++) {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 
