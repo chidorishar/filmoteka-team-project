@@ -36,6 +36,7 @@
 
 .block__title {
   color: #604f4f;
+  margin-bottom: 15px;
 }
 
 .block__item {
@@ -56,23 +57,24 @@
   border: none;
   cursor: pointer;
   padding: 10px 20px;
-  background-color: #fff;
+  background: linear-gradient(to bottom, #eef2f3, #8e9eab);
   border-radius: 5px;
   color: #333;
   font-size: 16px;
   font-weight: 500;
+  transition: all 300ms linear;
+
+  &:hover {
+    background: #03a9f4;
+    color: #fff;
+  }
 }
 
 .form-box {
-  //background-color: #fff;
-  background: #C9D6FF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #E2E2E2, #C9D6FF);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #E2E2E2, #C9D6FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
+  background: linear-gradient(to right, #E2E2E2, #C9D6FF);
   height: 100%;
   width: 50%;
   box-shadow: 0 5px 45px rgba(0, 0, 0, 0.25);
-
   position: absolute;
   top: 0;
   left: 0;
@@ -174,17 +176,17 @@
 .btn__animation {
   border-radius: 15px;
   outline: none;
-  transition:0.2s;
+  transition: 0.2s;
 }
 
 .form__btn:hover {
-  transform:translateY(-3px);
-  box-shadow:0 5px 0 #06739f;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 0 #06739f;
   color:#d5d5d5;
 }
 .form__btn:active {
-  transform:translateY(-1px);
-  box-shadow:0 2px 0 #06739f;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 0 #06739f;
 }
 
 // end of animation buttons form
