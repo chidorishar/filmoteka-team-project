@@ -2,8 +2,10 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { PaginationAPI } from './components/PaginationAPI';
 import { NotificationAPI } from './components/NotificationAPI';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
-import './components/teamModalWindow.js';
 import { TMDBAPI } from './libs/TMDBAPI';
+import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
+import { MovieModalHandler } from './components/MovieModalHandler';
+
 import { readFromLocalStorage } from './utils/WebStorageMethods';
 
 const GENRES_DATA_LS_KEY = 'genres-data';
@@ -23,6 +25,7 @@ const libraryQueuedBtn = document.getElementById('library-queue');
   try {
     LDStorageAPI.init();
     NotificationAPI.init('body');
+    await BackendConfigStorage.init();
 
     LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
     activeMoviesType = MOVIE_INFO.WATCHED;
@@ -43,6 +46,14 @@ const libraryQueuedBtn = document.getElementById('library-queue');
 
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
+    const mmh = new MovieModalHandler(
+      '#watched-btn',
+      '#queue-btn',
+      '#movies-modal-window',
+      '.modal-close',
+      '#movie-modal-buttons-wrapper',
+      galleryAPI
+    );
 
     // Added event listeners
     PaginationAPI.paginationNextBtn.addEventListener(
