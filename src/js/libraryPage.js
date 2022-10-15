@@ -40,8 +40,12 @@ let moviesData = null;
       pathToPosterImg,
       genresAndIDs
     );
-
-    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
+    //hide spinner if there aren't movies else add listener for images loading
+    moviesData?.length
+      ? galleryAPI.addOnCriticalImagesLoadedCallback(
+          onGalleryLoadedCriticalImages
+        )
+      : (document.querySelector('.loader--critical').style.display = 'none');
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
     const mmh = new MovieModalHandler(
