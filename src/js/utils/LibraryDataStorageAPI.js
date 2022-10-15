@@ -52,6 +52,7 @@ export class LDStorageAPI {
    * @param {number} id - id of obj of movie data we need to remove
    * @param {string} storageKey - the key (where data was saved (watched/ queued))
    */
+
   static removeFromLocalStorage(id, storageKey) {
     const writeToLS = this.#writeObjToLS;
 
@@ -88,8 +89,20 @@ export class LDStorageAPI {
     }
   }
 
+  static searchInActiveStorageMovies(searchRequest) {
+    let moviesPropertiesArray = [...Object.values(this.#activeStorage)];
+
+    const filteredBySearchRequestArray = moviesPropertiesArray.filter(
+      movieObj => {
+        let movieName = movieObj.title ? movieObj.title : movieObj.name;
+        return movieName.toLowerCase().includes(searchRequest.toLowerCase());
+      }
+    );
+
+    return filteredBySearchRequestArray;
+  }
+
   static #sliceMoviesArrayByPage(moviesArray) {
-    // cutting sausage into slices
     let fromMovie =
       (this.paginationInfo.page - 1) * this.paginationInfo.MOVIES_PER_PAGE;
     let toMovie =

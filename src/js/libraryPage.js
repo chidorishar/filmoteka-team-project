@@ -66,11 +66,17 @@ let moviesData = null;
       'click',
       onPaginationListBtnNumberClick
     );
-
     const libButtonsWrapper = document.querySelector(
       '.header-library__buttons'
     );
     libButtonsWrapper.addEventListener('click', onLibraryBtnsClick);
+    const libraryMoviesSearchForm = document.getElementById(
+      'library-movies-search-form'
+    );
+    libraryMoviesSearchForm.addEventListener(
+      'click',
+      onlibraryMoviesSearchFormSubmit
+    );
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
@@ -158,4 +164,15 @@ function onLibraryBtnsClick(e) {
 
   galleryAPI.renderMoviesCards(moviesData);
   PaginationAPI.renderPagination();
+}
+
+function onlibraryMoviesSearchFormSubmit(e) {
+  e.preventDefault();
+
+  const moviesSearchRequest = e.currentTarget.elements.query.value;
+
+  if (moviesSearchRequest === '') return;
+
+  moviesData = LDStorageAPI.searchInActiveStorageMovies(moviesSearchRequest);
+  galleryAPI.renderMoviesCards(moviesData);
 }
