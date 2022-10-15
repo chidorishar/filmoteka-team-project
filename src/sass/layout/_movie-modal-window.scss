@@ -186,9 +186,6 @@
   position: relative;
 
   @include mediaUpTo('tablet') {
-    margin-left: auto;
-    margin-right: auto;
-
     width: 100%;
     min-width: 240px;
     height: 100%;
@@ -235,9 +232,11 @@
   position: absolute;
 
   @include mediaUpTo('tablet') {
-    left: auto;
-    right: auto;
-    bottom: 240px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-width: 240px;
+    min-height: 357px;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -269,6 +268,10 @@
 
   background-color: rgba(getColorFromPalette('primary', 'dark'), 0.8);
   box-shadow: 0px 0px 20px 0px #6d6d6d;
+
+  @include mediaUpTo('tablet') {
+    bottom: 500px;
+  }
 }
 
 .modal-poster__placeholder--title {
