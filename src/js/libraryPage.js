@@ -270,14 +270,6 @@ function onMovieStatusChanged(action) {
     needRerender = true;
   }
 
-  // ) {
-  //   LDStorageAPI.searchInLastActiveStorageMovies(
-  //     LDStorageAPI.lastSearchRequest
-  //   );
-  //   LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
-  //   needRerender = true;
-  // }
-
   if (needRerender) {
     renderGalleryByPage();
     PaginationAPI.renderPagination();
