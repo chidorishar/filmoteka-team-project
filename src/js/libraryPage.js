@@ -71,7 +71,7 @@ const libraryQueuedBtn = document.getElementById('library-queue');
     );
     libraryWatchedBtn.addEventListener('click', onLibraryWatchedBtnClick);
     libraryQueuedBtn.addEventListener('click', onLibraryQueueBtnClick);
-    resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
+    const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
     NotificationAPI.addNotification('Showing your watched movies', false, 3000);
