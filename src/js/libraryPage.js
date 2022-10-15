@@ -17,6 +17,7 @@ const MOVIE_INFO = {
 let galleryAPI = null;
 let activeLibMode = null;
 let moviesData = null;
+let libraryMoviesSearchForm = null;
 
 // MAIN
 (async () => {
@@ -72,7 +73,7 @@ let moviesData = null;
       '.header-library__buttons'
     );
     libButtonsWrapper.addEventListener('click', onLibraryBtnsClick);
-    const libraryMoviesSearchForm = document.getElementById(
+    libraryMoviesSearchForm = document.getElementById(
       'library-movies-search-form'
     );
     libraryMoviesSearchForm.addEventListener(
@@ -151,6 +152,10 @@ function onLibraryBtnsClick(e) {
   const clickedEl = e.target;
   if (clickedEl.nodeName !== 'BUTTON') return;
 
+  // resetting search field input if there is anything written in there
+  libraryMoviesSearchForm.elements.query.value = '';
+  LDStorageAPI.lastSearchRequest = null;
+
   const clickedLibMode =
     clickedEl.id === 'library-watched' ? MOVIE_INFO.WATCHED : MOVIE_INFO.QUEUED;
   if (clickedLibMode === activeLibMode) return;
@@ -193,6 +198,7 @@ function onLibraryMoviesSearchFormSubmit(e) {
 
   if (moviesSearchRequest === '') {
     LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
+    activeLibMode = LDStorageAPI.lastActiveMovieInfo;
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
     PaginationAPI.updateCurrentPage(1);
 
@@ -201,15 +207,26 @@ function onLibraryMoviesSearchFormSubmit(e) {
     return;
   }
 
-  // NotificationAPI.addNotification(
-  //   `Searching for '${moviesSearchRequest}' in your movies library...`,
-  //   false,
-  //   3000
-  // );
-
   moviesData =
     LDStorageAPI.searchInLastActiveStorageMovies(moviesSearchRequest);
+
+  if (!moviesData.length) {
+    NotificationAPI.addNotification(
+      `Oops, there are no results matching your search request...`,
+      false,
+      3000
+    );
+    return;
+  }
+
+  NotificationAPI.addNotification(
+    `Here are the movies with '${moviesSearchRequest}'`,
+    false,
+    3000
+  );
+
   LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
+  activeLibMode = MOVIE_INFO.SEARCHED;
 
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
   PaginationAPI.updateCurrentPage(1);
@@ -224,17 +241,32 @@ function onMovieStatusChanged(action) {
     (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED ||
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED) &&
     activeLibMode === MOVIE_INFO.WATCHED
-  )
+  ) {
+    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
     needRerender = true;
+  }
   if (
     (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED ||
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED) &&
     activeLibMode === MOVIE_INFO.QUEUED
-  )
+  ) {
+    LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
     needRerender = true;
+  }
+
+  if (
+    (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED ||
+      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED) &&
+    activeLibMode === MOVIE_INFO.SEARCHED
+  ) {
+    LDStorageAPI.searchInLastActiveStorageMovies(
+      LDStorageAPI.lastSearchRequest
+    );
+    LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
+    needRerender = true;
+  }
 
   if (needRerender) {
-    LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
     renderGalleryByPage();
     PaginationAPI.renderPagination();
   }
