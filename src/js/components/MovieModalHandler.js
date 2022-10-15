@@ -1,15 +1,19 @@
-// import { galleryAPI } from '../mainPage.js';
 import { IDsParser } from '../utils/IDsToGenresParser.js';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage';
 import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
 
 export class MovieModalHandler {
   #modalWindowEls = {
-    closeBtn: null,
-    queueBtn: null,
-    watchedBtn: null,
-    modalBackdrop: null,
-    libActionsBtnsWrapper: null,
+    closeBtn: document.querySelector('.modal-close'),
+    queueBtn: document.querySelector('#queue-btn'),
+    watchedBtn: document.querySelector('#watched-btn'),
+    moviesNavBtnsWrapper: document.querySelector('#movies-nav-btns-wrapper'),
+    prevMovieBtn: document.querySelector('#prev-movie-btn'),
+    nextMovieBtn: document.querySelector('#next-movie-btn'),
+    modalBackdrop: document.querySelector('#movies-modal-window'),
+    libActionsBtnsWrapper: document.querySelector(
+      '#movie-modal-buttons-wrapper'
+    ),
   };
 
   #movieLibData = null;
@@ -17,25 +21,29 @@ export class MovieModalHandler {
   #clickedMovieData = null;
   #galleryAPI = null;
 
-  constructor(
-    watchedBtnSelector,
-    queueBtnSelector,
-    backdropSelector,
-    closeBtnSelector,
-    libActionsBtnsWrapperSelector,
-    galleryAPI
-  ) {
-    this.#modalWindowEls.watchedBtn =
-      document.querySelector(watchedBtnSelector);
-    this.#modalWindowEls.queueBtn = document.querySelector(queueBtnSelector);
-    this.#modalWindowEls.modalBackdrop =
-      document.querySelector(backdropSelector);
-    this.#modalWindowEls.closeBtn = document.querySelector(closeBtnSelector);
-    this.#modalWindowEls.libActionsBtnsWrapper = document.querySelector(
-      libActionsBtnsWrapperSelector
-    );
+  #nextMovieId = null;
+  #prevMovieId = null;
 
+  static MODE = {
+    HOME: 'home',
+    LIBRARY_WATCHED: 'lib-watch',
+    LIBRARY_QUEUED: 'lib-queue',
+  };
+  mode = null;
+
+  static MOVIE_ACTIONS = {
+    ADDED_TO_WATCHED: 'add_wchd',
+    REMOVED_FROM_WATCHED: 'rem_wchd',
+    ADDED_TO_QUEUED: 'add_queue',
+    REMOVED_FROM_QUEUED: 'rem_queue',
+  };
+
+  #onMoveStatusChangedCB = null;
+
+  constructor(galleryAPI, mode, onMoveStatusChangedCB) {
     this.#galleryAPI = galleryAPI;
+    this.mode = mode;
+    this.#onMoveStatusChangedCB = onMoveStatusChangedCB;
 
     galleryAPI.addOnCardClickCallback(this.#onGalleryClick);
     this.#modalWindowEls.libActionsBtnsWrapper.addEventListener(
@@ -56,21 +64,36 @@ export class MovieModalHandler {
 
     event.preventDefault();
 
+    //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.addEventListener(
       'click',
       this.#onBackdropClick
     );
     this.#modalWindowEls.closeBtn.addEventListener('click', this.#closeModal);
+    this.#modalWindowEls.moviesNavBtnsWrapper.addEventListener(
+      'click',
+      this.#onNavThroughMoviesBtnClick
+    );
     //cut body content by viewport sizes ti prevent from scrolling
     document.body.classList.add('js-modal-is-hidden');
 
     this.#movieId = movieCardLink.dataset.movieId;
-    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
-    this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
+    this.#setMovieData(movieCardLink);
 
     this.#renderModal(this.#clickedMovieData);
   };
+
+  #setMovieData(movieCardLink = null) {
+    movieCardLink ??= document.querySelector(
+      `a[data-movie-id="${this.#movieId}"]`
+    );
+
+    this.#prevMovieId = movieCardLink.dataset.prevMovieId;
+    this.#nextMovieId = movieCardLink.dataset.nextMovieId;
+    this.#movieLibData = LDStorageAPI.findInLocalStorage(this.#movieId);
+    this.#clickedMovieData = this.#getMovieDataByID(this.#movieId);
+  }
 
   #renderModal(movieData) {
     const {
@@ -104,13 +127,16 @@ export class MovieModalHandler {
     refs.moviePoster.src = `${posterFullPath}`;
     refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
     refs.movieAverageRating.textContent = `${fixedAverageRating}`;
-    refs.movieRating.textContent = `${votes}`;
+    refs.movieRating.textContent = `${votes ? votes : 'N/D'}`;
     refs.moviePopularity.textContent = `${fixedPopularity}`;
     refs.movieTitle.textContent = `${movieTitle ?? movieName}`;
-    refs.movieGenre.textContent = `${movieGenresString}`;
-    refs.movieAbout.textContent = `${overview}`;
+    refs.movieGenre.textContent = `${
+      movieGenresString ? movieGenresString : 'N/D'
+    }`;
+    refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
+    this.#updateMoviesNavButtons();
 
     //show whole modal window
     this.#modalWindowEls.modalBackdrop.classList.remove('is-hidden');
@@ -123,10 +149,37 @@ export class MovieModalHandler {
   ${queued ? 'REMOVE FROM' : 'ADD TO'} QUEUE`;
   }
 
+  #updateMoviesNavButtons() {
+    this.#prevMovieId
+      ? this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', false)
+      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', true);
+    this.#nextMovieId
+      ? this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', false)
+      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', true);
+  }
+
   #onLibraryButtonsClick = e => {
+    const oldMovieLibData = this.#movieLibData;
     const movieNewLibData = this.#updateLSData(e.target.id);
 
+    const movieLibDelta = {
+      watchedChanged: oldMovieLibData.watched !== movieNewLibData.watched,
+      queuedChanged: oldMovieLibData.queued === movieNewLibData.queued,
+    };
+    let movieAction;
+    if (movieLibDelta.watchedChanged) {
+      movieAction = oldMovieLibData.watched
+        ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED
+        : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED;
+    } else {
+      movieAction = oldMovieLibData.queued
+        ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED
+        : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED;
+    }
+    this.#onMoveStatusChangedCB?.(movieAction);
+
     this.#updateControlButtons(movieNewLibData);
+    this.#movieLibData = movieNewLibData;
   };
 
   #updateLSData(btnID) {
@@ -182,9 +235,45 @@ export class MovieModalHandler {
     }
   };
 
+  #onNavThroughMoviesBtnClick = e => {
+    if (e.target.nodeName !== 'B') return;
+
+    const nextMovieId =
+      e.target.id === 'prev-movie-btn' ? this.#prevMovieId : this.#nextMovieId;
+    if (!nextMovieId) {
+      return;
+    }
+
+    this.#movieId = nextMovieId;
+    this.#setMovieData();
+    this.#updateMoviesNavButtons();
+    this.#renderModal(this.#clickedMovieData);
+  };
+
   #onEscKeyPress = event => {
-    if (event.code === 'Escape') {
-      this.#closeModal();
+    let nextMovieId = null;
+    let switchMovie = false;
+
+    switch (event.code) {
+      case 'Escape':
+        this.#closeModal();
+        break;
+      case 'ArrowLeft':
+        nextMovieId = this.#prevMovieId;
+        switchMovie = true;
+        break;
+      case 'ArrowRight':
+        nextMovieId = this.#nextMovieId;
+        switchMovie = true;
+        break;
+    }
+
+    //render next/previous movie data
+    if (switchMovie && nextMovieId) {
+      this.#movieId = nextMovieId;
+      this.#setMovieData();
+      this.#updateMoviesNavButtons();
+      this.#renderModal(this.#clickedMovieData);
     }
   };
 

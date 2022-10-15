@@ -7,7 +7,7 @@
       name="description"
       content="This site will help you to find movies and tv-series and even create your own library! Search for top movies or for a specific movie which you know (or not)"
     />
-    <title>FT-Home</title>
+    <title>Home</title>
     <!-- SITE ICON -->
     <link
       rel="icon"
@@ -15,19 +15,79 @@
       href="./images/decorative/site-favicon.png"
     />
     <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
-      rel="stylesheet"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+    /></noscript>
     <!-- CSS -->
-    <link rel="stylesheet" href="./sass/index.scss" />
+    <link
+      rel="preload"
+      href="./sass/index.scss"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript><link rel="stylesheet" href="./sass/index.scss" /></noscript>
     <!-- JS -->
-    <script src="./index.js" type="module"></script>
+    <script src="./index.js" type="module" defer></script>
+    <!-- CRITICAL STYLES -->
+    <style type="text/css">
+      @keyframes loader {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      *,
+      :before,
+      :after {
+        box-sizing: border-box;
+      }
+
+      body.body-clip-overflow {
+        overflow: clip;
+      }
+
+      .loader--critical {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+
+        background: #fff;
+        z-index: 100;
+
+        transition: 0.5s;
+      }
+
+      .loader__spinner--critical {
+        /* transform: translate(50%, 50%); */
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+
+        border: 10px solid #ffffff99;
+        border-left-color: #3ebe8d;
+        border-radius: 50%;
+        animation: loader 1.3s linear infinite;
+        box-shadow: inset 0 0 6px #11c93bc9, 0 0 20px #91919178;
+        animation: loader 1.3s linear infinite;
+      }
+    </style>
   </head>
-  <body>
+  <body class="body-clip-overflow">
     <!--HTML -->
+    <include src="./html/loader.html"></include>
     <include src="./html/header-main.html"></include>
 
     <include src="./html/gallery.html"></include>
@@ -38,6 +98,5 @@
     <include src="./html/team-modal-window.html"></include>
 
     <include src="./html/movie-modal-window.html"></include>
-    <include src="./html/loader.html"></include>
   </body>
 </html>

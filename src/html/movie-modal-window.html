@@ -5,6 +5,28 @@
   id="movies-modal-window"
 >
   <div class="modal">
+    <ul class="modal-movies-nav__buttons-wrapper" id="movies-nav-btns-wrapper">
+      <li class="modal-movies-nav__item">
+        <b
+          class="modal-movies-nav__button"
+          type="button"
+          aria-label="Show previous movie details"
+          id="prev-movie-btn"
+        >
+          &lt;
+        </b>
+      </li>
+      <li class="modal-movies-nav__item">
+        <b
+          class="modal-movies-nav__button"
+          type="button"
+          aria-label="Show next movie details"
+          id="next-movie-btn"
+        >
+          &gt;
+        </b>
+      </li>
+    </ul>
     <div class="modal-close-btn">
       <button
         class="modal-close"
@@ -32,31 +54,49 @@
     <div class="modal-info">
       <h2 class="modal__title" id="modalTitle"></h2>
       <div class="modal-data">
-        <ul class="modal__characteristic">
-          <li class="modal__characteristic-rating">Vote / Votes</li>
-          <li class="modal__characteristic-popularity">Popularity</li>
-          <li class="modal__characteristic-title">Original Title</li>
-          <li class="modal__characteristic-genre">Genre</li>
-        </ul>
-        <ul class="modal__characteristic-data">
-          <li class="modal__characteristic-rating">
-            <span
-              class="modal__characteristic-inform-accent"
-              id="averageRating"
-            ></span>
-            /
-            <span class="modal__characteristic-inform" id="rating"></span>
-          </li>
-          <li class="modal__characteristic-popularity">
-            <span class="modal__characteristic-inform" id="popularity"></span>
-          </li>
-          <li class="modal__characteristic-title">
-            <span class="modal__characteristic-inform" id="title"></span>
-          </li>
-          <li class="modal__characteristic-genre">
-            <span class="modal__characteristic-inform" id="genre"></span>
-          </li>
-        </ul>
+        <table class="modal-data-table">
+          <tr>
+            <td class="modal__characteristic-rating" width="150">
+              Vote / Votes
+            </td>
+            <td class="modal__characteristic-rating">
+              <span
+                class="modal__characteristic-inform-accent"
+                id="averageRating"
+              ></span>
+              /
+              <span class="modal__characteristic-inform" id="rating"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-popularity" width="150">
+              Popularity
+            </td>
+            <td class="modal__characteristic-popularity">
+              <span class="modal__characteristic-inform" id="popularity"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-title" width="150">
+              Original Title
+            </td>
+            <td class="modal__characteristic-title">
+              <span
+                class="modal__characteristic-inform block-style"
+                id="title"
+              ></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-genre" width="150">Genre</td>
+            <td class="modal__characteristic-genre">
+              <span
+                class="modal__characteristic-inform block-style"
+                id="genre"
+              ></span>
+            </td>
+          </tr>
+        </table>
       </div>
       <h3 class="modal__about">ABOUT</h3>
       <p class="modal__about-text" id="aboutMovie"></p>

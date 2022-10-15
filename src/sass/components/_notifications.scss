@@ -1,0 +1,68 @@
+.notif-list {
+  font-family: $font-family-main;
+  font-weight: $font-regular;
+  font-size: 14px;
+
+  position: fixed;
+  top: 150px;
+  right: 10;
+  z-index: 10;
+
+  @include mediaOver('desktop') {
+    top: 82px;
+  }
+}
+
+.notif-list__item {
+  @extend %unmarked-list;
+
+  margin-bottom: 5px;
+}
+
+.notif-list__text {
+  transform: translateX(-100%);
+  padding: 20px;
+  width: 200px;
+  min-height: 50px;
+
+  opacity: 0;
+  background-color: rgba(getColorFromPalette('background', 'additional'), 0.75);
+  color: getColorFromPalette('primary', 'dark');
+  text-align: center;
+  border-radius: 8px;
+
+  transition: createTransitionFor('opacity' 'transform');
+
+  @include mediaOver('tablet') {
+    width: 300px;
+  }
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+
+    background-color: rgba(
+      getColorFromPalette('background', 'additional'),
+      0.95
+    );
+  }
+
+  &--alert {
+    color: getColorFromPalette('primary', 'white');
+    background-color: rgba(getColorFromPalette('secondary', 'orange'), 0.75);
+
+    &:hover,
+    &:focus {
+      background-color: rgba(getColorFromPalette('secondary', 'orange'), 0.95);
+    }
+  }
+
+  &--is-visible {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+body {
+  position: relative;
+}
