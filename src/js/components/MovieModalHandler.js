@@ -123,7 +123,7 @@ export class MovieModalHandler {
       movieAbout: document.getElementById('aboutMovie'),
     };
 
-    refs.moviePoster.src = `${posterFullPath}`;
+    if (pathToPoster) refs.moviePoster.src = `${posterFullPath}`;
     refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
     refs.movieAverageRating.textContent = `${fixedAverageRating}`;
     refs.movieRating.textContent = `${votes ? votes : 'N/D'}`;

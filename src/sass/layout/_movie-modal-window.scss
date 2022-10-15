@@ -200,6 +200,7 @@
     margin-right: 16px;
   }
 }
+
 .poster {
   display: block;
   margin-bottom: 20px;
@@ -229,25 +230,25 @@
 }
 
 .modal-poster__placeholder--thumb {
+  @extend %flex--vh-centred;
   position: absolute;
 
-  @include mediaUpTo('tablet') {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    min-width: 240px;
-    min-height: 357px;
-  }
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 
-  @include mediaInBetween('tablet', 'desktop') {
-    left: 27px;
-    bottom: 355px;
-  }
+  $stripesWidth: 15px;
+  $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
 
-  @include mediaOver('desktop') {
-    left: 68px;
-    bottom: 359px;
-  }
+  background: unset;
+  background-image: repeating-linear-gradient(
+    to left bottom,
+    getColorFromPalette('primary', 'light'),
+    getColorFromPalette('primary', 'light') $stripesWidth,
+    $stripesMainColor $stripesWidth,
+    $stripesMainColor $stripesWidth * 2
+  );
 }
 
 .modal-poster__placeholder {
@@ -268,14 +269,20 @@
 
   background-color: rgba(getColorFromPalette('primary', 'dark'), 0.8);
   box-shadow: 0px 0px 20px 0px #6d6d6d;
+}
 
-  @include mediaUpTo('tablet') {
-    bottom: 500px;
-  }
+.modal-poster__placeholder-title-wrapper {
+  width: 75%;
+  height: 76;
+  overflow-y: auto;
 }
 
 .modal-poster__placeholder--title {
-  width: 82%;
+  @extend %rounded;
+  @extend %flex--v-centred;
+
+  line-height: 1.15;
+  // width: 82%;
   margin-bottom: 10px;
 
   color: getColorFromPalette('secondary', 'orange');
