@@ -234,6 +234,7 @@ function onMovieStatusChanged(action) {
     needRerender = true;
 
   if (needRerender) {
+    LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
     renderGalleryByPage();
     PaginationAPI.renderPagination();
   }
