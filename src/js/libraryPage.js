@@ -129,6 +129,7 @@ function renderGalleryByPage() {
     if (PaginationAPI.currentPage < 1) {
       PaginationAPI.updateCurrentPage(1);
       galleryAPI.renderMoviesCards(moviesData);
+      PaginationAPI.totalPages = 0;
       return;
     }
     renderGalleryByPage();
