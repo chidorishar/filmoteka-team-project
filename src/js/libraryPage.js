@@ -171,7 +171,12 @@ function onlibraryMoviesSearchFormSubmit(e) {
 
   const moviesSearchRequest = e.currentTarget.elements.query.value;
 
-  if (moviesSearchRequest === '') return;
+  if (moviesSearchRequest === '') {
+    PaginationAPI.currentPage = 1;
+    renderGalleryByPage();
+    PaginationAPI.renderPagination();
+    return;
+  }
 
   moviesData = LDStorageAPI.searchInActiveStorageMovies(moviesSearchRequest);
   galleryAPI.renderMoviesCards(moviesData);
