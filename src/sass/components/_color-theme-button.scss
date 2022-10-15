@@ -11,19 +11,21 @@
   border: none;
   background: none;
 
+  cursor: pointer;
+
   &--dark-mode {
     .theme-button__slider {
       transform: translateX(0%);
     }
 
     .theme-button__circle {
-      transform: translate(calc($buttonWidth - 25px / 2), -4%);
+      transform: translate(calc($buttonWidth - 30px / 2), -4%);
     }
   }
 
   &:hover .theme-button__slider-scene,
   &:focus .theme-button__slider-scene {
-    box-shadow: 0 0 12px 0px #f00;
+    box-shadow: 0 0 12px #56ff0038;
   }
 }
 
@@ -37,7 +39,7 @@
   width: 22px;
   height: 22px;
 
-  transform: translate(-50%, -4%);
+  transform: translate(-27%, -4%);
   transition: createTransitionFor('transform');
 
   border: 3px solid getColorFromPalette('secondary', 'orange');
@@ -84,7 +86,6 @@
 }
 
 .theme-button__moon-symb {
-  font-size: 24px;
   color: rgb(0, 0, 0);
 }
 .theme-button__sun-symb {

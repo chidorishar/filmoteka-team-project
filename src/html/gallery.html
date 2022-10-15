@@ -1,32 +1,6 @@
 <section id="gallery" class="gallery">
-  <div class="toggle-container">
-    <button
-      class="theme-btn light"
-      onclick="setTheme('light')"
-      title="Light mode"
-    >
-      &#9728;
-      <!--sun icon-->
-    </button>
-    <button class="theme-btn dark" onclick="setTheme('dark')" title="Dark mode">
-      &#9789;
-      <!--moon icon-->
-    </button>
-  </div>
   <div class="container">
     <h2 class="gallery__section-title">Movies</h2>
     <ul class="movie-card__list grid-set" id="movies-wrapper"></ul>
   </div>
 </section>
-<script>
-  // const setTheme = theme => document.documentElement.className = theme;
-  const setTheme = theme => {
-    document.documentElement.className = theme;
-    localStorage.setItem('theme', theme);
-  };
-  const getTheme = () => {
-    const theme = localStorage.getItem('theme');
-    theme && setTheme(theme);
-  };
-  getTheme();
-</script>

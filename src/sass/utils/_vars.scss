@@ -69,6 +69,25 @@ $colorPalette: (
     'border-left': rgba(62, 190, 141),
   ),
 );
+
+:root,
+:root.light {
+  --bg-color: #fff;
+  --bgr-color: #f7f5ec;
+  --text-color: #123;
+}
+
+:root.dark {
+  --bg-color: #272e34;
+  --bgr-color: #607180;
+  --text-color: #fff;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 $breakpoints: (
   'mobile': 480px,
   'tablet': 768px,
