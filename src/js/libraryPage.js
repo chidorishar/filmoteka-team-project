@@ -14,11 +14,8 @@ const MOVIE_INFO = {
   QUEUED: 'queued',
 };
 let galleryAPI = null;
-let activeMoviesType = null;
+let activeLibMode = null;
 let moviesData = null;
-
-const libraryWatchedBtn = document.getElementById('library-watched');
-const libraryQueuedBtn = document.getElementById('library-queue');
 
 // MAIN
 (async () => {
@@ -28,7 +25,7 @@ const libraryQueuedBtn = document.getElementById('library-queue');
     await BackendConfigStorage.init();
 
     LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
-    activeMoviesType = MOVIE_INFO.WATCHED;
+    activeLibMode = MOVIE_INFO.WATCHED;
 
     moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
@@ -43,17 +40,18 @@ const libraryQueuedBtn = document.getElementById('library-queue');
       pathToPosterImg,
       genresAndIDs
     );
-
-    galleryAPI.addOnCriticalImagesLoadedCallback(onGalleryLoadedCriticalImages);
+    //hide spinner if there aren't movies else add listener for images loading
+    moviesData?.length
+      ? galleryAPI.addOnCriticalImagesLoadedCallback(
+          onGalleryLoadedCriticalImages
+        )
+      : (document.querySelector('.loader--critical').style.display = 'none');
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
     const mmh = new MovieModalHandler(
-      '#watched-btn',
-      '#queue-btn',
-      '#movies-modal-window',
-      '.modal-close',
-      '#movie-modal-buttons-wrapper',
-      galleryAPI
+      galleryAPI,
+      MovieModalHandler.MODE.LIBRARY_WATCHED,
+      onMovieStatusChanged
     );
 
     // Added event listeners
@@ -69,8 +67,11 @@ const libraryQueuedBtn = document.getElementById('library-queue');
       'click',
       onPaginationListBtnNumberClick
     );
-    libraryWatchedBtn.addEventListener('click', onLibraryWatchedBtnClick);
-    libraryQueuedBtn.addEventListener('click', onLibraryQueueBtnClick);
+
+    const libButtonsWrapper = document.querySelector(
+      '.header-library__buttons'
+    );
+    libButtonsWrapper.addEventListener('click', onLibraryBtnsClick);
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
@@ -122,21 +123,53 @@ function onPaginationBtnChangeClick(e) {
 
 function renderGalleryByPage() {
   moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
+  //if there isn't movies on current page - decrease page, and try again
+  if (!moviesData.length) {
+    PaginationAPI.changePageByOne(false);
+    if (PaginationAPI.currentPage < 1) {
+      PaginationAPI.updateCurrentPage(1);
+      galleryAPI.renderMoviesCards(moviesData);
+      PaginationAPI.totalPages = 0;
+      return;
+    }
+    renderGalleryByPage();
+  }
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
   galleryAPI.renderMoviesCards(moviesData);
   return;
 }
 
-function onLibraryWatchedBtnClick() {
-  if (activeMoviesType === MOVIE_INFO.WATCHED) return;
+function onLibraryBtnsClick(e) {
+  const clickedEl = e.target;
+  if (clickedEl.nodeName !== 'BUTTON') return;
 
-  NotificationAPI.addNotification('Showing your watched movies', false, 3000);
+  const clickedLibMode =
+    clickedEl.id === 'library-watched' ? MOVIE_INFO.WATCHED : MOVIE_INFO.QUEUED;
+  if (clickedLibMode === activeLibMode) return;
 
-  // setting data for switching between movie types
+  const prevButtonEl = e.currentTarget.querySelector(
+    `button:not(#${clickedEl.id})`
+  );
+  prevButtonEl.classList.remove('btn-active');
+  clickedEl.classList.add('btn-active');
+  activeLibMode = clickedLibMode;
   PaginationAPI.currentPage = 1;
-  activeMoviesType = MOVIE_INFO.WATCHED;
-  LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
+
+  switch (activeLibMode) {
+    case MOVIE_INFO.WATCHED:
+      NotificationAPI.addNotification(
+        'Showing your watched movies',
+        false,
+        3000
+      );
+      LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
+      break;
+    case MOVIE_INFO.QUEUED:
+      NotificationAPI.addNotification('Showing your movies queue', false, 3000);
+      LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
+      break;
+  }
 
   moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
@@ -145,19 +178,23 @@ function onLibraryWatchedBtnClick() {
   PaginationAPI.renderPagination();
 }
 
-function onLibraryQueueBtnClick() {
-  if (activeMoviesType === MOVIE_INFO.QUEUED) return;
+function onMovieStatusChanged(action) {
+  let needRerender = false;
+  if (
+    (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED ||
+      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED) &&
+    activeLibMode === MOVIE_INFO.WATCHED
+  )
+    needRerender = true;
+  if (
+    (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED ||
+      action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED) &&
+    activeLibMode === MOVIE_INFO.QUEUED
+  )
+    needRerender = true;
 
-  NotificationAPI.addNotification('Showing your movies queue', false, 3000);
-
-  // setting data for switching between movie types
-  PaginationAPI.currentPage = 1;
-  activeMoviesType = MOVIE_INFO.QUEUED;
-  LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
-
-  moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
-  PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
-
-  galleryAPI.renderMoviesCards(moviesData);
-  PaginationAPI.renderPagination();
+  if (needRerender) {
+    renderGalleryByPage();
+    PaginationAPI.renderPagination();
+  }
 }
