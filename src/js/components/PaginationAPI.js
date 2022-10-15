@@ -69,6 +69,7 @@ class PaginationAPI {
       this.#paginationWrapperDiv.classList.add('pagination--width-S');
       this.paginationNextBtn.classList.add('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
+      this.#paginationWrapperDiv.classList.remove('pagination--width-M');
 
       this.#totalMarkup += this.#firstPageMarkup;
       return;
@@ -144,11 +145,6 @@ class PaginationAPI {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 
-    if (this.totalPages >= 2 && this.totalPages <= 4) {
-      this.#paginationWrapperDiv.classList.add('pagination--width-L');
-    } else {
-      this.#paginationWrapperDiv.classList.remove('pagination--width-L');
-    }
     if (this.totalPages >= 6) {
       this.#totalMarkup += this.#dotsRightMarkup;
       this.#totalMarkup += this.#getLastPageMarkup();
@@ -322,10 +318,22 @@ class PaginationAPI {
 
   static #correctPaginationBarSize() {
     // For better experience, we lock the size of the bar if we have a lot of pages. So it is comfortable to switch between the pages by pressing the arrows buttons.
-    if (this.totalPages >= 10) {
+    if (this.totalPages >= 8) {
       this.paginationPagesList.classList.add('pagination__list--width-L');
     } else {
       this.paginationPagesList.classList.remove('pagination__list--width-L');
+    }
+
+    if (this.totalPages >= 3 && this.totalPages <= 4) {
+      this.#paginationWrapperDiv.classList.add('pagination--width-L');
+    } else {
+      this.#paginationWrapperDiv.classList.remove('pagination--width-L');
+    }
+
+    if (this.totalPages >= 5 && this.totalPages <= 6) {
+      this.#paginationWrapperDiv.classList.add('pagination--width-XL');
+    } else {
+      this.#paginationWrapperDiv.classList.remove('pagination--width-XL');
     }
   }
 
