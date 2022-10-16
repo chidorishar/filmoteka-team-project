@@ -13,9 +13,10 @@ export class IDsParser {
    * @returns {string} string that contains all genres combined together and separated with comma: 'genre-1, genre-2'.
    */
   static idsToGenres(ids) {
+    if (!ids) return '';
     return ids
       .reduce((acc, id) => {
-        const genre = IDsParser.#findGenreByID(id);
+        const genre = this.#findGenreByID(id);
 
         return genre ? (acc += `${genre}, `) : acc;
       }, '')

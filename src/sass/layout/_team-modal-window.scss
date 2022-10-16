@@ -27,7 +27,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  background-color: getColorFromPalette('primary', 'light');
+  background-color: var(--bg-color);
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
   opacity: 1;
@@ -36,13 +36,13 @@
 
   transition: transform 0.8s ease,
     createTransitionFor('height' 'width' 'max-height' 'max-width');
-  // transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
 
   @include mediaUpTo('tablet') {
     min-width: 280px;
     max-width: 420px;
     max-height: 95vh;
+    width: 90vw;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -54,23 +54,6 @@
     width: 1200px;
     max-height: 70vh;
   }
-}
-
-.modal-wrapper__button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  color: black;
-  background-color: getColorFromPalette('primary', 'light');
-  border: 1px solid getColorFromPalette('primary', 'light');
-  // transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .modal-title {
@@ -87,7 +70,7 @@
   font-weight: 700;
   text-align: center;
   letter-spacing: 0.03em;
-  color: getColorFromPalette('primary', 'dark');
+  color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 24px;
@@ -97,6 +80,46 @@
   @include mediaOver('desktop') {
     font-size: 30px;
     line-height: 1.5;
+  }
+}
+
+.team-container {
+  position: relative;
+}
+
+.modal-wrapper__close-button-wrapper {
+  position: absolute;
+  top: -84px;
+  right: 0;
+  height: 100%;
+  width: 41px;
+
+  pointer-events: none;
+}
+
+.modal-wrapper__button {
+  position: sticky;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+  transition: createTransitionFor('fill');
+
+  fill: var(--text-color);
+  background-color: transparent;
+  border: none;
+
+  pointer-events: all;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    fill: getColorFromPalette('secondary', 'orange');
   }
 }
 
@@ -119,24 +142,24 @@
 .team {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 0 auto;
   margin-bottom: 30px;
-  background-color: #f7f5ec;
-  width: 230px;
+  background-color: var(--bgr-color);
+  width: calc(100% - 2 * 30px);
   border-radius: 5px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
     0px 2px 1px rgba(0, 0, 0, 0.2);
-  padding: 30px 0 40px;
-  background-color: #f7f5ec;
+  padding-top: 20px;
+  padding-bottom: 10px;
   text-align: center;
   overflow: hidden;
   position: relative;
 
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;
-    width: calc(50% - 30px);
+    width: calc(33% - 30px);
   }
 
   @include mediaOver('desktop') {
@@ -198,12 +221,12 @@
 
 .team:hover .team-photo__img,
 .team:focus .team-photo__img {
-  box-shadow: 0 0 0 14px #f7f5ec;
+  box-shadow: 0 0 0 14px #f7f7f7;
   transform: scale(0.7);
 }
 
 .team-info {
-  padding: 10px;
+  width: 100%;
 }
 
 .team-info__name {
@@ -214,7 +237,7 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 1.15;
-  color: getColorFromPalette('primary', 'dark');
+  color: var(--text-color);
 }
 
 .team-info__role {
@@ -225,41 +248,39 @@
   font-weight: 400;
   font-size: 16px;
   line-height: 1.15;
-  color: getColorFromPalette('primary', 'additional');
+  color: var(--text-color);
 }
 
 .list-social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
   list-style: none;
-  width: 100%;
-  margin: 0;
-  background-color: getColorFromPalette('secondary', 'orange');
-  position: absolute;
-  bottom: -100px;
-  left: 0;
-  transition: all 0.5s ease 0s;
-}
-
-.team:hover .list-social,
-.team:focus .list-social {
-  bottom: 0;
-}
-
-.item-social {
-  display: inline-block;
 }
 
 .link-social {
-  display: block;
-  padding: 10px;
-  font-size: 17px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease 0s;
   color: getColorFromPalette('primary', 'light');
-  transition: all 0.3s ease 0s;
-  text-decoration: none;
+
+  @include mediaInBetween('tablet', 'desktop') {
+    width: 45px;
+    height: 45px;
+  }
+
+  @include mediaOver('desktop') {
+    width: 40px;
+    height: 40px;
+  }
 }
 
-.team .link-social:hover,
-.team .link-social:focus {
-  color: getColorFromPalette('secondary', 'orange');
-  background-color: #f7f5ec;
+.link-social:hover,
+.link-social:focus {
+  background-color: getColorFromPalette('secondary', 'orange');
 }

@@ -8,6 +8,10 @@ $colorPalette: (
     'orange': #ff6b08,
     'white': #ffffff,
   ),
+  'pagination': (
+    'orange': #ff6b08,
+    'grey': #f7f7f7,
+  ),
   'footer': (
     'text': #545454,
     'background': #f7f7f7,
@@ -65,6 +69,27 @@ $colorPalette: (
     'border-left': rgba(62, 190, 141),
   ),
 );
+
+:root,
+:root.light {
+  --bg-color: #fff;
+  --bgr-color: #f7f5ec;
+  --text-color: #123;
+  --placeholder-stripes: #fff;
+}
+
+:root.dark {
+  --bg-color: #272e34;
+  --bgr-color: #607180;
+  --text-color: #fff;
+  --placeholder-stripes: rgba(255, 255, 255, 0.53);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 $breakpoints: (
   'mobile': 480px,
   'tablet': 768px,
@@ -80,4 +105,3 @@ $transitionData: (
   'time': 250ms,
   'timeFunction': cubic-bezier(0.4, 0, 0.2, 1),
 );
-

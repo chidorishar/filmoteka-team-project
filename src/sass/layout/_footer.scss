@@ -1,13 +1,14 @@
 .footer-section {
-  background-color: getColorFromPalette('footer', 'background');
+  background-color: var(--bg-color);
   font-style: normal;
   padding-top: 29px;
   padding-bottom: 29px;
+  margin-top: 40px;
 }
 
 .footer-section__box {
   font-family: $font-family-main;
-  color: getColorFromPalette('footer', 'text');
+  color: var(--text-color);
   font-size: 14px;
   line-height: 1.17;
   font-weight: $font-regular;
@@ -38,7 +39,7 @@
 }
 
 .footer-section__acсent {
-  color: getColorFromPalette('footer', 'text');
+  color: var(--text-color);
 }
 
 .footer-section__acсent:hover {

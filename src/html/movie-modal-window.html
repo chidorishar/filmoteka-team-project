@@ -1,0 +1,134 @@
+<div
+  class="backdrop is-hidden"
+  style="display: none"
+  data-modal__window
+  id="movies-modal-window"
+>
+  <div class="modal">
+    <ul class="modal__movies-nav__buttons-wrapper" id="movies-nav-btns-wrapper">
+      <li class="modal__movies-nav__item">
+        <b
+          class="modal__movies-nav__button"
+          type="button"
+          aria-label="Show previous movie details"
+          id="prev-movie-btn"
+        >
+          &lt;
+        </b>
+      </li>
+      <li class="modal__movies-nav__item">
+        <b
+          class="modal__movies-nav__button"
+          type="button"
+          aria-label="Show next movie details"
+          id="next-movie-btn"
+        >
+          &gt;
+        </b>
+      </li>
+    </ul>
+    <div class="modal-close-btn">
+      <button
+        class="modal-close"
+        type="button"
+        name="close"
+        aria-label="side menu open"
+      >
+        <svg class="modal-close__icon">
+          <use
+            href="/src/images/decorative/sprite.svg#icon-close"
+            width="30"
+            height="30"
+          ></use>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-poster">
+      <img
+        src="./images/opaque.png"
+        alt="poster"
+        class="poster is-hidden"
+        id="poster"
+      />
+      <div
+        id="modal-placeholder"
+        class="modal-poster__placeholder-thumb is-hidden"
+      >
+        <span class="modal-poster__placeholder">
+          <div class="modal-poster__placeholder-title-wrapper">
+            <span class="modal-poster__placeholder-title"></span>
+          </div>
+          has no poster
+        </span>
+      </div>
+    </div>
+    <div class="modal-info">
+      <h2 class="modal__title" id="modalTitle"></h2>
+      <div class="modal-data">
+        <table class="modal-data-table">
+          <tr>
+            <td class="modal__characteristic-rating" width="150">
+              Vote / Votes
+            </td>
+            <td class="modal__characteristic-rating">
+              <span
+                class="modal__characteristic-inform--accent"
+                id="averageRating"
+              ></span>
+              /
+              <span class="modal__characteristic-inform" id="rating"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-popularity" width="150">
+              Popularity
+            </td>
+            <td class="modal__characteristic-popularity">
+              <span class="modal__characteristic-inform" id="popularity"></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-title" width="150">
+              Original Title
+            </td>
+            <td class="modal__characteristic-title">
+              <span
+                class="modal__characteristic-inform block-style"
+                id="title"
+              ></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="modal__characteristic-genre" width="150">Genre</td>
+            <td class="modal__characteristic-genre">
+              <span
+                class="modal__characteristic-inform block-style"
+                id="genre"
+              ></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <h3 class="modal__about">ABOUT</h3>
+      <p class="modal__about-text" id="aboutMovie"></p>
+      <div class="modal-buttons" id="movie-modal-buttons-wrapper">
+        <button
+          class="modal__add-to-watched"
+          type="button"
+          name="add-watched-btn"
+          id="watched-btn"
+        >
+          ADD TO WATCHED
+        </button>
+        <button
+          class="modal__add-to-queue"
+          type="button"
+          name="add-queue-btn"
+          id="queue-btn"
+        >
+          ADD TO QUEUE
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

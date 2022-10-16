@@ -19,6 +19,10 @@
   @extend %flex;
   flex-grow: 1;
 
+  position: relative;
+
+  background: #0000004a;
+  box-shadow: -4px 6px 10px 0px #00000036;
   border-radius: 5px;
   overflow: hidden;
 
@@ -26,13 +30,48 @@
     $stripesWidth: 15px;
     $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
 
+    background: unset;
     background-image: repeating-linear-gradient(
       to left bottom,
-      getColorFromPalette('primary', 'light'),
-      getColorFromPalette('primary', 'light') $stripesWidth,
+      var(--placeholder-stripes),
+      var(--placeholder-stripes) $stripesWidth,
       $stripesMainColor $stripesWidth,
       $stripesMainColor $stripesWidth * 2
     );
+  }
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(3.5);
+
+    transition: createTransitionFor('opacity', '1s');
+
+    opacity: 0;
+    background-image: linear-gradient(
+      125deg,
+      #ff6b08 0%,
+      hsl(187deg 79% 52%) 100%
+    );
+    background-size: 141% 300%;
+    animation: imgLoadingBackgroundAnimation 3s ease-in-out infinite
+      alternate-reverse;
+    background-size: 100% 300%;
+  }
+
+  &--img-loading::before,
+  &--img-fallback::before {
+    opacity: 1;
+  }
+
+  &--img-loading .movie-card__img,
+  &--img-fallback .movie-card__img {
+    opacity: 0;
   }
 }
 
@@ -40,8 +79,17 @@
   width: 100%;
   height: 100%;
 
+  transition: createTransitionFor('opacity', 2s);
+  opacity: 1;
+
   object-fit: cover;
   object-position: 50% 50%;
+  transition: createTransitionFor('transform');
+
+  .movie-card__link:hover &,
+  .movie-card__link:focus & {
+    transform: scale(1.1);
+  }
 }
 
 .movie-card__poster-placeholder {
@@ -88,7 +136,7 @@
   margin: 0;
   margin-top: 8px;
 
-  color: getColorFromPalette('primary', 'dark');
+  color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
