@@ -1,8 +1,9 @@
 .header-library {
   padding-top: 40px;
   padding-bottom: 24px;
+  
   @include mediaOver('tablet') {
-    padding-bottom: 26px;
+    padding-bottom: 27px;
   }
 }
 

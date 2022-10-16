@@ -18,6 +18,7 @@ let galleryAPI = null;
 let activeLibMode = null;
 let moviesData = null;
 let libraryMoviesSearchForm = null;
+let noFoundWarningMessage = null;
 
 // MAIN
 (async () => {
@@ -80,10 +81,20 @@ let libraryMoviesSearchForm = null;
       'submit',
       onLibraryMoviesSearchFormSubmit
     );
+    noFoundWarningMessage = document.getElementById('library-no-movies');
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
-    NotificationAPI.addNotification('Showing your watched movies', false, 3000);
+    if (PaginationAPI.totalPages) {
+      NotificationAPI.addNotification(
+        'Showing your watched movies',
+        false,
+        3000
+      );
+      noFoundWarningMessage.setAttribute('style', 'display: none;');
+    } else {
+      noFoundWarningMessage.removeAttribute('style');
+    }
   } catch (error) {
     console.log(error.message);
     document.querySelector('.loader--critical').style.display = 'none';
@@ -138,9 +149,14 @@ function renderGalleryByPage() {
       PaginationAPI.updateCurrentPage(1);
       galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
+      noFoundWarningMessage.removeAttribute('style');
       return;
     }
     renderGalleryByPage();
+  }
+
+  if (!noFoundWarningMessage.hasAttribute('style')) {
+    noFoundWarningMessage.setAttribute('style', 'display: none;');
   }
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
@@ -170,21 +186,26 @@ function onLibraryBtnsClick(e) {
 
   switch (activeLibMode) {
     case MOVIE_INFO.WATCHED:
-      NotificationAPI.addNotification(
-        'Showing your watched movies',
-        false,
-        3000
-      );
       LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
       break;
     case MOVIE_INFO.QUEUED:
-      NotificationAPI.addNotification('Showing your movies queue', false, 3000);
       LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
       break;
   }
 
   moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
+
+  if (PaginationAPI.totalPages) {
+    NotificationAPI.addNotification(
+      `Showing your ${activeLibMode} movies`,
+      false,
+      3000
+    );
+    noFoundWarningMessage.setAttribute('style', 'display: none;');
+  } else {
+    noFoundWarningMessage.removeAttribute('style');
+  }
 
   galleryAPI.renderMoviesCards(moviesData);
   PaginationAPI.renderPagination();
