@@ -21,7 +21,7 @@ let moviesData = null;
 (async () => {
   try {
     LDStorageAPI.init();
-    NotificationAPI.init('body');
+    NotificationAPI.init('body', 178);
     await BackendConfigStorage.init();
 
     LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);

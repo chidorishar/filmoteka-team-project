@@ -31,7 +31,7 @@
   text-align: center;
   border-radius: 8px;
 
-  transition: createTransitionFor('opacity' 'transform');
+  transition: createTransitionFor('opacity' 'transform' 'background-color');
 
   @include mediaOver('tablet') {
     width: 300px;
