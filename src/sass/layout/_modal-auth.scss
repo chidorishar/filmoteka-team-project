@@ -1,20 +1,20 @@
 .overlay-modal {
-  // display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   display: none;
   position: absolute;
-  z-index: 2000;
+  z-index: 2;
   top: 0;
   left: 0;
-  background-color: rgba($color: #792727, $alpha: 0.7);
+  background-color: rgba(54, 54, 54, 0.607);
   width: 100vw;
   height: 100vh;
   transition: 0.5s;
 }
 
 .overlay-modal.active {
-  background-color: rgba(71, 70, 73, 0.9);
+  background-color: rgba(54, 54, 54, 0.607);
 }
 
 .container-modal {
@@ -27,7 +27,7 @@
 
 .block {
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(var(--bgr-color), 0.75);
   box-shadow: 0 5px 45px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@
 }
 
 .block__title {
-  color: #604f4f;
+  color: var(--text-color);
   margin-bottom: 15px;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .form-box {
-  background: linear-gradient(to right, #E2E2E2, #C9D6FF);
+  background: var(--firebase-auth-gradient);
   height: 100%;
   width: 50%;
   box-shadow: 0 5px 45px rgba(0, 0, 0, 0.25);
@@ -165,10 +165,9 @@
 
 .form__btn--singup {
   background-color: #f43648;
-
 }
 
-.form__btn--signin{
+.form__btn--signin {
   margin-bottom: 10px;
 }
 
@@ -182,7 +181,7 @@
 .form__btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 0 #06739f;
-  color:#d5d5d5;
+  color: #d5d5d5;
 }
 .form__btn:active {
   transform: translateY(-1px);
@@ -191,18 +190,18 @@
 
 // end of animation buttons form
 
-.form__btn--google{
+.form__btn--google {
   background-color: rgb(33, 27, 27);
 }
 
 .form__btn--google:hover {
-  transform:translateY(-3px);
-  box-shadow:0 5px 0 #575555;
-  color:#d5d5d5;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 0 #575555;
+  color: #d5d5d5;
 }
 .form__btn--google:active {
-  transform:translateY(-1px);
-  box-shadow:0 2px 0 #575555;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 0 #575555;
 }
 
 .btn-close-modal {
@@ -239,6 +238,7 @@
   font-weight: 500;
   color: #fff;
   background-color: transparent;
+  margin-left: 40px;
 
   font-size: 12px;
   line-height: 1.17;

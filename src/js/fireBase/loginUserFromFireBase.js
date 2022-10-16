@@ -63,14 +63,14 @@ function userLogin(e) {
       console.log(user);
       NotificationAPI.addNotification(
         'Incorrect mail and password',
-        false,
+        true,
         3000
       );
     })
     .catch(error => {
       NotificationAPI.addNotification(
         'Incorrect mail and password',
-        false,
+        true,
         3000
       );
     });
@@ -83,7 +83,7 @@ onAuthStateChanged(auth, user => {
   if (user) {
     refs.btnOpenModal.style.display = 'none';
     refs.myLibraryPage.style.display = 'flex';
-    refs.modalAuth.style.display = 'none';
+    refs.modalAuth.classList.add('is-hidden');
     refs.btnGoOut.style.display = 'flex';
   } else {
     refs.btnOpenModal.style.display = 'flex';

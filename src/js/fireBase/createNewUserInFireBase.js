@@ -52,7 +52,7 @@ function userRegistration(e) {
       const errorMessage = error.message;
       NotificationAPI.addNotification(
         'Incorrect mail and password',
-        false,
+        true,
         3000
       );
     });
