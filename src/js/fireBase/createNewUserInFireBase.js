@@ -30,7 +30,6 @@ function userRegistration(e) {
 
   const newUserEmail = email.value;
   const newUserPassword = password.value;
-  console.log(newUserEmail, newUserPassword);
 
   //Валидация контента полей формы
   if (newUserEmail === '' || newUserPassword === '') {
