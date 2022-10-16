@@ -38,7 +38,7 @@
   color: #604f4f;
   margin-bottom: 15px;
 }
- 
+
 .block__item {
   width: 50%;
 }
@@ -218,6 +218,11 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    fill: #06739f;
+  }
 }
 
 .btn-auth {
