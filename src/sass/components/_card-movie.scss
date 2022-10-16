@@ -84,6 +84,12 @@
 
   object-fit: cover;
   object-position: 50% 50%;
+  transition: createTransitionFor('transform');
+
+  .movie-card__link:hover &,
+  .movie-card__link:focus & {
+    transform: scale(1.1);
+  }
 }
 
 .movie-card__poster-placeholder {
