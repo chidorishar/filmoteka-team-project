@@ -4,23 +4,85 @@ export class LDStorageAPI {
   static MOVIE_INFO = {
     WATCHED: 'watched',
     QUEUED: 'queued',
+    SEARCHED: 'searched',
   };
 
-  static paginationInfo = {
+  static lastSearchRequest = null;
+
+  static #paginationInfo = {
     page: 1,
     totalPages: null,
     MOVIES_PER_PAGE: 18,
   };
 
   static #activeStorage = null;
+  static #activeStorageMode = null;
+  static #isInLibrary = null;
   static #watched = {};
   static #queued = {};
+  static #searched = [];
 
-  static init() {
+  static init(isInLibraryMode = false) {
     this.#watched = readFromLocalStorage(this.MOVIE_INFO.WATCHED) ?? {};
     this.#queued = readFromLocalStorage(this.MOVIE_INFO.QUEUED) ?? {};
-    this.#activeStorage = this.#watched;
-    this.paginationInfo.totalPages = this.#countTotalPages();
+
+    this.#isInLibrary = isInLibraryMode;
+    if (isInLibraryMode) {
+      this.#activeStorageMode = this.MOVIE_INFO.WATCHED;
+      this.#activeStorage = [...Object.values(this.#watched)];
+      this.#paginationInfo.totalPages = this.#countTotalPages();
+    }
+  }
+
+  static getTotalPages() {
+    this.#paginationInfo.totalPages = this.#countTotalPages();
+
+    return this.#paginationInfo.totalPages;
+  }
+
+  static getMoviesByPage(pageNumber) {
+    this.#paginationInfo.page = pageNumber;
+
+    const moviesData = this.#sliceMoviesArrayByPage();
+
+    return moviesData;
+  }
+
+  static updateActiveStorage(storageType = '') {
+    if (!storageType) storageType = this.#activeStorageMode;
+
+    this.#activeStorageMode = storageType;
+    switch (storageType) {
+      case this.MOVIE_INFO.QUEUED:
+        this.#activeStorage = [...Object.values(this.#queued)];
+        break;
+      case this.MOVIE_INFO.WATCHED:
+        this.#activeStorage = [...Object.values(this.#watched)];
+        break;
+      case this.MOVIE_INFO.SEARCHED:
+        this.#activeStorage = this.#searched;
+        break;
+    }
+  }
+
+  static searchMoviesByName(searchRequest, searchIn) {
+    if (!this.#activeStorage) return;
+
+    const moviesData = [
+      ...Object.values(
+        searchIn === this.MOVIE_INFO.WATCHED ? this.#watched : this.#queued
+      ),
+    ];
+
+    const filteredMoviesData = moviesData.filter(movieObj => {
+      let movieName = movieObj.title ? movieObj.title : movieObj.name;
+      return movieName.toLowerCase().includes(searchRequest.toLowerCase());
+    });
+
+    this.lastSearchRequest = searchRequest;
+    this.#searched = filteredMoviesData;
+    this.updateActiveStorage();
+    return filteredMoviesData;
   }
 
   /**
@@ -45,6 +107,7 @@ export class LDStorageAPI {
     } catch (error) {
       console.log(error.message);
     }
+    if (this.#isInLibrary) this.updateActiveStorage();
   }
 
   /**
@@ -52,6 +115,7 @@ export class LDStorageAPI {
    * @param {number} id - id of obj of movie data we need to remove
    * @param {string} storageKey - the key (where data was saved (watched/ queued))
    */
+
   static removeFromLocalStorage(id, storageKey) {
     const writeToLS = this.#writeObjToLS;
 
@@ -62,48 +126,7 @@ export class LDStorageAPI {
       delete this.#queued['' + id];
       writeToLS(storageKey, this.#queued);
     }
-  }
-
-  static getTotalPages() {
-    this.paginationInfo.totalPages = this.#countTotalPages();
-
-    return this.paginationInfo.totalPages;
-  }
-
-  static getMoviesByPage(pageNumber) {
-    this.paginationInfo.page = pageNumber;
-
-    let moviesPropertiesArray = [...Object.values(this.#activeStorage)];
-
-    let moviesData = this.#sliceMoviesArrayByPage(moviesPropertiesArray);
-
-    return moviesData;
-  }
-
-  static setActiveStorage(storageType) {
-    if (this.MOVIE_INFO.WATCHED === storageType) {
-      this.#activeStorage = this.#watched;
-    } else if (this.MOVIE_INFO.QUEUED === storageType) {
-      this.#activeStorage = this.#queued;
-    }
-  }
-
-  static #sliceMoviesArrayByPage(moviesArray) {
-    // cutting sausage into slices
-    let fromMovie =
-      (this.paginationInfo.page - 1) * this.paginationInfo.MOVIES_PER_PAGE;
-    let toMovie =
-      this.paginationInfo.page * this.paginationInfo.MOVIES_PER_PAGE;
-
-    return moviesArray.slice(fromMovie, toMovie);
-  }
-
-  static #countTotalPages() {
-    const moviesQuantity = Object.keys(this.#activeStorage).length;
-    const paginationPagesQuantity =
-      moviesQuantity / this.paginationInfo.MOVIES_PER_PAGE;
-
-    return Math.ceil(paginationPagesQuantity);
+    if (this.#isInLibrary) this.updateActiveStorage();
   }
 
   /**
@@ -111,6 +134,7 @@ export class LDStorageAPI {
    * @param {number} id  id of obj of movie we need to find
    * @returns {Object} object of information about storing the film
    */
+
   static findInLocalStorage(id) {
     const movInf = {
       watched: !!this.#watched['' + id],
@@ -118,6 +142,23 @@ export class LDStorageAPI {
     };
 
     return movInf;
+  }
+
+  static #sliceMoviesArrayByPage() {
+    let fromMovie =
+      (this.#paginationInfo.page - 1) * this.#paginationInfo.MOVIES_PER_PAGE;
+    let toMovie =
+      this.#paginationInfo.page * this.#paginationInfo.MOVIES_PER_PAGE;
+
+    return this.#activeStorage.slice(fromMovie, toMovie);
+  }
+
+  static #countTotalPages() {
+    const moviesQuantity = this.#activeStorage.length;
+    const paginationPagesQuantity =
+      moviesQuantity / this.#paginationInfo.MOVIES_PER_PAGE;
+
+    return Math.ceil(paginationPagesQuantity);
   }
 
   static #writeObjToLS(key, obj) {

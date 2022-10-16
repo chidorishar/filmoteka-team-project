@@ -4,14 +4,16 @@ import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
 
 export class MovieModalHandler {
   #modalWindowEls = {
-    closeBtn: null,
-    queueBtn: null,
-    watchedBtn: null,
-    moviesNavBtnsWrapper: null,
+    closeBtn: document.querySelector('.modal-close'),
+    queueBtn: document.querySelector('#queue-btn'),
+    watchedBtn: document.querySelector('#watched-btn'),
+    moviesNavBtnsWrapper: document.querySelector('#movies-nav-btns-wrapper'),
     prevMovieBtn: document.querySelector('#prev-movie-btn'),
     nextMovieBtn: document.querySelector('#next-movie-btn'),
-    modalBackdrop: null,
-    libActionsBtnsWrapper: null,
+    modalBackdrop: document.querySelector('#movies-modal-window'),
+    libActionsBtnsWrapper: document.querySelector(
+      '#movie-modal-buttons-wrapper'
+    ),
   };
 
   #movieLibData = null;
@@ -22,28 +24,26 @@ export class MovieModalHandler {
   #nextMovieId = null;
   #prevMovieId = null;
 
-  constructor(
-    watchedBtnSelector,
-    queueBtnSelector,
-    backdropSelector,
-    closeBtnSelector,
-    libActionsBtnsWrapperSelector,
-    galleryAPI
-  ) {
-    this.#modalWindowEls.watchedBtn =
-      document.querySelector(watchedBtnSelector);
-    this.#modalWindowEls.queueBtn = document.querySelector(queueBtnSelector);
-    this.#modalWindowEls.modalBackdrop =
-      document.querySelector(backdropSelector);
-    this.#modalWindowEls.closeBtn = document.querySelector(closeBtnSelector);
-    this.#modalWindowEls.libActionsBtnsWrapper = document.querySelector(
-      libActionsBtnsWrapperSelector
-    );
-    this.#modalWindowEls.moviesNavBtnsWrapper = document.querySelector(
-      '#movies-nav-btns-wrapper'
-    );
+  static MODE = {
+    HOME: 'home',
+    LIBRARY_WATCHED: 'lib-watch',
+    LIBRARY_QUEUED: 'lib-queue',
+  };
+  mode = null;
 
+  static MOVIE_ACTIONS = {
+    ADDED_TO_WATCHED: 'add_wchd',
+    REMOVED_FROM_WATCHED: 'rem_wchd',
+    ADDED_TO_QUEUED: 'add_queue',
+    REMOVED_FROM_QUEUED: 'rem_queue',
+  };
+
+  #onMoveStatusChangedCB = null;
+
+  constructor(galleryAPI, mode, onMoveStatusChangedCB) {
     this.#galleryAPI = galleryAPI;
+    this.mode = mode;
+    this.#onMoveStatusChangedCB = onMoveStatusChangedCB;
 
     galleryAPI.addOnCardClickCallback(this.#onGalleryClick);
     this.#modalWindowEls.libActionsBtnsWrapper.addEventListener(
@@ -64,6 +64,7 @@ export class MovieModalHandler {
 
     event.preventDefault();
 
+    //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.addEventListener(
       'click',
@@ -123,7 +124,7 @@ export class MovieModalHandler {
       movieAbout: document.getElementById('aboutMovie'),
     };
 
-    refs.moviePoster.src = `${posterFullPath}`;
+    if (pathToPoster) refs.moviePoster.src = `${posterFullPath}`;
     refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
     refs.movieAverageRating.textContent = `${fixedAverageRating}`;
     refs.movieRating.textContent = `${votes ? votes : 'N/D'}`;
@@ -132,6 +133,27 @@ export class MovieModalHandler {
     refs.movieGenre.textContent = `${
       movieGenresString ? movieGenresString : 'N/D'
     }`;
+
+    function addPosterPlaceholder() {
+      const modalPosterPlaceholder =
+        document.getElementById('modal-placeholder');
+      const textInPlaceholder = document.querySelector(
+        '.modal-poster__placeholder-title'
+      );
+      const hiddenPoster = document.querySelector('.poster');
+
+      if (!pathToPoster) {
+        modalPosterPlaceholder.classList.remove('is-hidden');
+        textInPlaceholder.textContent = `${movieTitle ?? movieName}`;
+        hiddenPoster.classList.add('is-hidden');
+      } else {
+        modalPosterPlaceholder.classList.add('is-hidden');
+        hiddenPoster.classList.remove('is-hidden');
+      }
+    }
+
+    addPosterPlaceholder();
+
     refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
@@ -158,9 +180,28 @@ export class MovieModalHandler {
   }
 
   #onLibraryButtonsClick = e => {
+    const oldMovieLibData = this.#movieLibData;
     const movieNewLibData = this.#updateLSData(e.target.id);
 
+    const movieLibDelta = {
+      watchedChanged: oldMovieLibData.watched !== movieNewLibData.watched,
+      queuedChanged: oldMovieLibData.queued === movieNewLibData.queued,
+    };
+    let movieAction;
+    if (movieLibDelta.watchedChanged) {
+      movieAction = oldMovieLibData.watched
+        ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED
+        : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED;
+    } else {
+      movieAction = oldMovieLibData.queued
+        ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED
+        : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED;
+    }
+
     this.#updateControlButtons(movieNewLibData);
+    this.#movieLibData = movieNewLibData;
+
+    this.#onMoveStatusChangedCB?.(movieAction);
   };
 
   #updateLSData(btnID) {

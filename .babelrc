@@ -1,3 +1,14 @@
 {
-  "plugins": ["@babel/plugin-proposal-private-methods"]
+  "plugins": [
+    [
+      "@babel/plugin-proposal-private-methods",
+      {
+        "assumptions": {
+          "privateFieldsAsProperties": true,
+          "setPublicClassFields": true
+        }
+      }
+    ],
+    "@babel/plugin-proposal-class-static-block"
+  ]
 }

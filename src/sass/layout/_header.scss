@@ -71,8 +71,10 @@
 
 .nav-header__item {
   position: relative;
-  margin-left: 40px;
-  margin-right: 40px
+
+  &:last-child {
+    margin-left: 40px;
+  }
 }
 
 .nav-header__link {
@@ -152,6 +154,14 @@
   }
   &::placeholder {
     color: getColorFromPalette('primary', 'light');
+  }
+
+  &:disabled {
+    &::placeholder {
+      color: getColorFromPalette('modal', 'characteristic-text-color');
+    }
+
+    border-bottom-color: getColorFromPalette('accent', 'warning');
   }
 }
 

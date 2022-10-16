@@ -33,8 +33,8 @@
     background: unset;
     background-image: repeating-linear-gradient(
       to left bottom,
-      getColorFromPalette('primary', 'light'),
-      getColorFromPalette('primary', 'light') $stripesWidth,
+      var(--placeholder-stripes),
+      var(--placeholder-stripes) $stripesWidth,
       $stripesMainColor $stripesWidth,
       $stripesMainColor $stripesWidth * 2
     );
@@ -84,6 +84,12 @@
 
   object-fit: cover;
   object-position: 50% 50%;
+  transition: createTransitionFor('transform');
+
+  .movie-card__link:hover &,
+  .movie-card__link:focus & {
+    transform: scale(1.1);
+  }
 }
 
 .movie-card__poster-placeholder {
@@ -130,7 +136,8 @@
   margin: 0;
   margin-top: 8px;
 
-  color: getColorFromPalette('primary', 'dark');
+  transition: createTransitionFor('color');
+  color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {
     font-size: 12px;
