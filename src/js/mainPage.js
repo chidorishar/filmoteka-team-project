@@ -37,17 +37,9 @@ let unsuccessfulSearchEl = null;
     galleryAPI = new GalleryAPI('#movies-wrapper');
 
     //init pagination variables
-    PaginationAPI.paginationNextBtn.addEventListener(
+    PaginationAPI.paginationWrapperDiv.addEventListener(
       'click',
-      onPaginationBtnChangeClick
-    );
-    PaginationAPI.paginationPreviousBtn.addEventListener(
-      'click',
-      onPaginationBtnChangeClick
-    );
-    PaginationAPI.paginationPagesList.addEventListener(
-      'click',
-      onPaginationListBtnNumberClick
+      onPaginationWrapperBtnClick
     );
 
     resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
@@ -174,23 +166,25 @@ async function renderGalleryByPage() {
   }
 }
 
-async function onPaginationBtnChangeClick(e) {
-  if (e.currentTarget.id === 'pagination-button-next') {
-    PaginationAPI.changePageByOne(true);
-  } else {
-    PaginationAPI.changePageByOne(false);
-  }
-
-  await renderGalleryByPage();
-
-  PaginationAPI.renderPagination();
-}
-
-async function onPaginationListBtnNumberClick(e) {
+async function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
-  if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
 
-  PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+  let buttonId = e.target.id;
+
+  switch (buttonId) {
+    case 'pagination-button-next':
+      PaginationAPI.changePageByOne(true);
+      break;
+    case 'pagination-button-previous':
+      PaginationAPI.changePageByOne(false);
+      break;
+    case 'pagination-number-btn':
+      if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
+      PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+      break;
+    default:
+      return;
+  }
 
   await renderGalleryByPage();
 
