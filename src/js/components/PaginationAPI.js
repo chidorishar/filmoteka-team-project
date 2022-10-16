@@ -40,7 +40,7 @@ class PaginationAPI {
   static #renderPaginationMarkup() {
     this.#totalMarkup = '';
 
-    if (this.totalPages === 0) {
+    if (!this.totalPages) {
       this.#paginationWrapperDiv.setAttribute('style', 'display: none');
     } else {
       this.#paginationWrapperDiv.removeAttribute('style');
