@@ -4,14 +4,14 @@ const refs = {
   modalAuth: document.querySelector('.overlay-modal'),
 };
 
-let isVisible = false;
+export let isVisible = false;
 
 refs.btnOpenModal.addEventListener('click', toggleModal);
 refs.btnCloseModal.addEventListener('click', toggleModal);
 refs.modalAuth.addEventListener('click', onBackdropClick);
 refs.modalAuth.style.display = 'flex';
 
-function toggleModal() {
+export function toggleModal() {
   document.body.classList.toggle('js-modal-is-hidden');
   refs.modalAuth.classList.toggle('is-hidden');
   isVisible

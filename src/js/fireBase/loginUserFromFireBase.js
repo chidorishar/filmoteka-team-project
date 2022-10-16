@@ -8,6 +8,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
 } from 'firebase/auth';
+import { toggleModal, isVisible } from './closeAndOpenModal';
 
 import { NotificationAPI } from '../../js/components/NotificationAPI';
 
@@ -83,7 +84,7 @@ onAuthStateChanged(auth, user => {
   if (user) {
     refs.btnOpenModal.style.display = 'none';
     refs.myLibraryPage.style.display = 'flex';
-    refs.modalAuth.classList.add('is-hidden');
+    if (isVisible) toggleModal();
     refs.btnGoOut.style.display = 'flex';
   } else {
     refs.btnOpenModal.style.display = 'flex';
