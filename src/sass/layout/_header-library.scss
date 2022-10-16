@@ -82,10 +82,13 @@
 }
 
 .nav-group-library__item {
-  position: relative;
-  margin-left: 40px;
-
   @extend %unmarked-list;
+
+  position: relative;
+
+  &:last-child {
+    margin-left: 40px;
+  }
 }
 
 .nav-group-library__link {
