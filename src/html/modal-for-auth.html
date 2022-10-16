@@ -1,7 +1,11 @@
 //Контейнер
 <div class="overlay-modal">
   <div class="container-modal">
-    <button class="btn-close-modal">X</button>
+    <button class="btn-close-modal">
+      <svg width='25' height='25'>
+        <use href="./images/decorative/icon-close-auth.svg#icon-x-square"></use>
+      </svg>
+    </button>
 
     <div class="block">
       <section class="block__item block-item">
@@ -33,12 +37,15 @@
             placeholder="Пароль"
           />
         </p>
-        <p>
-          <button type="submit" class="form__btn form__btn--signin">
+        <p class="form__buttons">
+          <button type="submit" class="form__btn btn__animation form__btn--signin">
             Войти
           </button>
-          <button type="button" class="form__btn form__btn--google">
-            Войти c помощью Гугл
+          <button type="button" class="form__btn btn__animation form__btn--google">
+            <svg class="google-logo" width="35" height="35">
+              <use xlink:href="./images/decorative/icon-google.svg#icon-google"></use>
+            </svg>
+            Войти c помощью Google
           </button>
         </p>
       </form>
@@ -62,8 +69,8 @@
           />
         </p>
 
-        <p>
-          <button type="submit" class="form__btn form__btn--signup">
+        <p class="form__buttons">
+          <button type="submit" class="form__btn btn__animation form__btn--signup">
             Зарегистрироваться
           </button>
         </p>
