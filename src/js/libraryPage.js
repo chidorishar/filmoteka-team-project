@@ -137,13 +137,22 @@ function renderGalleryByPage() {
   if (!moviesData.length) {
     PaginationAPI.changePageByOne(false);
     if (PaginationAPI.currentPage < 1) {
+      if (activeLibMode === MOVIE_INFO.SEARCHED && moviesData.length === 1) {
+        PaginationAPI.currentPage = 1;
+        LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
+        librarySearchFieldInput.value = '';
+        renderGalleryByPage();
+
+        return;
+      }
+
+      librarySearchFieldInput.value = '';
       PaginationAPI.updateCurrentPage(1);
       galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
+
       noFoundWarningMessage.removeAttribute('style');
       librarySearchFieldInput.setAttribute('disabled', 'true');
-      librarySearchFieldInput.value = '';
-
       return;
     }
     renderGalleryByPage();
