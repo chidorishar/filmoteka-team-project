@@ -136,6 +136,7 @@
   margin: 0;
   margin-top: 8px;
 
+  transition: createTransitionFor('color');
   color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {
