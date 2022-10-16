@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { NotificationAPI } from '../../js/components/NotificationAPI';
 
 //Инициализация FireBase
 const firebaseConfig = {
@@ -33,7 +33,7 @@ function userRegistration(e) {
 
   //Валидация контента полей формы
   if (newUserEmail === '' || newUserPassword === '') {
-    Notify.warning(`Введите данные`);
+    NotificationAPI.addNotification('Enter email and password', false, 3000);
     return;
   }
 
@@ -42,18 +42,20 @@ function userRegistration(e) {
     .then(userCredential => {
       // Signed in
       const user = userCredential.user;
-      Notify.info('You have successfully registered', {
-        timeout: 1000,
-        clickToClose: true,
-      });
+      NotificationAPI.addNotification(
+        'user successfully logged in...',
+        false,
+        3000
+      );
     })
     .catch(error => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      Notify.warning('Incorrect mail and password', {
-        timeout: 1000,
-        clickToClose: true,
-      });
+      NotificationAPI.addNotification(
+        'Incorrect mail and password',
+        false,
+        3000
+      );
     });
 
   e.currentTarget.reset();

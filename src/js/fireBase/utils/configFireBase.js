@@ -1,3 +1,1 @@
-//vit@gmail.com    vTjadksd123
-
-// vita@mail.ru cznxfof
+// Пользователь для теста логина vita@mail.ru cznxfof

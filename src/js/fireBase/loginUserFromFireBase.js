@@ -9,7 +9,7 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { NotificationAPI } from '../../js/components/NotificationAPI';
 
 //Инициализация FireBase
 const firebaseConfig = {
@@ -47,12 +47,11 @@ function userLogin(e) {
 
   const UserEmail = email.value;
   const UserPassword = password.value;
-  console.log(UserEmail, UserPassword);
+  // console.log(UserEmail, UserPassword);
 
   //Валидация контента полей формы
   if (UserEmail === '' || UserPassword === '') {
-    Notify.warning(`Введите данные`);
-    return;
+    NotificationAPI.addNotification('Enter email and password', false, 3000);
   }
 
   //Регистрация по email and login
@@ -62,35 +61,19 @@ function userLogin(e) {
       // Signed in
       const user = userCredential.user;
       console.log(user);
-      Notify.info('You have been login', {
-        timeout: 1000,
-        clickToClose: true,
-      });
+      NotificationAPI.addNotification(
+        'Incorrect mail and password',
+        false,
+        3000
+      );
     })
     .catch(error => {
-      Notify.warning('This user does not exist', {
-        timeout: 1000,
-        clickToClose: true,
-      });
+      NotificationAPI.addNotification(
+        'Incorrect mail and password',
+        false,
+        3000
+      );
     });
-
-
-  // //Регистрация по Google
-  // const provider = new GoogleAuthProvider(app);
-  // signInWithPopup(auth, provider)
-  //   .then(result => {
-  //     const credential = GoogleAuthProvider.credentialFromResult(result);
-  //     const token = credential.accessToken;
-
-  //     const user = result.user;
-  //     console.log(user);
-  //   })
-  //   .catch(error => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-
-  //     const credential = GoogleAuthProvider.credentialFromError(error);
-  //   });
 
   e.currentTarget.reset();
 }
@@ -112,27 +95,25 @@ onAuthStateChanged(auth, user => {
 //Выход пользователя с профиля
 refs.btnCloseProfile.addEventListener('click', e => {
   signOut(auth);
-  Notify.info('You have been logged out', {
-    timeout: 1000,
-    clickToClose: true,
-  });
+  NotificationAPI.addNotification('You have been logged out', false, 3000);
 });
 
 function googleLogin() {
   const provider = new GoogleAuthProvider(app);
   signInWithPopup(auth, provider)
-  .then((result) => {
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    console.log(user);
-  }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-  });
+    .then(result => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      console.log(user);
+    })
+    .catch(error => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
 }
