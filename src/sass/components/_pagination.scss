@@ -44,7 +44,12 @@
     &--width-L {        
         @include mediaOver('mobile') {
             width: 380px;        
-            margin: auto;
+        }
+    }
+
+    &--width-XL {
+        @include mediaOver('mobile') {
+            width: 490px;
         }
     }
 }
@@ -141,4 +146,8 @@
             fill: getColorFromPalette('primary', 'dark');
         }
     }
+}
+
+.pagination_svg {
+    pointer-events: none;
 }
