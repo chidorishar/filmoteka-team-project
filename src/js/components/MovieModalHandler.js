@@ -197,10 +197,11 @@ export class MovieModalHandler {
         ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED
         : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED;
     }
-    this.#onMoveStatusChangedCB?.(movieAction);
 
     this.#updateControlButtons(movieNewLibData);
     this.#movieLibData = movieNewLibData;
+
+    this.#onMoveStatusChangedCB?.(movieAction);
   };
 
   #updateLSData(btnID) {

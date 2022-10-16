@@ -8,7 +8,6 @@ export class LDStorageAPI {
   };
 
   static lastSearchRequest = null;
-  static lastActiveMovieInfo = null;
 
   static #paginationInfo = {
     page: 1,
@@ -17,15 +16,22 @@ export class LDStorageAPI {
   };
 
   static #activeStorage = null;
+  static #activeStorageMode = null;
+  static #isInLibrary = null;
   static #watched = {};
   static #queued = {};
   static #searched = [];
 
-  static init() {
+  static init(isInLibraryMode = false) {
     this.#watched = readFromLocalStorage(this.MOVIE_INFO.WATCHED) ?? {};
     this.#queued = readFromLocalStorage(this.MOVIE_INFO.QUEUED) ?? {};
-    this.#activeStorage = [...Object.values(this.#watched)];
-    this.#paginationInfo.totalPages = this.#countTotalPages();
+
+    this.#isInLibrary = isInLibraryMode;
+    if (isInLibraryMode) {
+      this.#activeStorageMode = this.MOVIE_INFO.WATCHED;
+      this.#activeStorage = [...Object.values(this.#watched)];
+      this.#paginationInfo.totalPages = this.#countTotalPages();
+    }
   }
 
   static getTotalPages() {
@@ -37,19 +43,20 @@ export class LDStorageAPI {
   static getMoviesByPage(pageNumber) {
     this.#paginationInfo.page = pageNumber;
 
-    let moviesData = this.#sliceMoviesArrayByPage();
+    const moviesData = this.#sliceMoviesArrayByPage();
 
     return moviesData;
   }
 
-  static setActiveStorage(storageType) {
+  static updateActiveStorage(storageType = '') {
+    if (!storageType) storageType = this.#activeStorageMode;
+
+    this.#activeStorageMode = storageType;
     switch (storageType) {
       case this.MOVIE_INFO.QUEUED:
-        this.lastActiveMovieInfo = this.MOVIE_INFO.QUEUED;
         this.#activeStorage = [...Object.values(this.#queued)];
         break;
       case this.MOVIE_INFO.WATCHED:
-        this.lastActiveMovieInfo = this.MOVIE_INFO.WATCHED;
         this.#activeStorage = [...Object.values(this.#watched)];
         break;
       case this.MOVIE_INFO.SEARCHED:
@@ -58,22 +65,24 @@ export class LDStorageAPI {
     }
   }
 
-  static searchInLastActiveStorageMovies(searchRequest) {
-    this.setActiveStorage(this.lastActiveMovieInfo);
+  static searchMoviesByName(searchRequest, searchIn) {
     if (!this.#activeStorage) return;
 
-    let moviesPropertiesArray = [...Object.values(this.#activeStorage)];
+    const moviesData = [
+      ...Object.values(
+        searchIn === this.MOVIE_INFO.WATCHED ? this.#watched : this.#queued
+      ),
+    ];
+
+    const filteredMoviesData = moviesData.filter(movieObj => {
+      let movieName = movieObj.title ? movieObj.title : movieObj.name;
+      return movieName.toLowerCase().includes(searchRequest.toLowerCase());
+    });
+
     this.lastSearchRequest = searchRequest;
-
-    const filteredBySearchRequestArray = moviesPropertiesArray.filter(
-      movieObj => {
-        let movieName = movieObj.title ? movieObj.title : movieObj.name;
-        return movieName.toLowerCase().includes(searchRequest.toLowerCase());
-      }
-    );
-
-    this.#searched = filteredBySearchRequestArray;
-    return filteredBySearchRequestArray;
+    this.#searched = filteredMoviesData;
+    this.updateActiveStorage();
+    return filteredMoviesData;
   }
 
   /**
@@ -98,6 +107,7 @@ export class LDStorageAPI {
     } catch (error) {
       console.log(error.message);
     }
+    if (this.#isInLibrary) this.updateActiveStorage();
   }
 
   /**
@@ -116,6 +126,7 @@ export class LDStorageAPI {
       delete this.#queued['' + id];
       writeToLS(storageKey, this.#queued);
     }
+    if (this.#isInLibrary) this.updateActiveStorage();
   }
 
   /**

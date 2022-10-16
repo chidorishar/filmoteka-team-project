@@ -6,43 +6,37 @@ import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { MovieModalHandler } from './components/MovieModalHandler';
 
-import { readFromLocalStorage } from './utils/WebStorageMethods';
-
-const GENRES_DATA_LS_KEY = 'genres-data';
-const MOVIE_INFO = {
-  WATCHED: 'watched',
-  QUEUED: 'queued',
-  SEARCHED: 'searched',
-};
-let galleryAPI = null;
+// const MOVIE_INFO = {
+//   WATCHED: 'watched',
+//   QUEUED: 'queued',
+//   SEARCHED: 'searched',
+// };
 let activeLibMode = null;
+let galleryAPI = null;
 let moviesData = null;
 let libraryMoviesSearchForm = null;
 let noFoundWarningMessage = null;
 let librarySearchFieldInput = null;
+let isSearchActive = false;
 
 // MAIN
 (async () => {
   try {
-    LDStorageAPI.init();
+    LDStorageAPI.init(true);
     NotificationAPI.init('body', 178);
     await BackendConfigStorage.init();
 
-    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
-    activeLibMode = MOVIE_INFO.WATCHED;
+    LDStorageAPI.updateActiveStorage(LDStorageAPI.MOVIE_INFO.WATCHED);
+    activeLibMode = LDStorageAPI.MOVIE_INFO.WATCHED;
 
     moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
     const tmdbAPI = new TMDBAPI();
-    const pathToPosterImg = (await tmdbAPI.getConfiguration()).images
-      .secure_base_url;
-
-    const genresAndIDs = readFromLocalStorage(GENRES_DATA_LS_KEY);
     galleryAPI = new GalleryAPI(
       '#movies-wrapper',
-      pathToPosterImg,
-      genresAndIDs
+      BackendConfigStorage.pathToPoster,
+      BackendConfigStorage.genresAndIDs
     );
     //hide spinner if there aren't movies else add listener for images loading
     moviesData?.length
@@ -58,6 +52,9 @@ let librarySearchFieldInput = null;
       onMovieStatusChanged
     );
 
+    //DOM things
+    noFoundWarningMessage = document.getElementById('library-no-movies');
+    librarySearchFieldInput = document.getElementById('library-search-input');
     // Added event listeners
     PaginationAPI.paginationWrapperDiv.addEventListener(
       'click',
@@ -75,23 +72,18 @@ let librarySearchFieldInput = null;
       onLibraryMoviesSearchFormSubmit
     );
 
-    noFoundWarningMessage = document.getElementById('library-no-movies');
-    librarySearchFieldInput = document.getElementById('library-search-input');
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
+    //show placeholder if there are no movies
     if (PaginationAPI.totalPages) {
       NotificationAPI.addNotification(
         'Showing your watched movies',
         false,
         3000
       );
-      noFoundWarningMessage.setAttribute('style', 'display: none;');
-      librarySearchFieldInput.removeAttribute('disabled');
-    } else {
-      noFoundWarningMessage.removeAttribute('style');
-      librarySearchFieldInput.setAttribute('disabled', 'true');
-    }
+      enableSearch();
+    } else disableSearch();
   } catch (error) {
     console.log(error.message);
     document.querySelector('.loader--critical').style.display = 'none';
@@ -110,7 +102,8 @@ function onGalleryLoadedCriticalImages() {
 function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
 
-  let buttonId = e.target.id;
+  const clickedButtonEl = e.target;
+  const buttonId = clickedButtonEl.id;
 
   switch (buttonId) {
     case 'pagination-button-next':
@@ -120,8 +113,9 @@ function onPaginationWrapperBtnClick(e) {
       PaginationAPI.changePageByOne(false);
       break;
     case 'pagination-number-btn':
-      if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
-      PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+      const desiredPageNumber = parseInt(clickedButtonEl.textContent);
+      if (desiredPageNumber === PaginationAPI.currentPage) return;
+      PaginationAPI.updateCurrentPage(desiredPageNumber);
       break;
     default:
       return;
@@ -136,10 +130,14 @@ function renderGalleryByPage() {
   //if there isn't movies on current page - decrease page, and try again
   if (!moviesData.length) {
     PaginationAPI.changePageByOne(false);
+
+    //there isn't movies at all
     if (PaginationAPI.currentPage < 1) {
-      if (activeLibMode === MOVIE_INFO.SEARCHED) {
+      //currently we navigate through search's results, so switch to watched/queued movies and try to show movies again
+      if (isSearchActive) {
+        isSearchActive = false;
         PaginationAPI.currentPage = 1;
-        LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
+        LDStorageAPI.updateActiveStorage(activeLibMode);
         librarySearchFieldInput.value = '';
         renderGalleryByPage();
 
@@ -148,19 +146,19 @@ function renderGalleryByPage() {
 
       librarySearchFieldInput.value = '';
       PaginationAPI.updateCurrentPage(1);
-      galleryAPI.renderMoviesCards(moviesData);
+      // galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
 
-      noFoundWarningMessage.removeAttribute('style');
-      librarySearchFieldInput.setAttribute('disabled', 'true');
+      disableSearch();
+      galleryAPI.renderMoviesCards(moviesData);
       return;
     }
+
     renderGalleryByPage();
   }
 
   if (!noFoundWarningMessage.hasAttribute('style')) {
-    noFoundWarningMessage.setAttribute('style', 'display: none;');
-    librarySearchFieldInput.removeAttribute('disabled');
+    enableSearch();
   }
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
@@ -175,9 +173,12 @@ function onLibraryBtnsClick(e) {
   // resetting search field input if there is anything written in there
   librarySearchFieldInput.value = '';
   LDStorageAPI.lastSearchRequest = null;
+  isSearchActive = false;
 
   const clickedLibMode =
-    clickedEl.id === 'library-watched' ? MOVIE_INFO.WATCHED : MOVIE_INFO.QUEUED;
+    clickedEl.id === 'library-watched'
+      ? LDStorageAPI.MOVIE_INFO.WATCHED
+      : LDStorageAPI.MOVIE_INFO.QUEUED;
   if (clickedLibMode === activeLibMode) return;
 
   const prevButtonEl = e.currentTarget.querySelector(
@@ -185,17 +186,10 @@ function onLibraryBtnsClick(e) {
   );
   prevButtonEl.classList.remove('btn-active');
   clickedEl.classList.add('btn-active');
+
   activeLibMode = clickedLibMode;
   PaginationAPI.currentPage = 1;
-
-  switch (activeLibMode) {
-    case MOVIE_INFO.WATCHED:
-      LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
-      break;
-    case MOVIE_INFO.QUEUED:
-      LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
-      break;
-  }
+  LDStorageAPI.updateActiveStorage(activeLibMode);
 
   moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
@@ -206,12 +200,8 @@ function onLibraryBtnsClick(e) {
       false,
       3000
     );
-    noFoundWarningMessage.setAttribute('style', 'display: none;');
-    librarySearchFieldInput.removeAttribute('disabled');
-  } else {
-    noFoundWarningMessage.removeAttribute('style');
-    librarySearchFieldInput.setAttribute('disabled', 'true');
-  }
+    enableSearch();
+  } else disableSearch();
 
   galleryAPI.renderMoviesCards(moviesData);
   PaginationAPI.renderPagination();
@@ -221,14 +211,18 @@ function onLibraryMoviesSearchFormSubmit(e) {
   e.preventDefault();
   const moviesSearchRequest = e.currentTarget.elements.query.value;
 
-  if (moviesSearchRequest === LDStorageAPI.lastSearchRequest) return;
+  if (moviesSearchRequest === LDStorageAPI.lastSearchRequest && isSearchActive)
+    return;
 
+  //abort search status and render movies from current lib page
   if (moviesSearchRequest === '') {
-    if (LDStorageAPI.lastSearchRequest === null) return;
-    LDStorageAPI.lastSearchRequest = '';
+    //current mode isn't searching - do nothing
+    if (!isSearchActive) return;
 
-    LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
-    activeLibMode = LDStorageAPI.lastActiveMovieInfo;
+    LDStorageAPI.lastSearchRequest = '';
+    isSearchActive = false;
+
+    LDStorageAPI.updateActiveStorage(activeLibMode);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
     PaginationAPI.updateCurrentPage(1);
 
@@ -237,26 +231,29 @@ function onLibraryMoviesSearchFormSubmit(e) {
     return;
   }
 
-  moviesData =
-    LDStorageAPI.searchInLastActiveStorageMovies(moviesSearchRequest);
+  const foundedMovies = LDStorageAPI.searchMoviesByName(
+    moviesSearchRequest,
+    activeLibMode
+  );
 
-  if (!moviesData.length) {
+  if (!foundedMovies.length) {
     NotificationAPI.addNotification(
       `Oops, there are no results matching your search request...`,
-      true,
+      false,
       3000
     );
     return;
   }
 
+  isSearchActive = true;
+  moviesData = foundedMovies;
   NotificationAPI.addNotification(
     `Here are the movies matching '${moviesSearchRequest}' request`,
     false,
     3000
   );
 
-  LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
-  activeLibMode = MOVIE_INFO.SEARCHED;
+  LDStorageAPI.updateActiveStorage(LDStorageAPI.MOVIE_INFO.SEARCHED);
 
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
   PaginationAPI.updateCurrentPage(1);
@@ -270,17 +267,17 @@ function onMovieStatusChanged(action) {
   if (
     (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED ||
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED) &&
-    activeLibMode === MOVIE_INFO.WATCHED
+    activeLibMode === LDStorageAPI.MOVIE_INFO.WATCHED
   ) {
-    LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
+    // LDStorageAPI.setActiveStorage(MOVIE_INFO.WATCHED);
     needRerender = true;
   }
   if (
     (action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED ||
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED) &&
-    activeLibMode === MOVIE_INFO.QUEUED
+    activeLibMode === LDStorageAPI.MOVIE_INFO.QUEUED
   ) {
-    LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
+    // LDStorageAPI.setActiveStorage(MOVIE_INFO.QUEUED);
     needRerender = true;
   }
 
@@ -289,12 +286,13 @@ function onMovieStatusChanged(action) {
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED ||
       action === MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED ||
       action === MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_WATCHED) &&
-    activeLibMode === MOVIE_INFO.SEARCHED
+    isSearchActive
   ) {
-    LDStorageAPI.searchInLastActiveStorageMovies(
-      LDStorageAPI.lastSearchRequest
+    LDStorageAPI.searchMoviesByName(
+      LDStorageAPI.lastSearchRequest,
+      activeLibMode
     );
-    LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
+    // LDStorageAPI.setActiveStorage(MOVIE_INFO.SEARCHED);
     needRerender = true;
   }
 
@@ -302,4 +300,14 @@ function onMovieStatusChanged(action) {
     renderGalleryByPage();
     PaginationAPI.renderPagination();
   }
+}
+
+function enableSearch() {
+  noFoundWarningMessage.setAttribute('style', 'display: none;');
+  librarySearchFieldInput.removeAttribute('disabled');
+}
+
+function disableSearch() {
+  noFoundWarningMessage.removeAttribute('style');
+  librarySearchFieldInput.setAttribute('disabled', 'true');
 }
