@@ -199,12 +199,15 @@
 }
 
 .modal-poster {
+  flex-shrink: 0;
   position: relative;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 5px;
 
   @include mediaUpTo('tablet') {
     width: 100%;
     min-width: 200px;
-    height: 100%;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -219,13 +222,12 @@
 
 .poster {
   display: block;
-  margin-bottom: 20px;
   height: 100%;
   width: 100%;
 
   border-radius: 5px;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: top;
 
   @include mediaInBetween('tablet', 'desktop') {
