@@ -51,7 +51,7 @@ function userLogin(e) {
 
   //Валидация контента полей формы
   if (UserEmail === '' || UserPassword === '') {
-    NotificationAPI.addNotification('Enter email and password', false, 3000);
+    return;
   }
 
   //Регистрация по email and login

@@ -33,7 +33,6 @@ function userRegistration(e) {
 
   //Валидация контента полей формы
   if (newUserEmail === '' || newUserPassword === '') {
-    NotificationAPI.addNotification('Enter email and password', false, 3000);
     return;
   }
 
