@@ -67,10 +67,7 @@ let isSearchActive = false;
     libraryMoviesSearchForm = document.getElementById(
       'library-movies-search-form'
     );
-    libraryMoviesSearchForm.addEventListener(
-      'submit',
-      onLibraryMoviesSearchFormSubmit
-    );
+    libraryMoviesSearchForm.addEventListener('submit', searchMovies);
 
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
@@ -207,7 +204,7 @@ function onLibraryBtnsClick(e) {
   PaginationAPI.renderPagination();
 }
 
-function onLibraryMoviesSearchFormSubmit(e) {
+function searchMovies(e) {
   e.preventDefault();
   const moviesSearchRequest = e.currentTarget.elements.query.value;
 
@@ -239,7 +236,7 @@ function onLibraryMoviesSearchFormSubmit(e) {
   if (!foundedMovies.length) {
     NotificationAPI.addNotification(
       `Oops, there are no results matching your search request...`,
-      false,
+      true,
       3000
     );
     return;
