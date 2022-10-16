@@ -6,17 +6,10 @@
 }
 
 .pagination__container {
-    @include mediaUpTo('mobile') {
-        display: flex;        
-        align-items: center;
-        justify-content: center;
-    }
-
-    @include mediaOver('mobile') {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .pagination {
@@ -76,8 +69,8 @@
     border: none;
     padding: 8px;
     min-width: 40px;
-    border-radius: 5px;
     min-height: 40px;
+    border-radius: 5px;
 
     @extend %flex--vh-centred;
     text-align: center;

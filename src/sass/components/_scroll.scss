@@ -1,5 +1,4 @@
 .scroll {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,8 +20,11 @@
     &.scroll--isShown {
         opacity: .8;
         visibility: visible;
+        &:hover {
+            background-color: getColorFromPalette('pagination', 'orange');       
+        }
     }
-    display: none;
+
 }
 
 .icon__scroll {
