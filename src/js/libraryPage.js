@@ -137,7 +137,7 @@ function renderGalleryByPage() {
   if (!moviesData.length) {
     PaginationAPI.changePageByOne(false);
     if (PaginationAPI.currentPage < 1) {
-      if (activeLibMode === MOVIE_INFO.SEARCHED && moviesData.length === 1) {
+      if (activeLibMode === MOVIE_INFO.SEARCHED) {
         PaginationAPI.currentPage = 1;
         LDStorageAPI.setActiveStorage(LDStorageAPI.lastActiveMovieInfo);
         librarySearchFieldInput.value = '';
@@ -243,7 +243,7 @@ function onLibraryMoviesSearchFormSubmit(e) {
   if (!moviesData.length) {
     NotificationAPI.addNotification(
       `Oops, there are no results matching your search request...`,
-      false,
+      true,
       3000
     );
     return;
