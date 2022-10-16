@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: color 250ms cubic-bezier(.57, .21, .69, 1.25);
 }
 
 .library-no-movies--emoji {
