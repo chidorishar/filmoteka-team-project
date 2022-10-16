@@ -23,6 +23,17 @@
   @include mediaOver('desktop') {
     height: 219px;
   }
+
+  &::before {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.56);
+  }
 }
 
 .header-library__background-img {
@@ -71,10 +82,13 @@
 }
 
 .nav-group-library__item {
-  position: relative;
-  margin-left: 40px;
-
   @extend %unmarked-list;
+
+  position: relative;
+
+  &:last-child {
+    margin-left: 40px;
+  }
 }
 
 .nav-group-library__link {

@@ -11,13 +11,13 @@
 //   align-items: center;
 // }
 
-// .loader__spinner {
-//   @extend %rounded;
+.loader__spinner {
+  @extend %rounded;
 
-//   width: 75px;
-//   height: 75px;
-//   border: 10px solid getColorFromPalette('loader', 'border');
-//   border-left-color: getColorFromPalette('loader', 'border-left');
+  width: 75px;
+  height: 75px;
+  border: 10px solid getColorFromPalette('loader', 'border');
+  border-left-color: getColorFromPalette('loader', 'border-left');
 
-//   animation: loader 1.3s linear infinite;
-// }
+  animation: loader 1.3s linear infinite;
+}

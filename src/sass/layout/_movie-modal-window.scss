@@ -45,7 +45,7 @@
   flex-direction: column;
 
   position: relative;
-  background-color: getColorFromPalette('modal', 'background-color');
+  background-color: var(--bg-color);
   padding-left: 40px;
   padding-right: 40px;
   padding-top: 48px;
@@ -90,9 +90,10 @@
   width: 30px;
   height: 30px;
   border: 0;
-  background-color: transparent;
+  background-color: var(--bg-color);
   position: sticky;
   top: -38px;
+  fill: var(--text-color);
 
   cursor: pointer;
   pointer-events: all;
@@ -364,7 +365,7 @@ td {
 .modal__characteristic-title,
 .modal__characteristic-genre {
   font-size: 12px;
-  color: getColorFromPalette('modal', 'characteristic-text-color');
+  color: var(--text-color);
   margin-bottom: 8px;
 }
 
@@ -401,19 +402,19 @@ td {
 }
 
 .modal__characteristic-inform-accent {
-  background: getColorFromPalette('modal', 'accent-color');
+  background-color: var(--bg-color);
   border-radius: 5px;
   padding-left: 10px;
   padding-right: 10px;
   width: 36px;
   height: 16px;
-  color: getColorFromPalette('modal', 'text-in-accent');
+  color: var(--text-color);
 }
 
 .modal__characteristic-inform {
   font-size: 12px;
   line-height: 14px;
-  color: getColorFromPalette('modal', 'color-characteristics-text');
+  color: var(--text-color);
   height: 30px;
   overflow: auto;
 }
@@ -489,7 +490,7 @@ td {
 
 .modal__add-to-watched {
   background-color: getColorFromPalette('modal', 'accent-color');
-  color: getColorFromPalette('modal', 'text-in-accent');
+  color: var(--text-color);
   border: transparent;
 
   @include mediaInBetween('tablet', 'desktop') {
