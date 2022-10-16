@@ -102,7 +102,7 @@ function onPaginationWrapperBtnClick(e) {
   const clickedButtonEl = e.target;
   const buttonId = clickedButtonEl.id;
 
-  scrollYTo = window.innerHeight <= 767 ? 233 : 219;
+  let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
   window.scroll(0, scrollYTo);
 
   switch (buttonId) {
