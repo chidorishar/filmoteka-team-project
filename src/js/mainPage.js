@@ -171,6 +171,9 @@ async function onPaginationWrapperBtnClick(e) {
 
   let buttonId = e.target.id;
 
+  let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
+  window.scroll(0, scrollYTo);
+
   switch (buttonId) {
     case 'pagination-button-next':
       PaginationAPI.changePageByOne(true);
