@@ -128,6 +128,8 @@
   justify-content: space-between;
   width: 100%;
 
+  pointer-events: none;
+
   @include mediaInBetween('tablet', 'desktop') {
     bottom: 20%;
   }
@@ -156,6 +158,7 @@
   transition: createTransitionFor(
     'color' 'opacity' 'box-shadow' 'background-color'
   );
+  pointer-events: all;
   user-select: none;
 
   &:hover,
@@ -257,8 +260,8 @@
   background: unset;
   background-image: repeating-linear-gradient(
     to left bottom,
-    getColorFromPalette('primary', 'light'),
-    getColorFromPalette('primary', 'light') $stripesWidth,
+    var(--placeholder-stripes),
+    var(--placeholder-stripes) $stripesWidth,
     $stripesMainColor $stripesWidth,
     $stripesMainColor $stripesWidth * 2
   );
@@ -401,22 +404,22 @@ td {
   flex-direction: column;
 }
 
-.modal__characteristic-inform-accent {
-  background-color: var(--bg-color);
-  border-radius: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 36px;
-  height: 16px;
-  color: var(--text-color);
-}
-
 .modal__characteristic-inform {
   font-size: 12px;
   line-height: 14px;
   color: var(--text-color);
   height: 30px;
   overflow: auto;
+}
+
+.modal__characteristic-inform--accent {
+  background-color: getColorFromPalette('secondary', 'orange');
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 36px;
+  height: 16px;
+  color: var(--bg-color);
 }
 
 .modal__about {
