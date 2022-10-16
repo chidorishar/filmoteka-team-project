@@ -245,7 +245,7 @@
   }
 }
 
-.modal-poster__placeholder--thumb {
+.modal-poster__placeholder-thumb {
   @extend %flex--vh-centred;
   position: absolute;
 
@@ -296,7 +296,7 @@
   overflow-y: hidden;
 }
 
-.modal-poster__placeholder--title {
+.modal-poster__placeholder-title {
   @extend %rounded;
 
   line-height: 1.15;

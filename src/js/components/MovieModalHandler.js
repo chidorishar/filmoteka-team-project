@@ -138,7 +138,7 @@ export class MovieModalHandler {
       const modalPosterPlaceholder =
         document.getElementById('modal-placeholder');
       const textInPlaceholder = document.querySelector(
-        '.modal-poster__placeholder--title'
+        '.modal-poster__placeholder-title'
       );
       const hiddenPoster = document.querySelector('.poster');
 
