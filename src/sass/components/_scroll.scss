@@ -1,16 +1,18 @@
 .scroll {
-    @include mediaUpTo('mobile') {
-        position: absolute;
-        bottom: 76px;
-        right: 24px;
-    }
 
-    @include mediaInBetween('mobile', 'tablet') {
-        position: absolute;
-        bottom: 76px;
-        right: calc(100% / 2 - 32px - 180px);
+    &--absolute {
+        @include mediaUpTo('mobile') {
+            position: absolute;
+            bottom: 76px;
+            right: 24px;
+        }
+    
+        @include mediaInBetween('mobile', 'tablet') {
+            position: absolute;
+            bottom: 76px;
+            right: calc(100% / 2 - 32px - 180px);
+        }
     }
-
 
     display: flex;
     align-items: center;

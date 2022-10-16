@@ -4,6 +4,7 @@ class PaginationAPI {
   static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn" id="pagination-number-btn">1</button></li>`;
   static #dotsLeftMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>`;
   static #dotsRightMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>`;
+  static #scrollBtn = document.getElementById('js-scroll');
 
   static #totalMarkup = '';
 
@@ -306,6 +307,13 @@ class PaginationAPI {
   }
 
   static #correctPaginationBarSize() {
+    // Scroll adjustment when we have a less than 4 pages in total
+    if (this.totalPages <= 4) {
+      this.#scrollBtn.classList.remove('scroll--absolute');
+    } else {
+      this.#scrollBtn.classList.add('scroll--absolute');
+    }
+
     // For better experience, we lock the size of the bar if we have a lot of pages. So it is comfortable to switch between the pages by pressing the arrows buttons.
     if (this.totalPages >= 8) {
       this.paginationPagesList.classList.add('pagination__list--width-L');

@@ -1,4 +1,4 @@
-const scrollBtn = document.querySelector('.js-scroll');
+const scrollBtn = document.getElementById('js-scroll');
 scrollBtn.addEventListener('click', () => window.scroll(0, 0));
 window.addEventListener('scroll', onScrollClick);
 
