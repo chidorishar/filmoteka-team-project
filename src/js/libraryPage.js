@@ -55,19 +55,10 @@ let moviesData = null;
     );
 
     // Added event listeners
-    PaginationAPI.paginationNextBtn.addEventListener(
+    PaginationAPI.paginationWrapperDiv.addEventListener(
       'click',
-      onPaginationBtnChangeClick
+      onPaginationWrapperBtnClick
     );
-    PaginationAPI.paginationPreviousBtn.addEventListener(
-      'click',
-      onPaginationBtnChangeClick
-    );
-    PaginationAPI.paginationPagesList.addEventListener(
-      'click',
-      onPaginationListBtnNumberClick
-    );
-
     const libButtonsWrapper = document.querySelector(
       '.header-library__buttons'
     );
@@ -91,33 +82,27 @@ function onGalleryLoadedCriticalImages() {
   document.body.classList.remove('body-clip-overflow');
 }
 
-function onPaginationListBtnNumberClick(e) {
+function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
-  if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
 
-  PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+  let buttonId = e.target.id;
 
-  try {
-    renderGalleryByPage();
-  } catch (error) {
-    NotificationAPI.addNotification(
-      'Something went wrong! Here is the log: ' + error.message,
-      true
-    );
-    console.log(error.message);
-  }
-  PaginationAPI.renderPagination();
-}
-
-function onPaginationBtnChangeClick(e) {
-  if (e.currentTarget.id === 'pagination-button-next') {
-    PaginationAPI.changePageByOne(true);
-  } else {
-    PaginationAPI.changePageByOne(false);
+  switch (buttonId) {
+    case 'pagination-button-next':
+      PaginationAPI.changePageByOne(true);
+      break;
+    case 'pagination-button-previous':
+      PaginationAPI.changePageByOne(false);
+      break;
+    case 'pagination-number-btn':
+      if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
+      PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+      break;
+    default:
+      return;
   }
 
   renderGalleryByPage();
-
   PaginationAPI.renderPagination();
 }
 
