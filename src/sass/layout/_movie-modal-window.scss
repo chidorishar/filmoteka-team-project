@@ -43,6 +43,8 @@
 
 .modal {
   flex-direction: column;
+
+  position: relative;
   background-color: getColorFromPalette('modal', 'background-color');
   padding-left: 40px;
   padding-right: 40px;
@@ -74,16 +76,26 @@
   }
 }
 
+.modal-close-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 40px;
+
+  pointer-events: none;
+}
+
 .modal-close {
   width: 30px;
   height: 30px;
   border: 0;
   background-color: transparent;
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: sticky;
+  top: -38px;
 
   cursor: pointer;
+  pointer-events: all;
 }
 
 .modal-close:focus {
@@ -104,7 +116,7 @@
   fill: getColorFromPalette('modal-buttons', 'focus-watched-btn');
 }
 
-.modal-movies-nav__buttons-wrapper {
+.modal__movies-nav__buttons-wrapper {
   @extend %flex;
 
   position: absolute;
@@ -124,11 +136,11 @@
   }
 }
 
-.modal-movies-nav__item {
+.modal__movies-nav__item {
   @extend %unmarked-list;
 }
 
-.modal-movies-nav__button {
+.modal__movies-nav__button {
   $bordersRadius: 10px;
   $shadowColor: rgba(getColorFromPalette('primary', 'dark'), 0.2);
 
@@ -272,18 +284,19 @@
 }
 
 .modal-poster__placeholder-title-wrapper {
+  @extend %flex--vh-centred;
+
   width: 75%;
   height: 76;
-  overflow-y: auto;
+  margin-bottom: 10px;
+  overflow-y: hidden;
 }
 
 .modal-poster__placeholder--title {
   @extend %rounded;
-  @extend %flex--v-centred;
 
   line-height: 1.15;
   // width: 82%;
-  margin-bottom: 10px;
 
   color: getColorFromPalette('secondary', 'orange');
 }
@@ -301,11 +314,13 @@
   margin-bottom: 20px;
   font-size: 20px;
   line-height: 23px;
+
+  flex-shrink: 0;
   height: 47px;
   overflow: auto;
 
   @include mediaInBetween('tablet', 'desktop') {
-    height: 50px;
+    height: 30px;
     overflow: auto;
   }
 
@@ -362,20 +377,20 @@ td {
 .modal__characteristic-genre {
   @include mediaInBetween('tablet', 'desktop') {
     height: 30px;
-    overflow: scroll;
+    overflow: auto;
     border: 0;
   }
 
   .block-style {
     min-height: 30px;
     display: block;
-    overflow: scroll;
+    overflow: auto;
     margin: auto;
   }
 
   @include mediaOver('desktop') {
     height: 32px;
-    overflow: scroll;
+    overflow: auto;
   }
 }
 
@@ -400,7 +415,7 @@ td {
   line-height: 14px;
   color: getColorFromPalette('modal', 'color-characteristics-text');
   height: 30px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .modal__about {
@@ -420,14 +435,16 @@ td {
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-  height: 140px;
+
+  flex-shrink: 0;
+  height: 100px;
 
   margin-bottom: 20px;
   max-height: 120px;
   overflow: auto;
 
   @include mediaInBetween('tablet', 'desktop') {
-    max-height: 260px;
+    height: 15vh;
   }
 
   @include mediaOver('desktop') {
