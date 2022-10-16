@@ -19,6 +19,7 @@ let activeLibMode = null;
 let moviesData = null;
 let libraryMoviesSearchForm = null;
 let noFoundWarningMessage = null;
+let librarySearchFieldInput = null;
 
 // MAIN
 (async () => {
@@ -81,7 +82,10 @@ let noFoundWarningMessage = null;
       'submit',
       onLibraryMoviesSearchFormSubmit
     );
+
     noFoundWarningMessage = document.getElementById('library-no-movies');
+    librarySearchFieldInput = document.getElementById('library-search-input');
+
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
@@ -92,8 +96,10 @@ let noFoundWarningMessage = null;
         3000
       );
       noFoundWarningMessage.setAttribute('style', 'display: none;');
+      librarySearchFieldInput.removeAttribute('disabled');
     } else {
       noFoundWarningMessage.removeAttribute('style');
+      librarySearchFieldInput.setAttribute('disabled', 'true');
     }
   } catch (error) {
     console.log(error.message);
@@ -150,6 +156,8 @@ function renderGalleryByPage() {
       galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
       noFoundWarningMessage.removeAttribute('style');
+      librarySearchFieldInput.setAttribute('disabled', 'true');
+
       return;
     }
     renderGalleryByPage();
@@ -157,6 +165,7 @@ function renderGalleryByPage() {
 
   if (!noFoundWarningMessage.hasAttribute('style')) {
     noFoundWarningMessage.setAttribute('style', 'display: none;');
+    librarySearchFieldInput.removeAttribute('disabled');
   }
   PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
@@ -203,8 +212,10 @@ function onLibraryBtnsClick(e) {
       3000
     );
     noFoundWarningMessage.setAttribute('style', 'display: none;');
+    librarySearchFieldInput.removeAttribute('disabled');
   } else {
     noFoundWarningMessage.removeAttribute('style');
+    librarySearchFieldInput.setAttribute('disabled', 'true');
   }
 
   galleryAPI.renderMoviesCards(moviesData);
