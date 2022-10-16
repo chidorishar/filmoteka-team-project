@@ -75,12 +75,14 @@ $colorPalette: (
   --bg-color: #fff;
   --bgr-color: #f7f5ec;
   --text-color: #123;
+  --placeholder-stripes: #fff;
 }
 
 :root.dark {
   --bg-color: #272e34;
   --bgr-color: #607180;
   --text-color: #fff;
+  --placeholder-stripes: rgba(255, 255, 255, 0.53);
 }
 
 body {

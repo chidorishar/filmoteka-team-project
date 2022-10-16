@@ -56,22 +56,6 @@
   }
 }
 
-.modal-wrapper__button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  fill: var(--text-color);
-  background-color: var(--bg-color);
-  border: 1px solid getColorFromPalette('primary', 'light');
-}
-
 .modal-title {
   font-size: 22px;
   line-height: 1.15;
@@ -96,6 +80,46 @@
   @include mediaOver('desktop') {
     font-size: 30px;
     line-height: 1.5;
+  }
+}
+
+.team-container {
+  position: relative;
+}
+
+.modal-wrapper__close-button-wrapper {
+  position: absolute;
+  top: -84px;
+  right: 0;
+  height: 100%;
+  width: 41px;
+
+  pointer-events: none;
+}
+
+.modal-wrapper__button {
+  position: sticky;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+  transition: createTransitionFor('fill');
+
+  fill: var(--text-color);
+  background-color: transparent;
+  border: none;
+
+  pointer-events: all;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    fill: getColorFromPalette('secondary', 'orange');
   }
 }
 

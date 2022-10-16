@@ -124,7 +124,7 @@ export class MovieModalHandler {
       movieAbout: document.getElementById('aboutMovie'),
     };
 
-    refs.moviePoster.src = `${posterFullPath}`;
+    if (pathToPoster) refs.moviePoster.src = `${posterFullPath}`;
     refs.modalTitle.textContent = `${movieTitle ?? movieName}`;
     refs.movieAverageRating.textContent = `${fixedAverageRating}`;
     refs.movieRating.textContent = `${votes ? votes : 'N/D'}`;
@@ -133,6 +133,27 @@ export class MovieModalHandler {
     refs.movieGenre.textContent = `${
       movieGenresString ? movieGenresString : 'N/D'
     }`;
+
+    function addPosterPlaceholder() {
+      const modalPosterPlaceholder =
+        document.getElementById('modal-placeholder');
+      const textInPlaceholder = document.querySelector(
+        '.modal-poster__placeholder-title'
+      );
+      const hiddenPoster = document.querySelector('.poster');
+
+      if (!pathToPoster) {
+        modalPosterPlaceholder.classList.remove('is-hidden');
+        textInPlaceholder.textContent = `${movieTitle ?? movieName}`;
+        hiddenPoster.classList.add('is-hidden');
+      } else {
+        modalPosterPlaceholder.classList.add('is-hidden');
+        hiddenPoster.classList.remove('is-hidden');
+      }
+    }
+
+    addPosterPlaceholder();
+
     refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);

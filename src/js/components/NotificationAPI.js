@@ -12,12 +12,13 @@ export class NotificationAPI {
 
   constructor() {}
 
-  static init(rootElSelector) {
+  static init(rootElSelector, deltaYFromTop = 150) {
     //adding root el for messages
-    const markup = `<ul class="notif-list"></ul>`;
+    const markup = `<ul class="notif-list" id='notif-list-root'></ul>`;
     document
       .querySelector(rootElSelector)
       .insertAdjacentHTML('afterbegin', markup);
+    document.querySelector('#notif-list-root').style.top = `${deltaYFromTop}px`;
 
     this.#notificationListEl = document.querySelector('.notif-list');
     this.#notificationListEl.addEventListener(
