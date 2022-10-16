@@ -1,5 +1,4 @@
 .scroll {
-
     &--absolute {
         @include mediaUpTo('mobile') {
             position: absolute;
