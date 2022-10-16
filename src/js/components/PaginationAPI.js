@@ -65,23 +65,13 @@ class PaginationAPI {
 
     // if our total pages value is 1, then we need to hide buttons, but if we update our total pages value, we need to the pagination buttons again in the pagination bar
     if (this.totalPages === 1) {
-      this.paginationWrapperDiv.classList.add('pagination--width-S');
       this.paginationNextBtn.classList.add('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
-      this.paginationWrapperDiv.classList.remove('pagination--width-M');
-
       this.#totalMarkup += this.#firstPageMarkup;
       return;
     } else {
-      this.paginationWrapperDiv.classList.remove('pagination--width-S');
       this.paginationNextBtn.classList.remove('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.remove('pagination__btn--hidden');
-    }
-
-    if (this.totalPages <= 2 && !(this.totalPages === 1)) {
-      this.paginationWrapperDiv.classList.add('pagination--width-M');
-    } else {
-      this.paginationWrapperDiv.classList.remove('pagination--width-M');
     }
 
     if (window.innerWidth <= this.#MOBILE_MIN_WIDTH) {
@@ -321,18 +311,6 @@ class PaginationAPI {
       this.paginationPagesList.classList.add('pagination__list--width-L');
     } else {
       this.paginationPagesList.classList.remove('pagination__list--width-L');
-    }
-
-    if (this.totalPages >= 3 && this.totalPages <= 4) {
-      this.paginationWrapperDiv.classList.add('pagination--width-L');
-    } else {
-      this.paginationWrapperDiv.classList.remove('pagination--width-L');
-    }
-
-    if (this.totalPages >= 5 && this.totalPages <= 6) {
-      this.paginationWrapperDiv.classList.add('pagination--width-XL');
-    } else {
-      this.paginationWrapperDiv.classList.remove('pagination--width-XL');
     }
   }
 

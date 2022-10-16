@@ -1,27 +1,30 @@
 .scroll {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: inherit;
-    width: 50px;
-    height: 50px;
-    position: fixed;
-    bottom: 50px;
-    right: 8px;
-    opacity: 0;
-    visibility: hidden;
-    text-decoration: none;
-    fill: getColorFromPalette('accent', 'dark');
-    cursor: pointer;
+    padding: 8px;
 
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    
+    fill: getColorFromPalette('accent', 'dark');
+    background-color: getColorFromPalette('pagination', 'grey');
+    visibility: hidden;
+    opacity: 0;
+    
+    transition: background-color 250ms cubic-bezier(.57, .21, .69, 1.25), visibility 250ms cubic-bezier(.57, .21, .69, 1.25), opacity 250ms cubic-bezier(.57, .21, .69, 1.25);
+    cursor: pointer;
+    
     &.scroll--isShown {
         opacity: .8;
         visibility: visible;
-        
     }
+    display: none;
 }
 
 .icon__scroll {
-width: 50px;
-height: 50px;
+    fill: black;
 }
