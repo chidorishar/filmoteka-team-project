@@ -77,7 +77,6 @@ let librarySearchFieldInput = null;
 
     noFoundWarningMessage = document.getElementById('library-no-movies');
     librarySearchFieldInput = document.getElementById('library-search-input');
-
     const resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
     resizeObserver.observe(document.body);
 
@@ -143,6 +142,7 @@ function renderGalleryByPage() {
       PaginationAPI.totalPages = 0;
       noFoundWarningMessage.removeAttribute('style');
       librarySearchFieldInput.setAttribute('disabled', 'true');
+      librarySearchFieldInput.value = '';
 
       return;
     }
@@ -164,7 +164,7 @@ function onLibraryBtnsClick(e) {
   if (clickedEl.nodeName !== 'BUTTON') return;
 
   // resetting search field input if there is anything written in there
-  libraryMoviesSearchForm.elements.query.value = '';
+  librarySearchFieldInput.value = '';
   LDStorageAPI.lastSearchRequest = null;
 
   const clickedLibMode =
