@@ -73,6 +73,10 @@
   position: relative;
   margin-left: 40px;
   margin-right: 40px
+
+  &:last-child {
+    margin-left: 40px;
+  }
 }
 
 .nav-header__link {

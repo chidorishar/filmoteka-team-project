@@ -12,8 +12,10 @@ export class GalleryAPI {
   #spinner = null;
   #posterImageCSSClass = 'movie-card__img';
 
-  #maxNumOfCritImages = 3;
+  #MAX_NUM_OF_CRIT_IMAGES = 3;
+  #NUMB_OF_IMAGES_TO_LOAD_AT_ONCE = 3;
   #numberOfCriticalImages = null;
+  #imagesElsToLoad = null;
 
   constructor(rootElementSelector) {
     this.#rootEl = document.querySelector(rootElementSelector);
@@ -43,11 +45,17 @@ export class GalleryAPI {
   renderMoviesCards(moviesData) {
     this.#currentMoviesData = moviesData;
 
-    // const this.#spinner = this.#this.#spinner;
     this.#spinner.show();
 
+    //set constants according to device
+    if (window.matchMedia('(max-width: 1280px)').matches)
+      this.#MAX_NUM_OF_CRIT_IMAGES = 2;
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      this.#MAX_NUM_OF_CRIT_IMAGES = 1;
+      this.#NUMB_OF_IMAGES_TO_LOAD_AT_ONCE = 2;
+    }
     //reset Gallery state
-    this.#numberOfCriticalImages = this.#maxNumOfCritImages;
+    this.#numberOfCriticalImages = this.#MAX_NUM_OF_CRIT_IMAGES;
     let imgsWithPoster = 0;
     let isAllCriticalAdded = false;
     this.#untrackImagesLoadingEnd();
@@ -79,6 +87,9 @@ export class GalleryAPI {
     //if there is posters with images then load them in batches (progressive) else hide spinner
     if (imgsWithPoster) {
       this.#trackImagesLoadingEnd();
+      this.#imagesElsToLoad = [
+        ...document.querySelectorAll(`.${this.#posterImageCSSClass}[data-src]`),
+      ];
     } else this.#spinner.hide();
   }
 
@@ -113,7 +124,7 @@ export class GalleryAPI {
           ?
           `src="${this.#pathToPoster}w500${poster_path}"` 
           : 
-          `src="/" true-src="${this.#pathToPoster}w500${poster_path}"`
+          `src="#" data-src="${this.#pathToPoster}w500${poster_path}"`
           }
         alt="Poster of the ${movieName} movie"
       />`
@@ -174,27 +185,42 @@ export class GalleryAPI {
     const currentImageEl = e.target;
 
     //accept events only from images with correct "src" attribute value
-    if (currentImageEl.getAttribute('src') === '/') return;
+    if (currentImageEl.getAttribute('src') === '#') return;
 
     this.#loadedImages++;
+    const numbOfImgsToLoadAtOnce = this.#NUMB_OF_IMAGES_TO_LOAD_AT_ONCE;
+    const numberOfCriticalImages = this.#numberOfCriticalImages;
     currentImageEl.removeEventListener('load', this.#onImageLoaded);
-    //load image for next image element with dummy src attribute
-    const imageToLoadEl = document.querySelector(
-      `.${this.#posterImageCSSClass}[true-src]`
-    );
-    if (imageToLoadEl) {
-      const imgToLoadThumbEl = imageToLoadEl.closest('.movie-card__img-thumb');
-      const pathToPoster = imageToLoadEl.getAttribute('true-src');
-      imageToLoadEl.removeAttribute('true-src');
-      imageToLoadEl.setAttribute('src', pathToPoster);
-      //remove placeholder, which showed while image loading
-      imgToLoadThumbEl.classList.remove('movie-card__img-thumb--img-loading');
+    //load next bunch of images if there any or it's a last bunch of images
+    //it just works
+    if (
+      !(this.#loadedImages < numberOfCriticalImages) &&
+      (this.#loadedImages === numberOfCriticalImages ||
+        !(
+          (this.#loadedImages - numberOfCriticalImages) %
+          numbOfImgsToLoadAtOnce
+        ) ||
+        this.#totalImages - this.#loadedImages < numbOfImgsToLoadAtOnce)
+    ) {
+      let counter = 0;
+      while (
+        counter < numbOfImgsToLoadAtOnce &&
+        this.#imagesElsToLoad?.length
+      ) {
+        const imageToLoadEl = this.#imagesElsToLoad.shift();
+        const imgToLoadThumbEl = imageToLoadEl.closest(
+          '.movie-card__img-thumb'
+        );
+        const pathToPoster = imageToLoadEl.dataset.src;
+        imageToLoadEl.removeAttribute('data-src');
+        imageToLoadEl.src = pathToPoster;
+        //remove placeholder, which showed while image loading
+        imgToLoadThumbEl.classList.remove('movie-card__img-thumb--img-loading');
+        counter++;
+      }
     }
 
-    if (
-      this.#loadedImages === this.#numberOfCriticalImages &&
-      this.#totalImages
-    ) {
+    if (this.#loadedImages === numberOfCriticalImages && this.#totalImages) {
       this.#spinner.hide();
       this.#onCriticalImagesLoadedCallbacks.forEach(cb => cb());
     }
@@ -202,7 +228,11 @@ export class GalleryAPI {
     //image loading failed, show fallback instead
     const currImgThumbEl = currentImageEl.closest('.movie-card__img-thumb');
     if (e.type === 'error') {
-      currImgThumbEl.classList.add('movie-card__img-thumb--img-fallback');
+      //it checks for image loaded flag after some timeout, because sometimes we get events with "error" type for loaded images
+      setTimeout(() => {
+        if (!currentImageEl.complete)
+          currImgThumbEl?.classList.add('movie-card__img-thumb--img-fallback');
+      }, 250);
     }
   };
 

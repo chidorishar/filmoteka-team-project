@@ -5,25 +5,25 @@
   id="movies-modal-window"
 >
   <div class="modal">
-    <ul class="modal-movies-nav__buttons-wrapper" id="movies-nav-btns-wrapper">
-      <li class="modal-movies-nav__item">
+    <ul class="modal__movies-nav__buttons-wrapper" id="movies-nav-btns-wrapper">
+      <li class="modal__movies-nav__item">
         <b
-          class="modal-movies-nav__button"
+          class="modal__movies-nav__button"
           type="button"
           aria-label="Show previous movie details"
           id="prev-movie-btn"
         >
-          <
+          &lt;
         </b>
       </li>
-      <li class="modal-movies-nav__item">
+      <li class="modal__movies-nav__item">
         <b
-          class="modal-movies-nav__button"
+          class="modal__movies-nav__button"
           type="button"
           aria-label="Show next movie details"
           id="next-movie-btn"
         >
-          >
+          &gt;
         </b>
       </li>
     </ul>
@@ -45,11 +45,22 @@
     </div>
     <div class="modal-poster">
       <img
-        src="https://resizing.flixster.com/AyfMXKSDwYzOp2baHwyap39cYLU=/206x305/v2/https://flxt.tmsimg.com/assets/p16188223_p_v8_aa.jpg"
+        src="./images/opaque.png"
         alt="poster"
-        class="poster"
+        class="poster is-hidden"
         id="poster"
       />
+      <div
+        id="modal-placeholder"
+        class="modal-poster__placeholder-thumb is-hidden"
+      >
+        <span class="modal-poster__placeholder">
+          <div class="modal-poster__placeholder-title-wrapper">
+            <span class="modal-poster__placeholder-title"></span>
+          </div>
+          has no poster
+        </span>
+      </div>
     </div>
     <div class="modal-info">
       <h2 class="modal__title" id="modalTitle"></h2>
@@ -61,7 +72,7 @@
             </td>
             <td class="modal__characteristic-rating">
               <span
-                class="modal__characteristic-inform-accent"
+                class="modal__characteristic-inform--accent"
                 id="averageRating"
               ></span>
               /
