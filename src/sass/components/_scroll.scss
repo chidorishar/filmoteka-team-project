@@ -1,0 +1,47 @@
+.scroll {
+    &--absolute {
+        @include mediaUpTo('mobile') {
+            position: absolute;
+            bottom: 76px;
+            right: 24px;
+        }
+    
+        @include mediaInBetween('mobile', 'tablet') {
+            position: absolute;
+            bottom: 76px;
+            right: calc(100% / 2 - 32px - 180px);
+        }
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+
+
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    
+    fill: getColorFromPalette('accent', 'dark');
+    background-color: getColorFromPalette('pagination', 'grey');
+    visibility: hidden;
+    opacity: 0;
+    
+    transition: background-color 250ms cubic-bezier(.57, .21, .69, 1.25), visibility 250ms cubic-bezier(.57, .21, .69, 1.25), opacity 250ms cubic-bezier(.57, .21, .69, 1.25);
+    cursor: pointer;
+    
+    &.scroll--isShown {
+        opacity: .8;
+        visibility: visible;
+        &:hover {
+            background-color: getColorFromPalette('pagination', 'orange');       
+        }
+    }
+
+}
+
+.icon__scroll {
+    fill: black;
+}

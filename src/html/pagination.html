@@ -1,19 +1,25 @@
 <section class="pagination-section pagination-section--sticky">
-    <div class="container">
+    <div class="container pagination__container">
         <div class="pagination" id="pagination-wrapper">
-            <button type="button" aria-label="Previous page" class="pagination__btn pagination__btn--margin-right pagination__btn-arrow" id="pagination-button-previous">
+            <button type="button" aria-label="Previous page"
+                class="pagination__btn pagination__btn--margin-right pagination__btn-arrow" id="pagination-button-previous">
                 <svg class="pagination_svg" width="16" height="16">
                     <use href="./images/decorative/sprite.svg#icon-arrow-left"></use>
                 </svg>
             </button>
             <ul class="pagination__list" id="pagination-pages">
             </ul>
-            <button type="button" aria-label="Next page" class="pagination__btn pagination__btn--margin-left pagination__btn-arrow" id="pagination-button-next">
+            <button type="button" aria-label="Next page"
+                class="pagination__btn pagination__btn--margin-left pagination__btn-arrow" id="pagination-button-next">
                 <svg class="pagination_svg" width="16" height="16">
                     <use href="./images/decorative/sprite.svg#icon-arrow-right"></use>
                 </svg>
             </button>
         </div>
-    </div>
-  </div>
+        <a href="#" class="scroll scroll-absolute" id="js-scroll" tabindex="-1" >
+            <svg class="icon__scroll" width="26" height="26">
+                <use href="./images/decorative/sprite.svg#icon-arrow-up"></use>
+            </svg>
+        </a>
+    </div>        
 </section>
