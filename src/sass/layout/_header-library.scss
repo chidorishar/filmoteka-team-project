@@ -1,8 +1,9 @@
 .header-library {
   padding-top: 40px;
-  padding-bottom: 62px;
+  padding-bottom: 24px;
+  
   @include mediaOver('tablet') {
-    padding-bottom: 60px;
+    padding-bottom: 27px;
   }
 }
 
@@ -46,9 +47,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 60px;
+  margin-bottom: 44px;
   @include mediaOver('tablet') {
-    margin-bottom: 40px;
+    margin-bottom: 16px;
   }
 }
 
@@ -121,6 +122,7 @@
   @include mediaOver('desktop') {
     gap: 16px;
   }
+  margin-bottom: 30px;
 }
 
 .nav-group-library__link--current::after {

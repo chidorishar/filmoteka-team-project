@@ -150,7 +150,16 @@
   &::placeholder {
     color: getColorFromPalette('primary', 'light');
   }
+
+  &:disabled{
+    &::placeholder {
+      color: getColorFromPalette('modal', 'characteristic-text-color')
+    }
+
+    border-bottom-color: getColorFromPalette('accent', 'warning');
+  }
 }
+
 
 .search-button {
   position: absolute;
