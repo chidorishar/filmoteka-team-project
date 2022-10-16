@@ -71,7 +71,10 @@
 
 .nav-header__item {
   position: relative;
-  margin-left: 40px;
+
+  &:last-child {
+    margin-left: 40px;
+  }
 }
 
 .nav-header__link {
@@ -85,7 +88,7 @@
   transition: 250ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   &:hover,
-  &:focus{
+  &:focus {
     color: getColorFromPalette('secondary', 'orange');
   }
 }
