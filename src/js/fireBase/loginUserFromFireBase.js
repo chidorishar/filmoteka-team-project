@@ -88,12 +88,16 @@ onAuthStateChanged(auth, user => {
     refs.btnOpenModal.style.display = 'none';
     refs.myLibraryPage.style.display = 'flex';
     refs.btnAddToQueue.removeAttribute('disabled');
+    refs.btnAddToQueue.classList.remove('btn-modal-film__disabled');
     refs.btnAddToWatched.removeAttribute('disabled');
+    refs.btnAddToWatched.classList.remove('btn-modal-film__disabled');
     if (isVisible) toggleModal();
     refs.btnGoOut.style.display = 'flex';
   } else {
     refs.btnAddToQueue.setAttribute('disabled', '');
+    refs.btnAddToQueue.classList.add('btn-modal-film__disabled');
     refs.btnAddToWatched.setAttribute('disabled', '');
+    refs.btnAddToWatched.classList.add('btn-modal-film__disabled');
     refs.btnOpenModal.style.display = 'flex';
     refs.myLibraryPage.style.display = 'none';
     refs.btnGoOut.style.display = 'none';
@@ -105,6 +109,8 @@ refs.btnCloseProfile.addEventListener('click', e => {
   signOut(auth);
   refs.btnAddToQueue.setAttribute('disabled', '');
   refs.btnAddToWatched.setAttribute('disabled', '');
+  refs.btnAddToQueue.classList.add('btn-modal-film__disabled');
+  refs.btnAddToWatched.classList.add('btn-modal-film__disabled');
   NotificationAPI.addNotification('You have been logged out', false, 3000);
 });
 

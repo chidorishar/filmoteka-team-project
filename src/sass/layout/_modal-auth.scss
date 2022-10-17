@@ -284,3 +284,25 @@
     left: 0;
   }
 }
+
+@media screen and (orientation: landscape) and (max-width: 767px) {
+  .container-modal {
+    width: 480px;
+    height: 100%;
+    padding: 0;
+    margin: 0 20px;
+    overflow-y: scroll;
+  }
+}
+
+
+.btn-modal-film__disabled {
+  cursor: auto;
+  color: gray;
+  border: gray;
+  background-color: lightgray;
+
+  &:not([disabled]):hover {
+    color: red;
+  }
+}
