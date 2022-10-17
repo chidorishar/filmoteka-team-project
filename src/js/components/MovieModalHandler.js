@@ -15,6 +15,7 @@ export class MovieModalHandler {
     libActionsBtnsWrapper: document.querySelector(
       '#movie-modal-buttons-wrapper'
     ),
+    posterImgEl: document.querySelector('#poster'),
   };
 
   #movieLibData = null;
@@ -66,7 +67,7 @@ export class MovieModalHandler {
    * @param {number} movieId
    */
   onGalleryCardClicked = movieId => {
-    this.#spinner.show();
+    // this.#spinner.show();
 
     //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
@@ -86,6 +87,9 @@ export class MovieModalHandler {
     this.#setMovieData();
 
     this.#renderModal(this.#clickedMovieData);
+    const { posterImgEl } = this.#modalWindowEls;
+    posterImgEl.addEventListener('load', this.#onPosterLoaded);
+    posterImgEl.addEventListener('error', this.#onPosterLoaded);
   };
 
   #setMovieData(movieCardLink = null) {
@@ -137,28 +141,27 @@ export class MovieModalHandler {
     refs.movieGenre.textContent = `${
       movieGenresString ? movieGenresString : 'N/D'
     }`;
+    refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
 
-    function addPosterPlaceholder() {
-      const modalPosterPlaceholder =
-        document.getElementById('modal-placeholder');
-      const textInPlaceholder = document.querySelector(
-        '.modal-poster__placeholder-title'
-      );
-      const hiddenPoster = document.querySelector('.poster');
+    //placeholder logic
+    const modalPosterPlaceholder = document.getElementById('modal-placeholder');
+    const textInPlaceholder = document.querySelector(
+      '.modal-poster__placeholder-title'
+    );
+    const { posterImgEl } = this.#modalWindowEls;
 
-      if (!pathToPoster) {
-        modalPosterPlaceholder.classList.remove('is-hidden');
-        textInPlaceholder.textContent = `${movieTitle ?? movieName}`;
-        hiddenPoster.classList.add('is-hidden');
-      } else {
-        modalPosterPlaceholder.classList.add('is-hidden');
-        hiddenPoster.classList.remove('is-hidden');
-      }
+    if (!pathToPoster) {
+      modalPosterPlaceholder.classList.remove('is-hidden');
+      textInPlaceholder.textContent = `${movieTitle ?? movieName}`;
+      posterImgEl.classList.add('is-hidden');
+    } else {
+      modalPosterPlaceholder.classList.add('is-hidden');
+      posterImgEl.classList.remove('is-hidden');
     }
 
-    addPosterPlaceholder();
+    //if there is image for poster - show spinner, else - hide it in case we going from image to placeholder
+    pathToPoster ? this.#spinner.show() : this.#spinner.hide();
 
-    refs.movieAbout.textContent = `${overview ? overview : 'Sorry, no data'}`;
     //update text in library-related buttons according to movie's persistance in a library
     this.#updateControlButtons(this.#movieLibData);
     this.#updateMoviesNavButtons();
@@ -243,11 +246,16 @@ export class MovieModalHandler {
   }
 
   #closeModal = () => {
+    const { posterImgEl } = this.#modalWindowEls;
+    this.#spinner.hide();
+
     window.removeEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.removeEventListener(
       'click',
       this.#onBackdropClick
     );
+    posterImgEl.removeEventListener('load', this.#onPosterLoaded);
+    posterImgEl.removeEventListener('error', this.#onPosterLoaded);
 
     //hide whole modal
     this.#modalWindowEls.modalBackdrop.classList.add('is-hidden');
@@ -259,6 +267,11 @@ export class MovieModalHandler {
     if (event.target === this.#modalWindowEls.modalBackdrop) {
       this.#closeModal();
     }
+  };
+
+  #onPosterLoaded = e => {
+    console.log('Poster loaded');
+    this.#spinner.hide();
   };
 
   #onNavThroughMoviesBtnClick = e => {
