@@ -8,19 +8,32 @@ export class GalleryAPI {
   #pathToPoster = '';
   #rootEl = null;
   #onCriticalImagesLoadedCallbacks = [];
+  #onDeleteButtonClickedCB = null;
+  #onMovieCardClickedCB = null;
   #currentMoviesData = null;
   #spinner = null;
   #posterImageCSSClass = 'movie-card__img';
+
+  #renderCloseButton = null;
 
   #MAX_NUM_OF_CRIT_IMAGES = 3;
   #NUMB_OF_IMAGES_TO_LOAD_AT_ONCE = 3;
   #numberOfCriticalImages = null;
   #imagesElsToLoad = null;
 
-  constructor(rootElementSelector) {
+  constructor(
+    rootElementSelector,
+    renderCloseButton = false,
+    onMovieCardClickedCB = () => {},
+    onDeleteButtonClickedCB = () => {}
+  ) {
     this.#rootEl = document.querySelector(rootElementSelector);
+    this.#renderCloseButton = renderCloseButton;
+    this.#onMovieCardClickedCB = onMovieCardClickedCB;
+    this.#onDeleteButtonClickedCB = onDeleteButtonClickedCB;
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
     this.#spinner = new Spinner('.gallery', 'loader-gallery');
+    this.#rootEl.addEventListener('click', this.#onCardClicked);
   }
 
   addOnCardClickCallback(cb) {
@@ -30,6 +43,39 @@ export class GalleryAPI {
   removeOnCardClickCallback(cb) {
     this.#rootEl.removeEventListener('click', cb);
   }
+
+  /**
+   * It routs click events
+   * @returns nothing
+   */
+  #onCardClicked = e => {
+    const movieCardLink = e.target.closest('a');
+    const clickedElNodeName = e.target.nodeName;
+    e.preventDefault();
+
+    if (!movieCardLink) {
+      return;
+    }
+
+    const movieId = movieCardLink.dataset.movieId;
+    //if we clicked remove button - call specific callback asynchronously and exit from function
+    if (clickedElNodeName === 'BUTTON') {
+      Promise.resolve(
+        (() => {
+          this.#onDeleteButtonClickedCB(movieId);
+        })()
+      );
+
+      return;
+    }
+
+    //we clicked to movie card - call specific callback asynchronously
+    Promise.resolve(
+      (() => {
+        this.#onMovieCardClickedCB(movieId);
+      })()
+    );
+  };
 
   addOnCriticalImagesLoadedCallback(cb) {
     this.#onCriticalImagesLoadedCallbacks.push(cb);
@@ -134,6 +180,17 @@ export class GalleryAPI {
           ${movieName}
         </span>has no poster
       </span>`;
+    // prettier-ignore
+    const closeButtonEl = this.#renderCloseButton
+      ? `<button
+          aria-label="Delete movie from library"
+          class="movie-card__delete-button"
+          data-modal-close
+        >
+          <svg class="movie-card__icon" viewBox="0 0 32 32" width="10" height="10">
+            <path d="M31.439 3.166l-3.166-3.166-12.554 12.552-12.552-12.552-3.166 3.166 12.552 12.552-12.552 12.554 3.166 3.166 12.552-12.554 12.554 12.554 3.166-3.166-12.554-12.554 12.554-12.552z"></path>          </svg>
+        </button>`
+      : '';
 
     const imgThumbAdditionalClasses =
       (hasPoster ? '' : 'movie-card__img-thumb--no-poster') +
@@ -149,6 +206,7 @@ export class GalleryAPI {
           data-prev-movie-id="${prevMovieID ?? '' }" data-next-movie-id="${ nextMovieID ?? '' }">
           <div class="movie-card__img-thumb ${imgThumbAdditionalClasses}"
             >
+            ${closeButtonEl}
             ${posterEl}
           </div>
           <h3 class="movie-card__title">${movieName}</h3>

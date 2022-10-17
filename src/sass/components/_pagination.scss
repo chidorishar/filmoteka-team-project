@@ -1,136 +1,139 @@
 .pagination-section {
-    &--sticky {
-        position: sticky;
-        bottom: 10;
-    }
+  &--sticky {
+    position: sticky;
+    bottom: 10;
+  }
+}
+
+.pagination-section__heading {
+  @extend %visually-hidden;
 }
 
 .pagination__container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .pagination {
-    @extend %flex--vh-centred;
-    padding: 14px 30px;
-    
-    border-radius: 10px;
-    background-color: rgba(getColorFromPalette('primary', 'dark'), 0.65);
+  @extend %flex--vh-centred;
+  padding: 14px 30px;
 
-    @include mediaUpTo('mobile') {
-        max-width: 278px;
-    }
+  border-radius: 10px;
+  background-color: rgba(getColorFromPalette('primary', 'dark'), 0.65);
 
-    @include mediaInBetween(420px, 480px) {
-        max-width: 350px;
-    }
-    
-    @include mediaInBetween('mobile', 'tablet') {
-        max-width: 420px;
-    }
+  @include mediaUpTo('mobile') {
+    max-width: 278px;
+  }
 
-    @include mediaOver('tablet') {
-        max-width: 604px;
-    }
+  @include mediaInBetween(420px, 480px) {
+    max-width: 350px;
+  }
+
+  @include mediaInBetween('mobile', 'tablet') {
+    max-width: 420px;
+  }
+
+  @include mediaOver('tablet') {
+    max-width: 604px;
+  }
 }
 
 .pagination__list {
-    font-size: 12px;
-    line-height: 1.33;
+  font-size: 12px;
+  line-height: 1.33;
 
-    column-gap: 16px;
-    
-    &--width-L {
-        width: 432px;
-    }
+  column-gap: 16px;
 
-    @include mediaUpTo('420px') {
-        column-gap: 8px;
-    }
-    
-    @extend %flex--vh-centred;
-    @extend %unmarked-list;
+  &--width-L {
+    width: 432px;
+  }
+
+  @include mediaUpTo('420px') {
+    column-gap: 8px;
+  }
+
+  @extend %flex--vh-centred;
+  @extend %unmarked-list;
 }
 
 .pagination__item {
-    &--hidden {
-        @extend %visually-hidden;
-    }
-    
-    &-dots {
-        color: white;
-        user-select: none;
-    }
+  &--hidden {
+    @extend %visually-hidden;
+  }
+
+  &-dots {
+    color: white;
+    user-select: none;
+  }
 }
 
 .pagination__btn {
-    border: none;
-    padding: 8px;
-    min-width: 40px;
-    min-height: 40px;
-    border-radius: 5px;
+  border: none;
+  padding: 8px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 5px;
 
-    @extend %flex--vh-centred;
-    text-align: center;
+  @extend %flex--vh-centred;
+  text-align: center;
 
-    background-color: getColorFromPalette('primary', 'light');
+  background-color: getColorFromPalette('primary', 'light');
 
+  transition: background-color 250ms cubic-bezier(0.57, 0.21, 0.69, 1.25);
 
-    transition: background-color 250ms cubic-bezier(.57, .21, .69, 1.25);
+  @include mediaUpTo('420px') {
+    padding: 4px;
+  }
+
+  &--margin-right {
+    margin-right: 16px;
 
     @include mediaUpTo('420px') {
-        padding: 4px;
+      margin-right: 8px;
     }
+  }
 
-    &--margin-right {
-        margin-right: 16px;
+  &--margin-left {
+    margin-left: 16px;
 
-        @include mediaUpTo('420px') {
-            margin-right: 8px;
-        }
+    @include mediaUpTo('420px') {
+      margin-left: 8px;
     }
+  }
 
-    &--margin-left {
-        margin-left: 16px;
+  &--active {
+    background-color: getColorFromPalette('pagination', 'orange');
+    color: getColorFromPalette('primary', 'light');
+  }
 
-        @include mediaUpTo('420px') {
-            margin-left: 8px;
-        }
-    }
+  &-arrow {
+    background-color: getColorFromPalette('pagination', 'grey');
+  }
 
-    &--active {
-        background-color: getColorFromPalette('pagination', 'orange');
-        color: getColorFromPalette('primary', 'light');
-    }
+  &--hidden {
+    @extend %visually-hidden;
+  }
 
-    &-arrow {
-        background-color: getColorFromPalette('pagination', 'grey');
-    }
+  &:hover {
+    cursor: pointer;
+    background-color: getColorFromPalette('pagination', 'orange');
+    color: getColorFromPalette('primary', 'light');
+    fill: getColorFromPalette('primary', 'light');
+  }
 
-    &--hidden {
-        @extend %visually-hidden;
-    }
+  &:disabled {
+    background-color: darkgrey;
 
     &:hover {
-        cursor: pointer;
-        background-color: getColorFromPalette('pagination', 'orange');
-        color: getColorFromPalette('primary', 'light');
-        fill: getColorFromPalette('primary', 'light');
+      cursor: default;
+      background-color: darkgrey;
+      fill: getColorFromPalette('primary', 'dark');
     }
-
-    &:disabled {
-        background-color: darkgrey;
-
-        &:hover {
-            cursor: default;
-            background-color: darkgrey;
-            fill: getColorFromPalette('primary', 'dark');
-        }
-    }
+  }
 }
 
 .pagination_svg {
-    pointer-events: none;
+  pointer-events: none;
 }

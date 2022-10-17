@@ -2,7 +2,6 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { PaginationAPI } from './components/PaginationAPI';
 import { NotificationAPI } from './components/NotificationAPI';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
-import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { MovieModalHandler } from './components/MovieModalHandler';
 
@@ -12,7 +11,10 @@ import { MovieModalHandler } from './components/MovieModalHandler';
 //   SEARCHED: 'searched',
 // };
 let activeLibMode = null;
+
 let galleryAPI = null;
+let moviesModalHandler = null;
+
 let moviesData = null;
 let libraryMoviesSearchForm = null;
 let noFoundWarningMessage = null;
@@ -32,11 +34,11 @@ let isSearchActive = false;
     moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
-    const tmdbAPI = new TMDBAPI();
     galleryAPI = new GalleryAPI(
       '#movies-wrapper',
-      BackendConfigStorage.pathToPoster,
-      BackendConfigStorage.genresAndIDs
+      true,
+      onMovieCardClicked,
+      onRemoveMovieFromCurrentLibrary
     );
     //hide spinner if there aren't movies else add listener for images loading
     moviesData?.length
@@ -46,7 +48,7 @@ let isSearchActive = false;
       : (document.querySelector('.loader--critical').style.display = 'none');
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
-    const mmh = new MovieModalHandler(
+    moviesModalHandler = new MovieModalHandler(
       galleryAPI,
       MovieModalHandler.MODE.LIBRARY_WATCHED,
       onMovieStatusChanged
@@ -100,19 +102,19 @@ function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
 
   const clickedButtonEl = e.target;
-  const buttonId = clickedButtonEl.id;
+  const buttonData = clickedButtonEl.dataset.pagination;
 
   let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
   window.scroll(0, scrollYTo);
 
-  switch (buttonId) {
-    case 'pagination-button-next':
+  switch (buttonData) {
+    case 'next':
       PaginationAPI.changePageByOne(true);
       break;
-    case 'pagination-button-previous':
+    case 'previous':
       PaginationAPI.changePageByOne(false);
       break;
-    case 'pagination-number-btn':
+    case 'number':
       const desiredPageNumber = parseInt(clickedButtonEl.textContent);
       if (desiredPageNumber === PaginationAPI.currentPage) return;
       PaginationAPI.updateCurrentPage(desiredPageNumber);
@@ -146,7 +148,6 @@ function renderGalleryByPage() {
 
       librarySearchFieldInput.value = '';
       PaginationAPI.updateCurrentPage(1);
-      // galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
 
       disableSearch();
@@ -260,6 +261,19 @@ function searchMovies(e) {
 
   galleryAPI.renderMoviesCards(moviesData);
   PaginationAPI.renderPagination();
+}
+
+function onMovieCardClicked(id) {
+  moviesModalHandler.onGalleryCardClicked(+id);
+}
+
+function onRemoveMovieFromCurrentLibrary(id) {
+  const action =
+    activeLibMode === LDStorageAPI.MOVIE_INFO.WATCHED
+      ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED
+      : MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED;
+  LDStorageAPI.removeFromLocalStorage(+id, activeLibMode);
+  onMovieStatusChanged(action);
 }
 
 function onMovieStatusChanged(action) {
