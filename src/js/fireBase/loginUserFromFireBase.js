@@ -51,10 +51,9 @@ function userLogin(e) {
 
   const UserEmail = email.value;
   const UserPassword = password.value;
-  // console.log(UserEmail, UserPassword);
 
   //Валидация контента полей формы
-  if (UserEmail === '' || UserPassword === '') {
+  if (!UserEmail || !UserPassword) {
     return;
   }
 

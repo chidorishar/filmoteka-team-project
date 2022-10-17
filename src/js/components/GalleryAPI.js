@@ -176,9 +176,12 @@ export class GalleryAPI {
       />`
       : 
       `<span class="movie-card__poster-placeholder">
-        <span class="movie-card__poster-placeholder--title">
-          ${movieName}
-        </span>has no poster
+        <span class="movie-card__placeholder-title-wrapper">
+          <span class="movie-card__poster-placeholder--title">
+           ${movieName}
+          </span>
+        </span>
+      has no poster
       </span>`;
     // prettier-ignore
     const closeButtonEl = this.#renderCloseButton
