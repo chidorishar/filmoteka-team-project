@@ -33,6 +33,9 @@ const refs = {
   myLibraryPage: document.querySelector('#library'),
   modalAuth: document.querySelector('.overlay-modal'),
   btnGoOut: document.querySelector('.btn-close-profile'),
+
+  btnAddToWatched: document.querySelector('.modal__add-to-watched'),
+  btnAddToQueue: document.querySelector('.modal__add-to-queue'),
 };
 
 //Слушатель собития на форме Входа
@@ -61,11 +64,7 @@ function userLogin(e) {
       // Signed in
       const user = userCredential.user;
       console.log(user);
-      NotificationAPI.addNotification(
-        'Incorrect mail and password',
-        true,
-        3000
-      );
+      NotificationAPI.addNotification('You logged in successful', false, 3000);
     })
     .catch(error => {
       NotificationAPI.addNotification(
@@ -78,14 +77,18 @@ function userLogin(e) {
   e.currentTarget.reset();
 }
 
-//Наблюдателm состояния аутентификации
+//Наблюдатель состояния аутентификации
 onAuthStateChanged(auth, user => {
   if (user) {
     refs.btnOpenModal.style.display = 'none';
     refs.myLibraryPage.style.display = 'flex';
+    refs.btnAddToQueue.removeAttribute('disabled');
+    refs.btnAddToWatched.removeAttribute('disabled');
     if (isVisible) toggleModal();
     refs.btnGoOut.style.display = 'flex';
   } else {
+    refs.btnAddToQueue.setAttribute('disabled', '');
+    refs.btnAddToWatched.setAttribute('disabled', '');
     refs.btnOpenModal.style.display = 'flex';
     refs.myLibraryPage.style.display = 'none';
     refs.btnGoOut.style.display = 'none';
@@ -95,6 +98,8 @@ onAuthStateChanged(auth, user => {
 //Выход пользователя с профиля
 refs.btnCloseProfile.addEventListener('click', e => {
   signOut(auth);
+  refs.btnAddToQueue.setAttribute('disabled', '');
+  refs.btnAddToWatched.setAttribute('disabled', '');
   NotificationAPI.addNotification('You have been logged out', false, 3000);
 });
 
