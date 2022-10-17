@@ -29,12 +29,15 @@
   &--no-poster {
     $stripesWidth: 15px;
     $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
+    color: var(--placeholder-stripes);
+
+    transition: createTransitionFor('color');
 
     background: unset;
     background-image: repeating-linear-gradient(
       to left bottom,
-      var(--placeholder-stripes),
-      var(--placeholder-stripes) $stripesWidth,
+      currentColor,
+      currentColor $stripesWidth,
       $stripesMainColor $stripesWidth,
       $stripesMainColor $stripesWidth * 2
     );
