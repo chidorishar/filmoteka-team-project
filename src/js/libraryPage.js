@@ -104,7 +104,7 @@ function onPaginationWrapperBtnClick(e) {
   const clickedButtonEl = e.target;
   const buttonData = clickedButtonEl.dataset.pagination;
 
-  let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
+  let scrollYTo = window.innerWidth <= 767 ? 230 : 219;
   window.scroll(0, scrollYTo);
 
   switch (buttonData) {
