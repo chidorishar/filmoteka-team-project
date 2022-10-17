@@ -151,6 +151,7 @@
 
   display: block;
   padding: 20px 10px;
+  border: none;
 
   color: rgba(getColorFromPalette('background', 'additional'), 0.75);
   background-color: rgba(getColorFromPalette('primary', 'dark'), 0.45);
@@ -191,7 +192,7 @@
     }
   }
 
-  &[disabled='true'] {
+  &[disabled] {
     opacity: 0;
     pointer-events: none;
   }
