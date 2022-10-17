@@ -65,11 +65,7 @@ function userLogin(e) {
       // Signed in
       const user = userCredential.user;
       console.log(user);
-      NotificationAPI.addNotification(
-        'You logged in successful',
-        true,
-        3000
-      );
+      NotificationAPI.addNotification('You logged in successful', false, 3000);
     })
     .catch(error => {
       NotificationAPI.addNotification(
