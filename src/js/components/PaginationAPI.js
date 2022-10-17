@@ -1,17 +1,17 @@
 class PaginationAPI {
   static #MOBILE_MAX_WIDTH = 767;
   static #MOBILE_MIN_WIDTH = 479;
-  static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn">1</button></li>`;
+  static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn" data-pagination="number">1</button></li>`;
   static #dotsLeftMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>`;
   static #dotsRightMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>`;
-
-  static #paginationWrapperDiv = document.getElementById('pagination-wrapper');
+  static #scrollBtn = document.getElementById('js-scroll');
 
   static #totalMarkup = '';
 
   static currentPage = 1;
   static totalPages = null;
 
+  static paginationWrapperDiv = document.getElementById('pagination-wrapper');
   static paginationPagesList = document.getElementById('pagination-pages');
   static paginationNextBtn = document.getElementById('pagination-button-next');
   static paginationPreviousBtn = document.getElementById(
@@ -40,10 +40,10 @@ class PaginationAPI {
   static #renderPaginationMarkup() {
     this.#totalMarkup = '';
 
-    if (this.totalPages === 0) {
-      this.#paginationWrapperDiv.setAttribute('style', 'display: none');
+    if (!this.totalPages) {
+      this.paginationWrapperDiv.setAttribute('style', 'display: none');
     } else {
-      this.#paginationWrapperDiv.removeAttribute('style');
+      this.paginationWrapperDiv.removeAttribute('style');
     }
 
     // if our active page is the last one of the whole pagination, then we disable it.
@@ -66,22 +66,13 @@ class PaginationAPI {
 
     // if our total pages value is 1, then we need to hide buttons, but if we update our total pages value, we need to the pagination buttons again in the pagination bar
     if (this.totalPages === 1) {
-      this.#paginationWrapperDiv.classList.add('pagination--width-S');
       this.paginationNextBtn.classList.add('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.add('pagination__btn--hidden');
-
       this.#totalMarkup += this.#firstPageMarkup;
       return;
     } else {
-      this.#paginationWrapperDiv.classList.remove('pagination--width-S');
       this.paginationNextBtn.classList.remove('pagination__btn--hidden');
       this.paginationPreviousBtn.classList.remove('pagination__btn--hidden');
-    }
-
-    if (this.totalPages <= 2 && !(this.totalPages === 1)) {
-      this.#paginationWrapperDiv.classList.add('pagination--width-M');
-    } else {
-      this.#paginationWrapperDiv.classList.remove('pagination--width-M');
     }
 
     if (window.innerWidth <= this.#MOBILE_MIN_WIDTH) {
@@ -144,11 +135,6 @@ class PaginationAPI {
       this.#totalMarkup += this.#getPageBtnMarkupWithIdInsered(i);
     }
 
-    if (this.totalPages >= 2 && this.totalPages <= 4) {
-      this.#paginationWrapperDiv.classList.add('pagination--width-L');
-    } else {
-      this.#paginationWrapperDiv.classList.remove('pagination--width-L');
-    }
     if (this.totalPages >= 6) {
       this.#totalMarkup += this.#dotsRightMarkup;
       this.#totalMarkup += this.#getLastPageMarkup();
@@ -321,8 +307,15 @@ class PaginationAPI {
   }
 
   static #correctPaginationBarSize() {
+    // Scroll adjustment when we have a less than 4 pages in total
+    if (this.totalPages <= 4) {
+      this.#scrollBtn.classList.remove('scroll--absolute');
+    } else {
+      this.#scrollBtn.classList.add('scroll--absolute');
+    }
+
     // For better experience, we lock the size of the bar if we have a lot of pages. So it is comfortable to switch between the pages by pressing the arrows buttons.
-    if (this.totalPages >= 10) {
+    if (this.totalPages >= 8) {
       this.paginationPagesList.classList.add('pagination__list--width-L');
     } else {
       this.paginationPagesList.classList.remove('pagination__list--width-L');
@@ -330,11 +323,11 @@ class PaginationAPI {
   }
 
   static #getPageBtnMarkupWithIdInsered(id) {
-    return `<li class="pagination__item" id="pagination-number-${id}"><button class="pagination__btn">${id}</button></li>`;
+    return `<li class="pagination__item" id="pagination-number-${id}"><button class="pagination__btn" data-pagination="number">${id}</button></li>`;
   }
 
   static #getLastPageMarkup() {
-    return `<li class="pagination__item" id="pagination-number-${this.totalPages}"><button class="pagination__btn">${this.totalPages}</button></li>`;
+    return `<li class="pagination__item" id="pagination-number-${this.totalPages}"><button class="pagination__btn" data-pagination="number">${this.totalPages}</button></li>`;
   }
 }
 

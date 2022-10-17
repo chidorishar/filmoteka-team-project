@@ -35,9 +35,23 @@
     />
     <noscript><link rel="stylesheet" href="./sass/index.scss" /></noscript>
     <!-- JS -->
-    <script src="./index.js" type="module" defer></script>
+    <script src="./index.js" type="module"></script>
+    <!-- EMBEDDED SCRIPTS -->
+    <script>
+      const theme = localStorage.getItem('theme');
+      if (theme) document.documentElement.className = theme;
+    </script>
     <!-- CRITICAL STYLES -->
     <style type="text/css">
+      :root,
+      :root.light {
+        --bg-color: #fff;
+      }
+
+      :root.dark {
+        --bg-color: #272e34;
+      }
+
       @keyframes loader {
         100% {
           transform: rotate(360deg);
@@ -64,7 +78,7 @@
         width: 100%;
         height: 100%;
 
-        background: #fff;
+        background: var(--bg-color);
         z-index: 100;
 
         transition: 0.5s;
@@ -98,5 +112,6 @@
     <include src="./html/team-modal-window.html"></include>
 
     <include src="./html/movie-modal-window.html"></include>
+    <include src="./html/modal-for-auth.html"></include>
   </body>
 </html>

@@ -45,18 +45,18 @@ export class Spinner {
 
   #render() {
     // prettier-ignore
-    const markup =
-      `<div class="${this.#selfCSSClass}"
+    const markup = `<div class="${this.#selfCSSClass}"
         style="
           position: absolute; 
           top: 0px; 
-          left: 0px; 
+          left: 0px;
+          z-index: 2;
           display: flex; 
           justify-content: center;
           width: 100%;
           height: 100%; 
           transition: opacity ${this.#HIDE_DELAY}ms ease-in-out;
-          background-color: rgb(255, 255, 255);
+          background-color: var(--bg-color);
           ">
         <div class="loader__spinner" 
           style="

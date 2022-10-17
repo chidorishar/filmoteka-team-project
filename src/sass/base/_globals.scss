@@ -3,6 +3,7 @@ html {
 }
 
 body {
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
   &.js-modal-is-hidden,
   &.location-open {
     overflow: hidden;

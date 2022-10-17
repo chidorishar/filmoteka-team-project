@@ -12,8 +12,10 @@ let currentMode = MODE.TOP;
 
 let resizeObserver = null;
 let moviesData = null;
+
 let tmdbAPI = null;
 export let galleryAPI = null;
+let moviesModalHandler = null;
 
 let unsuccessfulSearchEl = null;
 
@@ -34,20 +36,16 @@ let unsuccessfulSearchEl = null;
     const searchFormEl = document.querySelector('#movie-search-form');
     searchFormEl.addEventListener('submit', onMoviesSearchFormSubmit);
     //get array of IDs and genres
-    galleryAPI = new GalleryAPI('#movies-wrapper');
+    galleryAPI = new GalleryAPI(
+      '#movies-wrapper',
+      undefined,
+      onMovieCardClicked
+    );
 
     //init pagination variables
-    PaginationAPI.paginationNextBtn.addEventListener(
+    PaginationAPI.paginationWrapperDiv.addEventListener(
       'click',
-      onPaginationBtnChangeClick
-    );
-    PaginationAPI.paginationPreviousBtn.addEventListener(
-      'click',
-      onPaginationBtnChangeClick
-    );
-    PaginationAPI.paginationPagesList.addEventListener(
-      'click',
-      onPaginationListBtnNumberClick
+      onPaginationWrapperBtnClick
     );
 
     resizeObserver = new ResizeObserver(PaginationAPI.onWindowResize);
@@ -59,7 +57,10 @@ let unsuccessfulSearchEl = null;
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
 
-    const mmh = new MovieModalHandler(galleryAPI, MovieModalHandler.MODE.HOME);
+    moviesModalHandler = new MovieModalHandler(
+      galleryAPI,
+      MovieModalHandler.MODE.HOME
+    );
 
     NotificationAPI.addNotification(
       "Showing week's top movies...",
@@ -79,6 +80,10 @@ let unsuccessfulSearchEl = null;
 function onGalleryLoadedCriticalImages() {
   document.querySelector('.loader--critical').style.display = 'none';
   document.body.classList.remove('body-clip-overflow');
+}
+
+function onMovieCardClicked(id) {
+  moviesModalHandler.onGalleryCardClicked(+id);
 }
 
 async function onMoviesSearchFormSubmit(ev) {
@@ -174,23 +179,29 @@ async function renderGalleryByPage() {
   }
 }
 
-async function onPaginationBtnChangeClick(e) {
-  if (e.currentTarget.id === 'pagination-button-next') {
-    PaginationAPI.changePageByOne(true);
-  } else {
-    PaginationAPI.changePageByOne(false);
-  }
-
-  await renderGalleryByPage();
-
-  PaginationAPI.renderPagination();
-}
-
-async function onPaginationListBtnNumberClick(e) {
+async function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
-  if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
 
-  PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+  const clickedButtonEl = e.target;
+  const buttonData = clickedButtonEl.dataset.pagination;
+
+  let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
+  window.scroll(0, scrollYTo);
+
+  switch (buttonData) {
+    case 'next':
+      PaginationAPI.changePageByOne(true);
+      break;
+    case 'previous':
+      PaginationAPI.changePageByOne(false);
+      break;
+    case 'number':
+      if (parseInt(e.target.textContent) === PaginationAPI.currentPage) return;
+      PaginationAPI.updateCurrentPage(parseInt(e.target.textContent));
+      break;
+    default:
+      return;
+  }
 
   await renderGalleryByPage();
 

@@ -29,12 +29,15 @@
   &--no-poster {
     $stripesWidth: 15px;
     $stripesMainColor: rgba(getColorFromPalette('primary', 'additional'), 0.3);
+    color: var(--placeholder-stripes);
+
+    transition: createTransitionFor('color');
 
     background: unset;
     background-image: repeating-linear-gradient(
       to left bottom,
-      getColorFromPalette('primary', 'light'),
-      getColorFromPalette('primary', 'light') $stripesWidth,
+      currentColor,
+      currentColor $stripesWidth,
       $stripesMainColor $stripesWidth,
       $stripesMainColor $stripesWidth * 2
     );
@@ -75,6 +78,46 @@
   }
 }
 
+.movie-card__delete-button {
+  @extend %rounded;
+
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 1;
+  transition: createTransitionFor('color', 'box-shadow');
+
+  color: rgb(26, 206, 71);
+  fill: currentColor;
+  background-color: rgba(getColorFromPalette('primary', 'dark'), 0.5);
+  box-shadow: 0px 0px 15px 4px rgba(26, 206, 71, 0.5);
+  border: 2px solid currentColor;
+
+  pointer-events: all;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: rgb(255, 31, 31);
+    box-shadow: 0px 0px 5px 4px rgba(255, 31, 3, 0.5);
+  }
+}
+
+.movie-card__icon {
+  transition: createTransitionFor('transform');
+
+  .movie-card__delete-button:hover &,
+  .movie-card__delete-button:focus & {
+    transform: scale(1.8);
+  }
+}
+
 .movie-card__img {
   width: 100%;
   height: 100%;
@@ -84,6 +127,12 @@
 
   object-fit: cover;
   object-position: 50% 50%;
+  transition: createTransitionFor('transform');
+
+  .movie-card__link:hover &,
+  .movie-card__link:focus & {
+    transform: scale(1.1);
+  }
 }
 
 .movie-card__poster-placeholder {
@@ -130,6 +179,7 @@
   margin: 0;
   margin-top: 8px;
 
+  transition: createTransitionFor('color');
   color: var(--text-color);
 
   @include mediaInBetween('tablet', 'desktop') {

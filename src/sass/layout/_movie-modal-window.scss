@@ -128,6 +128,8 @@
   justify-content: space-between;
   width: 100%;
 
+  pointer-events: none;
+
   @include mediaInBetween('tablet', 'desktop') {
     bottom: 20%;
   }
@@ -149,6 +151,7 @@
 
   display: block;
   padding: 20px 10px;
+  border: none;
 
   color: rgba(getColorFromPalette('background', 'additional'), 0.75);
   background-color: rgba(getColorFromPalette('primary', 'dark'), 0.45);
@@ -156,7 +159,7 @@
   transition: createTransitionFor(
     'color' 'opacity' 'box-shadow' 'background-color'
   );
-  user-select: none;
+  pointer-events: all;
 
   &:hover,
   &:focus {
@@ -189,19 +192,22 @@
     }
   }
 
-  &[disabled='true'] {
+  &[disabled] {
     opacity: 0;
     pointer-events: none;
   }
 }
 
 .modal-poster {
+  flex-shrink: 0;
   position: relative;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border-radius: 5px;
 
   @include mediaUpTo('tablet') {
     width: 100%;
-    min-width: 240px;
-    height: 100%;
+    min-width: 200px;
   }
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -216,13 +222,12 @@
 
 .poster {
   display: block;
-  margin-bottom: 20px;
   height: 100%;
   width: 100%;
 
   border-radius: 5px;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: top;
 
   @include mediaInBetween('tablet', 'desktop') {
@@ -242,7 +247,7 @@
   }
 }
 
-.modal-poster__placeholder--thumb {
+.modal-poster__placeholder-thumb {
   @extend %flex--vh-centred;
   position: absolute;
 
@@ -257,8 +262,8 @@
   background: unset;
   background-image: repeating-linear-gradient(
     to left bottom,
-    getColorFromPalette('primary', 'light'),
-    getColorFromPalette('primary', 'light') $stripesWidth,
+    var(--placeholder-stripes),
+    var(--placeholder-stripes) $stripesWidth,
     $stripesMainColor $stripesWidth,
     $stripesMainColor $stripesWidth * 2
   );
@@ -293,7 +298,7 @@
   overflow-y: hidden;
 }
 
-.modal-poster__placeholder--title {
+.modal-poster__placeholder-title {
   @extend %rounded;
 
   line-height: 1.15;
@@ -401,22 +406,22 @@ td {
   flex-direction: column;
 }
 
-.modal__characteristic-inform-accent {
-  background-color: var(--bg-color);
-  border-radius: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 36px;
-  height: 16px;
-  color: var(--text-color);
-}
-
 .modal__characteristic-inform {
   font-size: 12px;
   line-height: 14px;
   color: var(--text-color);
   height: 30px;
   overflow: auto;
+}
+
+.modal__characteristic-inform--accent {
+  background-color: getColorFromPalette('secondary', 'orange');
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 36px;
+  height: 16px;
+  color: var(--bg-color);
 }
 
 .modal__about {

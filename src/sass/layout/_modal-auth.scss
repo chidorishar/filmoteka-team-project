@@ -1,0 +1,286 @@
+.overlay-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  background-color: rgba(54, 54, 54, 0.607);
+  width: 100vw;
+  height: 100vh;
+  transition: 0.5s;
+}
+
+.overlay-modal.active {
+  background-color: rgba(54, 54, 54, 0.607);
+}
+
+.container-modal {
+  width: 800px;
+  height: 500px;
+
+  padding: 40px 0;
+  position: relative;
+}
+
+.block {
+  height: 100%;
+  background-color: rgba(var(--bgr-color), 0.75);
+  box-shadow: 0 5px 45px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  border-radius: 15px;
+}
+
+.block__title {
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.block__item {
+  width: 50%;
+}
+
+.block-item {
+  text-align: center;
+}
+.block-item__title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.block-item__btn {
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  background: linear-gradient(to bottom, #eef2f3, #8e9eab);
+  border-radius: 5px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 300ms linear;
+
+  &:hover {
+    background: #03a9f4;
+    color: #fff;
+  }
+}
+
+.form-box {
+  background: var(--firebase-auth-gradient);
+  height: 100%;
+  width: 50%;
+  box-shadow: 0 5px 45px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.form-box.active {
+  left: 50%;
+}
+
+.form-title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  width: 100%;
+  padding: 50px;
+  font-size: 16px;
+  position: absolute;
+  transition: 0.5s;
+}
+
+.form__singin {
+  left: 0;
+  transition-delay: 0.25s;
+}
+
+.form__singup {
+  left: 100%;
+  transition-delay: 0s;
+}
+
+.form-box.active .form__singin {
+  left: -100%;
+  transition-delay: 0s;
+}
+
+.form-box.active .form__singup {
+  left: 0;
+  transition-delay: 0.25s;
+}
+
+.form__title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #604f4f;
+}
+
+.form__input {
+  width: 100%;
+  padding: 10px;
+  border: solid 1px #333;
+  border-radius: 5px;
+  font-size: inherit;
+  margin-bottom: 10px;
+}
+
+.form__buttons {
+  margin-top: 25px;
+}
+
+.form__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: inherit;
+  background-color: #03a9f4;
+  color: #fff;
+  padding: 10px 50px;
+}
+
+.form__btn--google {
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2px 30px;
+}
+
+.form__btn--singup {
+  background-color: #f43648;
+}
+
+.form__btn--signin {
+  margin-bottom: 10px;
+}
+
+// start animation buttons form
+.btn__animation {
+  border-radius: 15px;
+  outline: none;
+  transition: 0.2s;
+}
+
+.form__btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 0 #06739f;
+  color: #d5d5d5;
+}
+.form__btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 0 #06739f;
+}
+
+// end of animation buttons form
+
+.form__btn--google {
+  background-color: rgb(33, 27, 27);
+}
+
+.form__btn--google:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 0 #575555;
+  color: #d5d5d5;
+}
+.form__btn--google:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 0 #575555;
+}
+
+.btn-close-modal {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  z-index: 2000;
+  padding: 10px 10px;
+  font-size: 24px;
+  font-weight: 700;
+  right: 5;
+  top: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    fill: #06739f;
+  }
+}
+
+.btn-auth {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #ff6b08;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  align-items: center;
+  text-transform: uppercase;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  color: #fff;
+  background-color: transparent;
+  margin-left: 40px;
+
+  font-size: 12px;
+  line-height: 1.17;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover,
+  &:focus {
+    color: getColorFromPalette('secondary', 'orange');
+  }
+}
+.btn-close-profile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .container-modal {
+    max-width: 480px;
+    height: 650px;
+    padding: 0;
+    margin: 0 20px;
+  }
+  .block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .block-item {
+    width: 100%;
+    padding: 30px 0;
+  }
+
+  .form-box {
+    width: 100%;
+    height: 500px;
+    box-shadow: none;
+
+    top: 0;
+  }
+
+  .form-box.active {
+    top: 150px;
+    left: 0;
+  }
+}

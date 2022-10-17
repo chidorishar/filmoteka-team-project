@@ -1,0 +1,14 @@
+.library-no-movies {
+    font-size: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 250ms cubic-bezier(.57, .21, .69, 1.25);
+}
+
+.library-no-movies--emoji {
+    margin-left: 4px;
+
+    font-size: 24px;
+}

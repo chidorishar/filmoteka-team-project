@@ -45,7 +45,6 @@ export class MovieModalHandler {
     this.mode = mode;
     this.#onMoveStatusChangedCB = onMoveStatusChangedCB;
 
-    galleryAPI.addOnCardClickCallback(this.#onGalleryClick);
     this.#modalWindowEls.libActionsBtnsWrapper.addEventListener(
       'click',
       this.#onLibraryButtonsClick
@@ -55,15 +54,11 @@ export class MovieModalHandler {
     this.#modalWindowEls.modalBackdrop.removeAttribute('style');
   }
 
-  #onGalleryClick = event => {
-    const movieCardLink = event.target.closest('a');
-
-    if (!movieCardLink) {
-      return;
-    }
-
-    event.preventDefault();
-
+  /**
+   *
+   * @param {number} movieId
+   */
+  onGalleryCardClicked = movieId => {
     //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.addEventListener(
@@ -75,11 +70,11 @@ export class MovieModalHandler {
       'click',
       this.#onNavThroughMoviesBtnClick
     );
-    //cut body content by viewport sizes ti prevent from scrolling
+    //cut body content by viewport sizes to prevent from scrolling
     document.body.classList.add('js-modal-is-hidden');
 
-    this.#movieId = movieCardLink.dataset.movieId;
-    this.#setMovieData(movieCardLink);
+    this.#movieId = movieId;
+    this.#setMovieData();
 
     this.#renderModal(this.#clickedMovieData);
   };
@@ -138,7 +133,7 @@ export class MovieModalHandler {
       const modalPosterPlaceholder =
         document.getElementById('modal-placeholder');
       const textInPlaceholder = document.querySelector(
-        '.modal-poster__placeholder--title'
+        '.modal-poster__placeholder-title'
       );
       const hiddenPoster = document.querySelector('.poster');
 
@@ -172,11 +167,11 @@ export class MovieModalHandler {
 
   #updateMoviesNavButtons() {
     this.#prevMovieId
-      ? this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', false)
-      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', true);
+      ? this.#modalWindowEls.prevMovieBtn.removeAttribute('disabled')
+      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', '');
     this.#nextMovieId
-      ? this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', false)
-      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', true);
+      ? this.#modalWindowEls.nextMovieBtn.removeAttribute('disabled')
+      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', '');
   }
 
   #onLibraryButtonsClick = e => {
@@ -197,10 +192,11 @@ export class MovieModalHandler {
         ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED
         : MovieModalHandler.MOVIE_ACTIONS.ADDED_TO_QUEUED;
     }
-    this.#onMoveStatusChangedCB?.(movieAction);
 
     this.#updateControlButtons(movieNewLibData);
     this.#movieLibData = movieNewLibData;
+
+    this.#onMoveStatusChangedCB?.(movieAction);
   };
 
   #updateLSData(btnID) {
@@ -257,7 +253,7 @@ export class MovieModalHandler {
   };
 
   #onNavThroughMoviesBtnClick = e => {
-    if (e.target.nodeName !== 'B') return;
+    if (e.target.nodeName !== 'BUTTON') return;
 
     const nextMovieId =
       e.target.id === 'prev-movie-btn' ? this.#prevMovieId : this.#nextMovieId;
