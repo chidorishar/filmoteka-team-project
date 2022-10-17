@@ -253,7 +253,8 @@ export class MovieModalHandler {
   };
 
   #onNavThroughMoviesBtnClick = e => {
-    if (e.target.nodeName !== 'B') return;
+    console.log('Clicked');
+    if (e.target.nodeName !== 'BUTTON') return;
 
     const nextMovieId =
       e.target.id === 'prev-movie-btn' ? this.#prevMovieId : this.#nextMovieId;
