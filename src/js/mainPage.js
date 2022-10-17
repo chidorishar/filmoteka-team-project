@@ -12,8 +12,10 @@ let currentMode = MODE.TOP;
 
 let resizeObserver = null;
 let moviesData = null;
+
 let tmdbAPI = null;
 export let galleryAPI = null;
+let moviesModalHandler = null;
 
 let unsuccessfulSearchEl = null;
 
@@ -34,7 +36,11 @@ let unsuccessfulSearchEl = null;
     const searchFormEl = document.querySelector('#movie-search-form');
     searchFormEl.addEventListener('submit', onMoviesSearchFormSubmit);
     //get array of IDs and genres
-    galleryAPI = new GalleryAPI('#movies-wrapper');
+    galleryAPI = new GalleryAPI(
+      '#movies-wrapper',
+      undefined,
+      onMovieCardClicked
+    );
 
     //init pagination variables
     PaginationAPI.paginationWrapperDiv.addEventListener(
@@ -51,7 +57,10 @@ let unsuccessfulSearchEl = null;
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
 
-    const mmh = new MovieModalHandler(galleryAPI, MovieModalHandler.MODE.HOME);
+    moviesModalHandler = new MovieModalHandler(
+      galleryAPI,
+      MovieModalHandler.MODE.HOME
+    );
 
     NotificationAPI.addNotification(
       "Showing week's top movies...",
@@ -71,6 +80,10 @@ let unsuccessfulSearchEl = null;
 function onGalleryLoadedCriticalImages() {
   document.querySelector('.loader--critical').style.display = 'none';
   document.body.classList.remove('body-clip-overflow');
+}
+
+function onMovieCardClicked(id) {
+  moviesModalHandler.onGalleryCardClicked(+id);
 }
 
 async function onMoviesSearchFormSubmit(ev) {

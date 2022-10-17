@@ -2,7 +2,6 @@ import { GalleryAPI } from './components/GalleryAPI';
 import { PaginationAPI } from './components/PaginationAPI';
 import { NotificationAPI } from './components/NotificationAPI';
 import { LDStorageAPI } from './utils/LibraryDataStorageAPI';
-import { TMDBAPI } from './libs/TMDBAPI';
 import { BackendConfigStorage } from './libs/BackendConfigStorage.js';
 import { MovieModalHandler } from './components/MovieModalHandler';
 
@@ -12,7 +11,10 @@ import { MovieModalHandler } from './components/MovieModalHandler';
 //   SEARCHED: 'searched',
 // };
 let activeLibMode = null;
+
 let galleryAPI = null;
+let moviesModalHandler = null;
+
 let moviesData = null;
 let libraryMoviesSearchForm = null;
 let noFoundWarningMessage = null;
@@ -32,10 +34,10 @@ let isSearchActive = false;
     moviesData = LDStorageAPI.getMoviesByPage(PaginationAPI.currentPage);
     PaginationAPI.totalPages = LDStorageAPI.getTotalPages();
 
-    const tmdbAPI = new TMDBAPI();
     galleryAPI = new GalleryAPI(
       '#movies-wrapper',
       true,
+      onMovieCardClicked,
       onRemoveMovieFromCurrentLibrary
     );
     //hide spinner if there aren't movies else add listener for images loading
@@ -46,7 +48,7 @@ let isSearchActive = false;
       : (document.querySelector('.loader--critical').style.display = 'none');
     galleryAPI.renderMoviesCards(moviesData);
     PaginationAPI.renderPagination();
-    const mmh = new MovieModalHandler(
+    moviesModalHandler = new MovieModalHandler(
       galleryAPI,
       MovieModalHandler.MODE.LIBRARY_WATCHED,
       onMovieStatusChanged
@@ -261,14 +263,15 @@ function searchMovies(e) {
   PaginationAPI.renderPagination();
 }
 
-function onRemoveMovieFromCurrentLibrary(id) {
-  console.log(`Deleting movie with id: ${id}`);
+function onMovieCardClicked(id) {
+  moviesModalHandler.onGalleryCardClicked(+id);
+}
 
+function onRemoveMovieFromCurrentLibrary(id) {
   const action =
     activeLibMode === LDStorageAPI.MOVIE_INFO.WATCHED
       ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED
       : MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED;
-  console.log('Action: ', action);
   LDStorageAPI.removeFromLocalStorage(+id, activeLibMode);
   onMovieStatusChanged(action);
 }

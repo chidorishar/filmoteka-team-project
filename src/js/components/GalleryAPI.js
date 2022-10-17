@@ -9,6 +9,7 @@ export class GalleryAPI {
   #rootEl = null;
   #onCriticalImagesLoadedCallbacks = [];
   #onDeleteButtonClickedCB = null;
+  #onMovieCardClickedCB = null;
   #currentMoviesData = null;
   #spinner = null;
   #posterImageCSSClass = 'movie-card__img';
@@ -23,10 +24,12 @@ export class GalleryAPI {
   constructor(
     rootElementSelector,
     renderCloseButton = false,
+    onMovieCardClickedCB = () => {},
     onDeleteButtonClickedCB = () => {}
   ) {
     this.#rootEl = document.querySelector(rootElementSelector);
     this.#renderCloseButton = renderCloseButton;
+    this.#onMovieCardClickedCB = onMovieCardClickedCB;
     this.#onDeleteButtonClickedCB = onDeleteButtonClickedCB;
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
     this.#spinner = new Spinner('.gallery', 'loader-gallery');
@@ -41,17 +44,35 @@ export class GalleryAPI {
     this.#rootEl.removeEventListener('click', cb);
   }
 
+  /**
+   * It routs click events
+   * @returns nothing
+   */
   #onCardClicked = e => {
     const movieCardLink = e.target.closest('a');
+    const clickedElNodeName = e.target.nodeName;
+    e.preventDefault();
 
-    if (!movieCardLink || e.target.nodeName !== 'BUTTON') {
+    if (!movieCardLink) {
       return;
     }
 
     const movieId = movieCardLink.dataset.movieId;
+    //if we clicked remove button - call specific callback asynchronously and exit from function
+    if (clickedElNodeName === 'BUTTON') {
+      Promise.resolve(
+        (() => {
+          this.#onDeleteButtonClickedCB(movieId);
+        })()
+      );
+
+      return;
+    }
+
+    //we clicked to movie card - call specific callback asynchronously
     Promise.resolve(
       (() => {
-        this.#onDeleteButtonClickedCB(movieId);
+        this.#onMovieCardClickedCB(movieId);
       })()
     );
   };
