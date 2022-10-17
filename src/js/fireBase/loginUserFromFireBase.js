@@ -51,10 +51,9 @@ function userLogin(e) {
 
   const UserEmail = email.value;
   const UserPassword = password.value;
-  // console.log(UserEmail, UserPassword);
 
   //Валидация контента полей формы
-  if (UserEmail === '' || UserPassword === '') {
+  if (!UserEmail || !UserPassword) {
     return;
   }
 
@@ -65,11 +64,7 @@ function userLogin(e) {
       // Signed in
       const user = userCredential.user;
       console.log(user);
-      NotificationAPI.addNotification(
-        'You logged in successful',
-        true,
-        3000
-      );
+      NotificationAPI.addNotification('You logged in successful', false, 3000);
     })
     .catch(error => {
       NotificationAPI.addNotification(
@@ -125,7 +120,7 @@ function googleLogin() {
       const user = result.user;
       NotificationAPI.addNotification(
         'You logged via Google successful',
-        true,
+        false,
         3000
       );
       // console.log(user);
