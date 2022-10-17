@@ -45,7 +45,6 @@ export class MovieModalHandler {
     this.mode = mode;
     this.#onMoveStatusChangedCB = onMoveStatusChangedCB;
 
-    galleryAPI.addOnCardClickCallback(this.#onGalleryClick);
     this.#modalWindowEls.libActionsBtnsWrapper.addEventListener(
       'click',
       this.#onLibraryButtonsClick
@@ -55,15 +54,11 @@ export class MovieModalHandler {
     this.#modalWindowEls.modalBackdrop.removeAttribute('style');
   }
 
-  #onGalleryClick = event => {
-    const movieCardLink = event.target.closest('a');
-
-    if (!movieCardLink) {
-      return;
-    }
-
-    event.preventDefault();
-
+  /**
+   *
+   * @param {number} movieId
+   */
+  onGalleryCardClicked = movieId => {
     //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.addEventListener(
@@ -75,11 +70,11 @@ export class MovieModalHandler {
       'click',
       this.#onNavThroughMoviesBtnClick
     );
-    //cut body content by viewport sizes ti prevent from scrolling
+    //cut body content by viewport sizes to prevent from scrolling
     document.body.classList.add('js-modal-is-hidden');
 
-    this.#movieId = movieCardLink.dataset.movieId;
-    this.#setMovieData(movieCardLink);
+    this.#movieId = movieId;
+    this.#setMovieData();
 
     this.#renderModal(this.#clickedMovieData);
   };
