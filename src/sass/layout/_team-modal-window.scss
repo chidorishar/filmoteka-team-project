@@ -123,6 +123,10 @@
   }
 }
 
+.movie-card__icon {
+  pointer-events: none;
+}
+
 .team-list {
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;

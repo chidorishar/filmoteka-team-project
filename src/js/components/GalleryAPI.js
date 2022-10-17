@@ -8,19 +8,29 @@ export class GalleryAPI {
   #pathToPoster = '';
   #rootEl = null;
   #onCriticalImagesLoadedCallbacks = [];
+  #onDeleteButtonClickedCB = null;
   #currentMoviesData = null;
   #spinner = null;
   #posterImageCSSClass = 'movie-card__img';
+
+  #renderCloseButton = null;
 
   #MAX_NUM_OF_CRIT_IMAGES = 3;
   #NUMB_OF_IMAGES_TO_LOAD_AT_ONCE = 3;
   #numberOfCriticalImages = null;
   #imagesElsToLoad = null;
 
-  constructor(rootElementSelector) {
+  constructor(
+    rootElementSelector,
+    renderCloseButton = false,
+    onDeleteButtonClickedCB = () => {}
+  ) {
     this.#rootEl = document.querySelector(rootElementSelector);
+    this.#renderCloseButton = renderCloseButton;
+    this.#onDeleteButtonClickedCB = onDeleteButtonClickedCB;
     this.#pathToPoster = BackendConfigStorage.pathToPoster;
     this.#spinner = new Spinner('.gallery', 'loader-gallery');
+    this.#rootEl.addEventListener('click', this.#onCardClicked);
   }
 
   addOnCardClickCallback(cb) {
@@ -30,6 +40,21 @@ export class GalleryAPI {
   removeOnCardClickCallback(cb) {
     this.#rootEl.removeEventListener('click', cb);
   }
+
+  #onCardClicked = e => {
+    const movieCardLink = e.target.closest('a');
+
+    if (!movieCardLink || e.target.nodeName !== 'BUTTON') {
+      return;
+    }
+
+    const movieId = movieCardLink.dataset.movieId;
+    Promise.resolve(
+      (() => {
+        this.#onDeleteButtonClickedCB(movieId);
+      })()
+    );
+  };
 
   addOnCriticalImagesLoadedCallback(cb) {
     this.#onCriticalImagesLoadedCallbacks.push(cb);
@@ -134,6 +159,18 @@ export class GalleryAPI {
           ${movieName}
         </span>has no poster
       </span>`;
+    // prettier-ignore
+    const closeButtonEl = this.#renderCloseButton
+      ? `<button
+          aria-label="Delete movie from library"
+          class="movie-card__delete-button"
+          data-modal-close
+        >
+          <svg class="movie-card__icon" width="18" height="18">
+            <use href="./images/decorative/sprite.svg#icon-close-menu1"></use>
+          </svg>
+        </button>`
+      : '';
 
     const imgThumbAdditionalClasses =
       (hasPoster ? '' : 'movie-card__img-thumb--no-poster') +
@@ -149,6 +186,7 @@ export class GalleryAPI {
           data-prev-movie-id="${prevMovieID ?? '' }" data-next-movie-id="${ nextMovieID ?? '' }">
           <div class="movie-card__img-thumb ${imgThumbAdditionalClasses}"
             >
+            ${closeButtonEl}
             ${posterEl}
           </div>
           <h3 class="movie-card__title">${movieName}</h3>

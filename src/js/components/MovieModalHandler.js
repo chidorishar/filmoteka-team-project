@@ -57,8 +57,9 @@ export class MovieModalHandler {
 
   #onGalleryClick = event => {
     const movieCardLink = event.target.closest('a');
+    event.preventDefault();
 
-    if (!movieCardLink) {
+    if (!movieCardLink || event.target.nodeName === 'BUTTON') {
       return;
     }
 
@@ -75,7 +76,7 @@ export class MovieModalHandler {
       'click',
       this.#onNavThroughMoviesBtnClick
     );
-    //cut body content by viewport sizes ti prevent from scrolling
+    //cut body content by viewport sizes to prevent from scrolling
     document.body.classList.add('js-modal-is-hidden');
 
     this.#movieId = movieCardLink.dataset.movieId;

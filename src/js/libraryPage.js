@@ -35,8 +35,8 @@ let isSearchActive = false;
     const tmdbAPI = new TMDBAPI();
     galleryAPI = new GalleryAPI(
       '#movies-wrapper',
-      BackendConfigStorage.pathToPoster,
-      BackendConfigStorage.genresAndIDs
+      true,
+      onRemoveMovieFromCurrentLibrary
     );
     //hide spinner if there aren't movies else add listener for images loading
     moviesData?.length
@@ -146,7 +146,6 @@ function renderGalleryByPage() {
 
       librarySearchFieldInput.value = '';
       PaginationAPI.updateCurrentPage(1);
-      // galleryAPI.renderMoviesCards(moviesData);
       PaginationAPI.totalPages = 0;
 
       disableSearch();
@@ -260,6 +259,18 @@ function searchMovies(e) {
 
   galleryAPI.renderMoviesCards(moviesData);
   PaginationAPI.renderPagination();
+}
+
+function onRemoveMovieFromCurrentLibrary(id) {
+  console.log(`Deleting movie with id: ${id}`);
+
+  const action =
+    activeLibMode === LDStorageAPI.MOVIE_INFO.WATCHED
+      ? MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_WATCHED
+      : MovieModalHandler.MOVIE_ACTIONS.REMOVED_FROM_QUEUED;
+  console.log('Action: ', action);
+  LDStorageAPI.removeFromLocalStorage(+id, activeLibMode);
+  onMovieStatusChanged(action);
 }
 
 function onMovieStatusChanged(action) {
