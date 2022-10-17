@@ -518,7 +518,7 @@ td {
   }
 }
 
-.modal__add-to-watched:hover {
+.modal__add-to-watched:not([disabled]):hover {
   background-color: getColorFromPalette('modal-buttons', 'hover-watched-btn');
 }
 
@@ -532,7 +532,7 @@ td {
   border-radius: 5px;
 }
 
-.modal__add-to-queue:hover {
+.modal__add-to-queue:not([disabled]):hover {
   background-color: getColorFromPalette('modal-buttons', 'hover-queue-btn');
 }
 

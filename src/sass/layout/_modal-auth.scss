@@ -8,9 +8,10 @@
   top: 0;
   left: 0;
   background-color: rgba(54, 54, 54, 0.607);
-  width: 100vw;
-  height: 100vh;
+  width: 102vw;
+  height: 102vh;
   transition: 0.5s;
+  overflow-y: auto;
 }
 
 .overlay-modal.active {
@@ -23,6 +24,14 @@
 
   padding: 40px 0;
   position: relative;
+  overflow-y: auto;
+
+  @media screen and (orientation: landscape) and (max-width: 900px) {
+    width: 95vw;
+    height: 95vh;
+    padding: 0;
+    margin: 0 20px;
+  }
 }
 
 .block {
@@ -214,13 +223,17 @@
   font-weight: 700;
   right: 5;
   top: 0;
-  background-color: transparent;
+  background-color: #000000ad;
+  background-clip: content-box;
+  border-radius: 18px;
   border: none;
   cursor: pointer;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  fill: #fff;
 
   &:hover {
-    fill: #06739f;
+    background-color: #ff6b08;
+    fill: #fff;
   }
 }
 
@@ -238,11 +251,15 @@
   font-weight: 500;
   color: #fff;
   background-color: transparent;
-  margin-left: 40px;
+  margin-left: 15px;
 
   font-size: 12px;
   line-height: 1.17;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include mediaOver('tablet') {
+    margin-left: 40px;
+  }
 
   &:hover,
   &:focus {
@@ -256,7 +273,7 @@
 @media (max-width: 767px) {
   .container-modal {
     max-width: 480px;
-    height: 650px;
+    height: 95vh;
     padding: 0;
     margin: 0 20px;
   }
@@ -282,5 +299,16 @@
   .form-box.active {
     top: 150px;
     left: 0;
+  }
+}
+
+.btn-modal-film__disabled {
+  cursor: auto;
+  color: gray;
+  border: gray;
+  background-color: lightgray;
+
+  &:not([disabled]):hover {
+    color: red;
   }
 }
