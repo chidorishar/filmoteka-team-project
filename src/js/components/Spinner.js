@@ -49,7 +49,8 @@ export class Spinner {
         style="
           position: absolute; 
           top: 0px; 
-          left: 0px; 
+          left: 0px;
+          z-index: 2;
           display: flex; 
           justify-content: center;
           width: 100%;
