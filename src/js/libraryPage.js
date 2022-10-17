@@ -102,19 +102,19 @@ function onPaginationWrapperBtnClick(e) {
   if (e.target.nodeName !== 'BUTTON') return;
 
   const clickedButtonEl = e.target;
-  const buttonId = clickedButtonEl.id;
+  const buttonData = clickedButtonEl.dataset.pagination;
 
   let scrollYTo = window.innerHeight <= 767 ? 233 : 219;
   window.scroll(0, scrollYTo);
 
-  switch (buttonId) {
-    case 'pagination-button-next':
+  switch (buttonData) {
+    case 'next':
       PaginationAPI.changePageByOne(true);
       break;
-    case 'pagination-button-previous':
+    case 'previous':
       PaginationAPI.changePageByOne(false);
       break;
-    case 'pagination-number-btn':
+    case 'number':
       const desiredPageNumber = parseInt(clickedButtonEl.textContent);
       if (desiredPageNumber === PaginationAPI.currentPage) return;
       PaginationAPI.updateCurrentPage(desiredPageNumber);
