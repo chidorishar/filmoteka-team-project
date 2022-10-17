@@ -114,7 +114,7 @@ function googleLogin() {
       const user = result.user;
       NotificationAPI.addNotification(
         'You logged via Google successful',
-        true,
+        false,
         3000
       );
       // console.log(user);
