@@ -296,7 +296,7 @@ export class GalleryAPI {
       }, 250);
     }
   };
-
+  //12
   #trackImagesLoadingEnd() {
     const allImagesEls = document.querySelectorAll(
       `.${this.#posterImageCSSClass}`
