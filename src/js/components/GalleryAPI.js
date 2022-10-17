@@ -187,9 +187,8 @@ export class GalleryAPI {
           class="movie-card__delete-button"
           data-modal-close
         >
-          <svg class="movie-card__icon" width="18" height="18">
-            <use href="./images/decorative/sprite.svg#icon-close-menu1"></use>
-          </svg>
+          <svg class="movie-card__icon" viewBox="0 0 32 32" width="10" height="10">
+            <path d="M31.439 3.166l-3.166-3.166-12.554 12.552-12.552-12.552-3.166 3.166 12.552 12.552-12.552 12.554 3.166 3.166 12.552-12.554 12.554 12.554 3.166-3.166-12.554-12.554 12.554-12.552z"></path>          </svg>
         </button>`
       : '';
 

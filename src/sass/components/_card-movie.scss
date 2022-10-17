@@ -88,18 +88,30 @@
   width: 30px;
   height: 30px;
   z-index: 2;
-  transition: createTransitionFor('fill');
+  transition: createTransitionFor('color', 'box-shadow');
 
-  fill: var(--text-color);
-  background-color: transparent;
-  border: 2px solid getColorFromPalette('primary', 'light');
+  color: rgb(26, 206, 71);
+  fill: currentColor;
+  background-color: rgba(getColorFromPalette('primary', 'dark'), 0.5);
+  box-shadow: 0px 0px 15px 4px rgba(26, 206, 71, 0.5);
+  border: 2px solid currentColor;
 
   pointer-events: all;
   cursor: pointer;
 
   &:hover,
   &:focus {
-    fill: getColorFromPalette('secondary', 'orange');
+    color: rgb(255, 31, 31);
+    box-shadow: 0px 0px 5px 4px rgba(255, 31, 3, 0.5);
+  }
+}
+
+.movie-card__icon {
+  transition: createTransitionFor('transform');
+
+  .movie-card__delete-button:hover &,
+  .movie-card__delete-button:focus & {
+    transform: scale(1.8);
   }
 }
 
