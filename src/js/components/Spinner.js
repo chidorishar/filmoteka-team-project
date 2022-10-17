@@ -6,9 +6,20 @@ export class Spinner {
   #rootElPrevPositionStyleValue = null;
   #HIDE_DELAY = 250; //ms
 
-  constructor(rootElementSelector, spinnerClassToCreate) {
+  static POSITION_MODE = {
+    FLEX_CENTRED: 'f-c',
+    STICKY_CENTRED: 's-c',
+  };
+  #positionMode = null;
+
+  constructor(
+    rootElementSelector,
+    spinnerClassToCreate,
+    positioningMode = Spinner.POSITION_MODE.STICKY_CENTRED
+  ) {
     this.#rootEl = document.querySelector(rootElementSelector);
     this.#selfCSSClass = spinnerClassToCreate;
+    this.#positionMode = positioningMode;
 
     this.#render();
     this.#selfDOMEl = document.querySelector(`.${spinnerClassToCreate}`);
@@ -53,6 +64,7 @@ export class Spinner {
           z-index: 2;
           display: flex; 
           justify-content: center;
+          ${this.#positionMode === Spinner.POSITION_MODE.FLEX_CENTRED ? "align-items: center;" : ''}
           width: 100%;
           height: 100%; 
           transition: opacity ${this.#HIDE_DELAY}ms ease-in-out;
@@ -60,7 +72,7 @@ export class Spinner {
           ">
         <div class="loader__spinner" 
           style="
-            position: sticky; 
+            ${this.#positionMode === Spinner.POSITION_MODE.FLEX_CENTRED ? "" : 'position: sticky;'}
         ">
         </div>
       </div>`;

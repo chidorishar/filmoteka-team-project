@@ -1,6 +1,7 @@
 import { IDsParser } from '../utils/IDsToGenresParser.js';
 import { BackendConfigStorage } from '../libs/BackendConfigStorage';
 import { LDStorageAPI } from '../utils/LibraryDataStorageAPI.js';
+import { Spinner } from '../components/Spinner';
 
 export class MovieModalHandler {
   #modalWindowEls = {
@@ -20,6 +21,7 @@ export class MovieModalHandler {
   #movieId = null;
   #clickedMovieData = null;
   #galleryAPI = null;
+  #spinner = null;
 
   #nextMovieId = null;
   #prevMovieId = null;
@@ -44,6 +46,11 @@ export class MovieModalHandler {
     this.#galleryAPI = galleryAPI;
     this.mode = mode;
     this.#onMoveStatusChangedCB = onMoveStatusChangedCB;
+    this.#spinner = new Spinner(
+      '.modal-poster',
+      'loader-movie-modal',
+      Spinner.POSITION_MODE.FLEX_CENTRED
+    );
 
     this.#modalWindowEls.libActionsBtnsWrapper.addEventListener(
       'click',
@@ -59,6 +66,8 @@ export class MovieModalHandler {
    * @param {number} movieId
    */
   onGalleryCardClicked = movieId => {
+    this.#spinner.show();
+
     //listener bindings
     window.addEventListener('keydown', this.#onEscKeyPress);
     this.#modalWindowEls.modalBackdrop.addEventListener(
