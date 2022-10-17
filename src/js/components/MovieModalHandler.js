@@ -270,7 +270,6 @@ export class MovieModalHandler {
   };
 
   #onPosterLoaded = e => {
-    console.log('Poster loaded');
     this.#spinner.hide();
   };
 
