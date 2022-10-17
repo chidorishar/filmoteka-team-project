@@ -6,8 +6,8 @@
     calc(320px - 2 * $containerLRPaddingsMobile),
     calc(getBreakpointValue('mobile') - 2 * $containerLRPaddingsMobile)
   );
-  grid-template-rows: 438px;
-  grid-auto-rows: 438px;
+  // grid-template-rows: 438px;
+  // grid-auto-rows: 438px;
   row-gap: 20px;
 
   @include mediaOver('tablet') {
