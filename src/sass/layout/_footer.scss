@@ -4,6 +4,8 @@
   padding-top: 29px;
   padding-bottom: 29px;
   margin-top: 40px;
+
+  transition: createTransitionFor('background-color');
 }
 
 .footer-section__box {
@@ -13,6 +15,8 @@
   line-height: 1.17;
   font-weight: $font-regular;
   text-align: center;
+
+  transition: createTransitionFor('color');
 
   @include mediaInBetween('tablet', 'desktop') {
     display: flex;
@@ -39,7 +43,9 @@
 }
 
 .footer-section__acсent {
-  color: var(--text-color);
+  color: currentColor;
+
+  transition: inherit;
 }
 
 .footer-section__acсent:hover {

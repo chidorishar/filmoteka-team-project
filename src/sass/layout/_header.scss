@@ -102,6 +102,11 @@
   color: getColorFromPalette('controls', 'accent');
   background-color: getColorFromPalette('controls', 'accent');
   height: 3px;
+  border-radius: 5px;
+}
+
+#library {
+  display: none;
 }
 
 .search-form {
@@ -151,15 +156,14 @@
     color: getColorFromPalette('primary', 'light');
   }
 
-  &:disabled{
+  &:disabled {
     &::placeholder {
-      color: getColorFromPalette('modal', 'characteristic-text-color')
+      color: getColorFromPalette('modal', 'characteristic-text-color');
     }
 
     border-bottom-color: getColorFromPalette('accent', 'warning');
   }
 }
-
 
 .search-button {
   position: absolute;
