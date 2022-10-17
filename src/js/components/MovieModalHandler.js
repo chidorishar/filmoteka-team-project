@@ -167,11 +167,11 @@ export class MovieModalHandler {
 
   #updateMoviesNavButtons() {
     this.#prevMovieId
-      ? this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', false)
-      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', true);
+      ? this.#modalWindowEls.prevMovieBtn.removeAttribute('disabled')
+      : this.#modalWindowEls.prevMovieBtn.setAttribute('disabled', '');
     this.#nextMovieId
-      ? this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', false)
-      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', true);
+      ? this.#modalWindowEls.nextMovieBtn.removeAttribute('disabled')
+      : this.#modalWindowEls.nextMovieBtn.setAttribute('disabled', '');
   }
 
   #onLibraryButtonsClick = e => {
@@ -253,7 +253,7 @@ export class MovieModalHandler {
   };
 
   #onNavThroughMoviesBtnClick = e => {
-    if (e.target.nodeName !== 'B') return;
+    if (e.target.nodeName !== 'BUTTON') return;
 
     const nextMovieId =
       e.target.id === 'prev-movie-btn' ? this.#prevMovieId : this.#nextMovieId;
