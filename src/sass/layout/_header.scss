@@ -72,8 +72,16 @@
 .nav-header__item {
   position: relative;
 
+  &:not(:last-child) {
+    height: 22px;
+  }
+
   &:last-child {
-    margin-left: 40px;
+    margin-left: 15px;
+
+    @include mediaOver('tablet') {
+      margin-left: 40px;
+    }
   }
 }
 
