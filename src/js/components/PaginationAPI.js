@@ -1,7 +1,7 @@
 class PaginationAPI {
   static #MOBILE_MAX_WIDTH = 767;
   static #MOBILE_MIN_WIDTH = 479;
-  static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn" id="pagination-number-btn">1</button></li>`;
+  static #firstPageMarkup = `<li class="pagination__item" id="pagination-number-1"><button class="pagination__btn" data-pagination="number">1</button></li>`;
   static #dotsLeftMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-left">&#183;&#183;&#183;</li>`;
   static #dotsRightMarkup = `<li class="pagination__item pagination__item-dots" id="pagination-dots-right">&#183;&#183;&#183;</li>`;
   static #scrollBtn = document.getElementById('js-scroll');
@@ -323,11 +323,11 @@ class PaginationAPI {
   }
 
   static #getPageBtnMarkupWithIdInsered(id) {
-    return `<li class="pagination__item" id="pagination-number-${id}"><button class="pagination__btn" id="pagination-number-btn">${id}</button></li>`;
+    return `<li class="pagination__item" id="pagination-number-${id}"><button class="pagination__btn" data-pagination="number">${id}</button></li>`;
   }
 
   static #getLastPageMarkup() {
-    return `<li class="pagination__item" id="pagination-number-${this.totalPages}"><button class="pagination__btn" id="pagination-number-btn">${this.totalPages}</button></li>`;
+    return `<li class="pagination__item" id="pagination-number-${this.totalPages}"><button class="pagination__btn" data-pagination="number">${this.totalPages}</button></li>`;
   }
 }
 
